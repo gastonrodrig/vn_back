@@ -13,7 +13,7 @@ export class DocumentoService {
   ) {}
 
   async create(createDocumentoDto: CreateDocumentoDto) {
-    const documento = new this.documentoModel(createDocumentoDto);
+    const documento = new this.documentoModel(createDocumentoDto)
     return await documento.save()
   }
 
@@ -28,20 +28,20 @@ export class DocumentoService {
   async update(documento_id: string, updateDocumentoDto: UpdateDocumentoDto) {
     const documento = await this.documentoModel.findById(documento_id)
     if (!documento) {
-      throw new BadRequestException('Documento not found');
+      throw new BadRequestException('Documento no encontrado')
     }
 
     documento.type = updateDocumentoDto.type;
 
-    return await documento.save();
+    return await documento.save()
   }
 
   async remove(documento_id: string) {
     const documento = await this.documentoModel.findByIdAndDelete(documento_id)
     if (!documento) {
-      throw new BadRequestException('Documento no encontrado');
+      throw new BadRequestException('Documento no encontrado')
     }
 
-    return { success: true };
+    return { success: true }
   }
 }

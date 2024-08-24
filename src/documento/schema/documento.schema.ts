@@ -5,7 +5,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ collection: 'Documento' })
 export class Documento {
-  @Prop({ required: true })
+  @Prop()
   type: string;
 
   // @Prop({ type: [{ type: Schema.Types.ObjectId, ref: 'Docente' }] })
