@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DocumentoModule } from './documento/documento.module';
 import { GradoModule } from './grado/grado.module';
+import { PeriodoEscolarModule } from './periodo-escolar/periodo-escolar.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GradoModule } from './grado/grado.module';
     }),
     DocumentoModule,
     GradoModule,
+    PeriodoEscolarModule,
   ],
   controllers: [AppController],
   providers: [AppService],
