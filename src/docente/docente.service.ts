@@ -88,8 +88,10 @@ export class DocenteService {
     }
     await this.docenteModel.findByIdAndDelete(docente_id)
 
-    const user = docente.user._id
-    await this.userModel.findByIdAndDelete(user)
+    if(docente.user) {
+      const user = docente.user._id
+      await this.userModel.findByIdAndDelete(user)
+    }
 
     return { success: true }
   }

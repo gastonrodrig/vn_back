@@ -15,13 +15,13 @@ import { FirebaseService } from 'src/storage/firebase.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {name: Estudiante.name, schema: EstudianteSchema},
-      {name: Documento.name, schema: DocumentoSchema},
-      {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema},
-      {name: Grado.name, schema: GradoSchema},
-      {name: Seccion.name, schema: SeccionSchema},
-      {name: Multimedia.name, schema: MultimediaSchema},
-      {name: User.name, schema: UserSchema}
+      { name: Estudiante.name, schema: EstudianteSchema },
+      { name: Documento.name, schema: DocumentoSchema },
+      { name: PeriodoEscolar.name, schema: PeriodoEscolarSchema },
+      { name: Grado.name, schema: GradoSchema },
+      { name: Seccion.name, schema: SeccionSchema },
+      { name: Multimedia.name, schema: MultimediaSchema },
+      { name: User.name, schema: UserSchema }
     ])
   ],
   controllers: [EstudianteController],

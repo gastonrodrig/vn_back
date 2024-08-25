@@ -44,14 +44,14 @@ export class UserController {
   removeEstudiante(@Param('id') id: string){
     return this.userService.removeEstudiante(id);
   }
- 
-  @Put('remove-apoderado/:id')
-  removeApoderado(@Param('id') id: string){
-    return this.userService.removeApoderado(id);
-  }
 
   @Put('remove-docente/:id')
   removeDocente(@Param('id') id: string){
     return this.userService.removeDocente(id);
+  }
+
+  @Put('remove-apoderado/:id')
+  removeApoderado(@Param('id') id: string){
+    return this.userService.removeApoderado(id);
   }
 } 

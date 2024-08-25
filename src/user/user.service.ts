@@ -7,12 +7,15 @@ import * as bcryptjs from 'bcryptjs';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Docente } from 'src/docente/schema/docente.schema';
+import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
+    @InjectModel(Estudiante.name)
+    private readonly estudianteModel: Model<User>,
     @InjectModel(Docente.name)
     private readonly docenteModel: Model<Docente>
   ) {}
@@ -40,7 +43,11 @@ export class UserService {
     let apoderado = null
 
     if(createUserDto.estudiante_id) {
-
+      estudiante = await this.estudianteModel.findById(createUserDto.estudiante_id)
+        .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      if (!estudiante) {
+        throw new BadRequestException('Estudiante no encontrado')
+      }
     }
 
     if (createUserDto.docente_id) {
@@ -75,16 +82,16 @@ export class UserService {
     Object.assign(user, updateUserDto)
 
     if (updateUserDto.estudiante_id) {
-    //   const estudiante = await this.estudiantesRepository.findOne({ 
-    //     where: { estudiante_id: updateUserDto.estudiante_id },
-    //     relations: ['documento', 'grado', 'apoderado', 'periodo', 'seccion', 'multimedia'] 
-    //   })
-    //   if (!estudiante) {
-    //     throw new BadRequestException('Estudiante no encontrado')
-    //   }
-    //   user.estudiante = estudiante
-    // } else {
-    //   user.estudiante = null
+      const estudianteId = new Types.ObjectId(updateUserDto.estudiante_id);
+      const estudiante = await this.estudianteModel.findById(estudianteId)
+        .populate(['documento','periodo','grado','seccion','multimedia','user']);
+      if (!estudiante) {
+        throw new BadRequestException('Docente not found');
+      }
+
+      user.estudiante = estudianteId;
+    } else {
+      user.estudiante = null
     }
 
     if (updateUserDto.docente_id) {
@@ -206,19 +213,7 @@ export class UserService {
       throw new BadRequestException('Usuario no encontrado')
     }
 
-    // user.estudiante = null
-  
-    await user.save()
-    return { success: true }
-  }
-  
-  async removeApoderado(user_id: string) {
-    const user = await this.userModel.findById(user_id)
-    if (!user) {
-      throw new BadRequestException('Usuario no encontrado')
-    }
-  
-    // usuario.apoderado = null
+    user.estudiante = null
   
     await user.save()
     return { success: true }
@@ -231,6 +226,18 @@ export class UserService {
     }
 
     user.docente = null
+  
+    await user.save()
+    return { success: true }
+  }
+
+  async removeApoderado(user_id: string) {
+    const user = await this.userModel.findById(user_id)
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado')
+    }
+  
+    // usuario.apoderado = null
   
     await user.save()
     return { success: true }

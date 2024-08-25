@@ -15,6 +15,7 @@ import { DocenteModule } from './docente/docente.module';
 import { CursoModule } from './curso/curso.module';
 import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
+import { DocumentosEstudianteModule } from './documentos-estudiante/documentos-estudiante.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { EstudianteModule } from './estudiante/estudiante.module';
     CursoModule,
     GradoModule,
     GradoCursoHorasModule,
-    EstudianteModule
+    EstudianteModule,
+    DocumentosEstudianteModule
   ],
   controllers: [AppController],
   providers: [AppService],
