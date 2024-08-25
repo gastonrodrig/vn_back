@@ -6,10 +6,9 @@ import { DocumentoController } from './documento.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{
-      name: Documento.name,
-      schema: DocumentoSchema
-    }])
+    MongooseModule.forFeature([
+      { name: Documento.name, schema: DocumentoSchema }
+    ])
   ],
   providers: [DocumentoService],
   controllers: [DocumentoController]

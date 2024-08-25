@@ -6,6 +6,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DocumentoModule } from './documento/documento.module';
 import { GradoModule } from './grado/grado.module';
 import { PeriodoEscolarModule } from './periodo-escolar/periodo-escolar.module';
+import { SeccionModule } from './seccion/seccion.module';
+import { SeccionGradoPeriodoModule } from './seccion-grado-periodo/seccion-grado-periodo.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { MultimediaModule } from './multimedia/multimedia.module';
+import { DocenteModule } from './docente/docente.module';
 
 @Module({
   imports: [
@@ -20,6 +26,12 @@ import { PeriodoEscolarModule } from './periodo-escolar/periodo-escolar.module';
     DocumentoModule,
     GradoModule,
     PeriodoEscolarModule,
+    SeccionModule,
+    SeccionGradoPeriodoModule,
+    AuthModule,
+    UserModule,
+    MultimediaModule,
+    DocenteModule
   ],
   controllers: [AppController],
   providers: [AppService],

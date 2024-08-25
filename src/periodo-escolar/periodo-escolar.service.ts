@@ -13,16 +13,20 @@ export class PeriodoEscolarService {
   ) {}
 
   async create(createPeriodoEscolarDto: CreatePeriodoEscolarDto) {
-    const periodo = new this.periodoEscolarModel(createPeriodoEscolarDto);
+    const periodo = new this.periodoEscolarModel({
+      anio: createPeriodoEscolarDto.anio,
+      fechaInicio: createPeriodoEscolarDto.fechaInicio,
+      fechaFin: createPeriodoEscolarDto.fechaFin
+    });
     return await periodo.save()
   }
 
   async findAll() {
-    return this.periodoEscolarModel.find()
+    return await this.periodoEscolarModel.find()
   }
 
   async findOne(periodo_id: string) {
-    return this.periodoEscolarModel.findById(periodo_id)
+    return await this.periodoEscolarModel.findById(periodo_id)
   }
 
   async update(periodo_id: string, updatePeriodoEscolarDto: UpdatePeriodoEscolarDto) {

@@ -13,16 +13,18 @@ export class GradoService {
   ) {}
 
   async create(createGradoDto: CreateGradoDto) {
-    const grado = new this.gradoModel(createGradoDto);
+    const grado = new this.gradoModel({
+      nombre: createGradoDto.nombre
+    });
     return await grado.save()
   }
 
   async findAll() {
-    return this.gradoModel.find()
+    return await this.gradoModel.find()
   }
 
   async findOne(grado_id: string) {
-    return this.gradoModel.findById(grado_id)
+    return await this.gradoModel.findById(grado_id)
   }
 
   async update(grado_id: string, updateGradoDto: UpdateGradoDto) {

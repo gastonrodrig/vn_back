@@ -13,16 +13,18 @@ export class DocumentoService {
   ) {}
 
   async create(createDocumentoDto: CreateDocumentoDto) {
-    const documento = new this.documentoModel(createDocumentoDto)
+    const documento = new this.documentoModel({
+      type: createDocumentoDto.type
+    })
     return await documento.save()
   }
 
   async findAll() {
-    return this.documentoModel.find()
+    return await this.documentoModel.find()
   }
 
   async findOne(documento_id: string) {
-    return this.documentoModel.findById(documento_id)
+    return await this.documentoModel.findById(documento_id)
   }
 
   async update(documento_id: string, updateDocumentoDto: UpdateDocumentoDto) {

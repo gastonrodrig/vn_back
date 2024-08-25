@@ -6,10 +6,9 @@ import { PeriodoEscolar, PeriodoEscolarSchema } from './schema/periodo-escolar.s
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{
-      name: PeriodoEscolar.name,
-      schema: PeriodoEscolarSchema
-    }])
+    MongooseModule.forFeature([
+      { name: PeriodoEscolar.name, schema: PeriodoEscolarSchema}
+    ])
   ],
   providers: [PeriodoEscolarService],
   controllers: [PeriodoEscolarController]

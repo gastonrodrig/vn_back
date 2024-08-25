@@ -5,10 +5,10 @@ export class PeriodoEscolar {
   @Prop()
   anio: string;
 
-  @Prop({ type: 'date' })
+  @Prop()
   fechaInicio: Date;
 
-  @Prop({ type: 'date' })
+  @Prop()
   fechaFin: Date;
 }
 

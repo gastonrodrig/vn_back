@@ -6,10 +6,9 @@ import { Grado, GradoSchema } from './schema/grado.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{
-      name: Grado.name,
-      schema: GradoSchema
-    }])
+    MongooseModule.forFeature([
+      { name: Grado.name, schema: GradoSchema }
+    ])
   ],
   providers: [GradoService],
   controllers: [GradoController]
