@@ -6,12 +6,12 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  nombres_usuario: string;
+  usuario: string;
 
   @ApiProperty()
   @IsEmail()
   @IsNotEmpty()
-  email_usuario: string;
+  email: string;
   
   @ApiProperty()
   @IsEnum(Roles)

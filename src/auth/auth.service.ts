@@ -24,16 +24,17 @@ import { JwtService } from '@nestjs/jwt';
     const payload = { 
       email: user.email,
       rol: user.rol,
-      nombres: user.usuario
+      nombres: user.usuario,
+      docente: null
     };
 
     // Incluir datos adicionales según el rol del usuario
     // if (user.rol === 'Estudiante' && user.estudiante) {
     //   payload.estudiante = user.estudiante;
     // }
-    // if (user.rol === 'Docente' && user.docente) {
-    //   payload.docente = user.docente;
-    // }
+    if (user.rol === 'Docente' && user.docente) {
+      payload.docente = user.docente;
+    }
     // if (user.rol === 'Apoderado' && user.apoderado) {
     //   payload.apoderado = user.apoderado;
     // }
@@ -45,7 +46,7 @@ import { JwtService } from '@nestjs/jwt';
       email: user.email,
       rol: user.rol,
       usuario: user.usuario,
-      // docente: user.rol === 'Docente' ? user.docente : null,
+      docente: user.rol === 'Docente' ? user.docente : null,
       // estudiante: user.rol === 'Estudiante' ? user.estudiante : null,
       // apoderado: user.rol === 'Apoderado' ? user.apoderado : null
     };

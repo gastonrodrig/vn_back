@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MultimediaModule } from './multimedia/multimedia.module';
 import { DocenteModule } from './docente/docente.module';
+import { CursoModule } from './curso/curso.module';
+import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.module';
 
 @Module({
   imports: [
@@ -23,15 +25,17 @@ import { DocenteModule } from './docente/docente.module';
       }),
       inject: [ConfigService],
     }),
+    MultimediaModule,
     DocumentoModule,
-    GradoModule,
     PeriodoEscolarModule,
-    SeccionModule,
-    SeccionGradoPeriodoModule,
     AuthModule,
     UserModule,
-    MultimediaModule,
-    DocenteModule
+    DocenteModule,
+    SeccionModule,
+    SeccionGradoPeriodoModule,
+    CursoModule,
+    GradoModule,
+    GradoCursoHorasModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { User } from './schema/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcryptjs from 'bcryptjs';
@@ -88,16 +88,16 @@ export class UserService {
     }
 
     if (updateUserDto.docente_id) {
-    //   const docente = await this.docentesRepository.findOne({ 
-    //     where: { docente_id: updateUserDto.docente_id },
-    //     relations: ['documento', 'multimedia'] 
-    //   })
-    //   if (!docente) {
-    //     throw new BadRequestException('Docente no encontrado')
-    //   }
-    //   user.docente = docente
-    // } else {
-    //   user.docente = null
+      const docenteId = new Types.ObjectId(updateUserDto.docente_id);
+      const docente = await this.docenteModel.findById(docenteId)
+        .populate(['documento', 'multimedia']);
+      if (!docente) {
+        throw new BadRequestException('Docente not found');
+      }
+
+      user.docente = docenteId;
+    } else {
+      user.docente = null
     }
 
     if (updateUserDto.apoderado_id) {
@@ -171,19 +171,22 @@ export class UserService {
   async findOneByEmailOrUsername(identifier: string) {
     const isEmail = identifier.includes('@')
   
-    const filter = isEmail ? { email: identifier } : { username: identifier }
+    const filter = isEmail ? { email: identifier } : { usuario: identifier }
   
     return await this.userModel.findOne(filter)
       .populate({
         path: 'estudiante',
+        strictPopulate: false,
         populate: ['documento', 'grado', 'apoderado', 'periodo', 'seccion', 'multimedia']
       })
       .populate({
         path: 'docente',
+        strictPopulate: false,
         populate: ['documento', 'multimedia']
       })
       .populate({
         path: 'apoderado',
+        strictPopulate: false,
         populate: ['documento', 'estudiante', 'multimedia']
       })
   }
