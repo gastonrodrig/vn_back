@@ -14,6 +14,7 @@ import { MultimediaModule } from './multimedia/multimedia.module';
 import { DocenteModule } from './docente/docente.module';
 import { CursoModule } from './curso/curso.module';
 import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.module';
+import { EstudianteModule } from './estudiante/estudiante.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.mod
     SeccionGradoPeriodoModule,
     CursoModule,
     GradoModule,
-    GradoCursoHorasModule
+    GradoCursoHorasModule,
+    EstudianteModule
   ],
   controllers: [AppController],
   providers: [AppService],
