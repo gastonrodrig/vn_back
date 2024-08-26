@@ -7,8 +7,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('curso-docente')
 @ApiTags('Curso-Docente')
 export class CursoDocenteController {
-
-    constructor(private readonly cursoDocenteService: CursoDocenteService) {}
+  constructor(private readonly cursoDocenteService: CursoDocenteService) {}
 
   @Post()
   create(@Body() createCursoDocenteDto: CreateCursoDocenteDto) {

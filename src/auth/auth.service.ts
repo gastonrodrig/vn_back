@@ -25,19 +25,21 @@ import { JwtService } from '@nestjs/jwt';
       email: user.email,
       rol: user.rol,
       nombres: user.usuario,
-      docente: null
+      estudiante: null,
+      docente: null,
+      apoderado: null
     };
 
     // Incluir datos adicionales según el rol del usuario
-    // if (user.rol === 'Estudiante' && user.estudiante) {
-    //   payload.estudiante = user.estudiante;
-    // }
+    if (user.rol === 'Estudiante' && user.estudiante) {
+      payload.estudiante = user.estudiante;
+    }
     if (user.rol === 'Docente' && user.docente) {
       payload.docente = user.docente;
     }
-    // if (user.rol === 'Apoderado' && user.apoderado) {
-    //   payload.apoderado = user.apoderado;
-    // }
+    if (user.rol === 'Apoderado' && user.apoderado) {
+      payload.apoderado = user.apoderado;
+    }
 
     const token = this.jwtService.sign(payload, { expiresIn: '1h' });
 
@@ -47,8 +49,8 @@ import { JwtService } from '@nestjs/jwt';
       rol: user.rol,
       usuario: user.usuario,
       docente: user.rol === 'Docente' ? user.docente : null,
-      // estudiante: user.rol === 'Estudiante' ? user.estudiante : null,
-      // apoderado: user.rol === 'Apoderado' ? user.apoderado : null
+      estudiante: user.rol === 'Estudiante' ? user.estudiante : null,
+      apoderado: user.rol === 'Apoderado' ? user.apoderado : null
     };
   }
 }

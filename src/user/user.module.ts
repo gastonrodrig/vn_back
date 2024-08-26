@@ -5,13 +5,15 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Docente, DocenteSchema } from 'src/docente/schema/docente.schema';
 import { Estudiante, EstudianteSchema } from 'src/estudiante/schema/estudiante.schema';
+import { Apoderado, ApoderadoSchema } from 'src/apoderado/schema/apoderado.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Estudiante.name, schema: EstudianteSchema },
-      { name: Docente.name, schema: DocenteSchema }
+      { name: Docente.name, schema: DocenteSchema },
+      { name: Apoderado.name, schema: ApoderadoSchema }
     ])
   ],
   controllers: [UserController],

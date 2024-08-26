@@ -51,7 +51,7 @@ export class ApoderadoService {
     await apoderado.save()
     
     return this.apoderadoModel.findById(apoderado._id)
-      .populate(['multimedia'])
+      .populate(['documento','estudiante','multimedia','user'])
   }
 
   async findAll(){
@@ -111,9 +111,9 @@ export class ApoderadoService {
 
     return { sucess: true }
   }
+  
   async asignarUsuario(apoderado_id: string, usuario_id: string){
     const apoderado = await this.apoderadoModel.findById(apoderado_id)
-      .populate(['documento','estudiante','multimedia','user'])
     if (!apoderado) {
       throw new BadRequestException('Apoderado no encontrado');
     }
@@ -130,6 +130,7 @@ export class ApoderadoService {
     return this.estudianteModel.findById(apoderado._id)
       .populate(['documento','estudiante','multimedia','user'])
   }
+
   async removeUsuario(apoderado_id: string) {
     const apoderado = await this.apoderadoModel.findById(apoderado_id)
     if (!apoderado) {
@@ -142,6 +143,7 @@ export class ApoderadoService {
     return this.apoderadoModel.findById(apoderado._id)
       .populate(['documento','estudiante','multimedia','user'])
   }
+
   async updateProfilePicture(apoderado_id: string, file: Express.Multer.File) {
     const apoderado = await this.apoderadoModel.findById(apoderado_id)
       .populate('multimedia')

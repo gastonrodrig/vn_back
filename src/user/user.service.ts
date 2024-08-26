@@ -8,6 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Docente } from 'src/docente/schema/docente.schema';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
+import { Apoderado } from 'src/apoderado/schema/apoderado.schema';
 
 @Injectable()
 export class UserService {
@@ -15,9 +16,11 @@ export class UserService {
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
     @InjectModel(Estudiante.name)
-    private readonly estudianteModel: Model<User>,
+    private readonly estudianteModel: Model<Estudiante>,
     @InjectModel(Docente.name)
-    private readonly docenteModel: Model<Docente>
+    private readonly docenteModel: Model<Docente>,
+    @InjectModel(Apoderado.name)
+    private readonly apoderadoModel: Model<Apoderado>
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -59,7 +62,11 @@ export class UserService {
     }
 
     if (createUserDto.apoderado_id) {
-
+      apoderado = await this.apoderadoModel.findById(createUserDto.apoderado_id)
+        .populate(['documento','estudiante','multimedia','user'])
+      if (!apoderado) {
+        throw new BadRequestException('Apoderado no encontrado')
+      }
     }
 
     const user = new this.userModel({
@@ -97,7 +104,7 @@ export class UserService {
     if (updateUserDto.docente_id) {
       const docenteId = new Types.ObjectId(updateUserDto.docente_id);
       const docente = await this.docenteModel.findById(docenteId)
-        .populate(['documento', 'multimedia']);
+        .populate(['documento', 'multimedia', 'user']);
       if (!docente) {
         throw new BadRequestException('Docente not found');
       }
@@ -108,16 +115,16 @@ export class UserService {
     }
 
     if (updateUserDto.apoderado_id) {
-    //   const apoderado = await this.apoderadosRepository.findOne({ 
-    //     where: { apoderado_id: updateUserDto.apoderado_id },
-    //     relations: ['documento', 'estudiante', 'multimedia']
-    //   })
-    //   if (!apoderado) {
-    //     throw new BadRequestException('Apoderado no encontrado')
-    //   }
-    //   user.apoderado = apoderado
-    // } else {
-    //   user.apoderado = null
+      const apoderadoId = new Types.ObjectId(updateUserDto.apoderado_id);
+      const apoderado = await this.apoderadoModel.findById(apoderadoId)
+        .populate(['documento','estudiante','multimedia','user']);
+      if (!apoderado) {
+        throw new BadRequestException('Docente not found');
+      }
+
+      user.apoderado = apoderadoId;
+    } else {
+      user.apoderado = null
     }
 
     return await user.save()
@@ -237,7 +244,7 @@ export class UserService {
       throw new BadRequestException('Usuario no encontrado')
     }
   
-    // usuario.apoderado = null
+    user.apoderado = null
   
     await user.save()
     return { success: true }

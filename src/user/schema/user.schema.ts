@@ -21,6 +21,9 @@ export class User {
 
   @Prop({ type: Types.ObjectId, ref: 'Docente' })
   docente: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Apoderado' })
+  apoderado: Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
