@@ -88,4 +88,25 @@ export class CursoDocenteService {
 
     return { sucess: true }
   }
+
+  async listarDocentesPorCurso(curso_id: string) {
+    const curso = await this.cursoModel.findById(curso_id)
+    if (!curso) {
+      throw new BadRequestException(`Curso no encontrado`);
+    }
+
+    return this.docenteModel.find({ curso: curso._id })
+      .populate(['curso','docente'])
+  }
+
+  async removeByCursoAndDocente(curso_id: string, docente_id: string) {
+    const cursosDocente = await this.cursoDocenteModel.findOne({ curso: curso_id, docente: docente_id })
+    if (!cursosDocente) {
+      throw new BadRequestException('CursoDocente no fue encontrada');
+    }
+
+    await this.cursoDocenteModel.deleteOne({ _id: cursosDocente._id })
+
+    return { success: true };
+  }
 }

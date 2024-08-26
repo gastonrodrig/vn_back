@@ -172,5 +172,15 @@ export class ApoderadoService {
 
     return await apoderado.save()
   }
+
+  async listarApoderadosPorEstudiante(estudiante_id: string) {
+    const estudiante = await this.estudianteModel.findById(estudiante_id)
+    if (!estudiante) {
+      throw new BadRequestException(`Estudiante no encontrado`);
+    }
+
+    return this.apoderadoModel.find({ estudiante: estudiante._id })
+      .populate(['documento','estudiante','multimedia','user'])
+  }
   
 }

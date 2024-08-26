@@ -71,4 +71,9 @@ export class ApoderadoController {
   ) {
     return this.apoderadoService.updateProfilePicture(id, imageFile);
   }
+
+  @Get('estudiante/:id')
+  listarApoderadosPorEstudiante(@Param('id') id: string) {
+    return this.apoderadoService.listarApoderadosPorEstudiante(id);
+  }
 }

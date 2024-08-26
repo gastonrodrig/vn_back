@@ -33,4 +33,17 @@ export class CursoDocenteController {
   remove(@Param('id') id: string) {
     return this.cursoDocenteService.remove(id);
   }
+
+  @Get('curso/:id')
+  listarDocentesPorCurso(@Param('id') id: string) {
+    return this.cursoDocenteService.listarDocentesPorCurso(id);
+  }
+
+  @Delete(':cursoId/:docenteId')
+  removeCursoDocente(
+    @Param('cursoId') curso_id: string, 
+    @Param('docenteId') docente_id: string
+  ) {
+    return this.cursoDocenteService.removeByCursoAndDocente(curso_id, docente_id);
+  }
 }
