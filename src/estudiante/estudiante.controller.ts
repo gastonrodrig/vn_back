@@ -1,13 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { EstudianteService } from './estudiante.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Estudiante } from './schema/estudiante.schema';
 import { UpdateSeccionDto } from './dto/update-seccion.dto';
 import { UpdateEstadoEstudianteDto } from './dto/update-estado.dto';
+import { ObjectId, Types } from 'mongoose';
 
 @Controller('estudiante')
 @ApiTags('Estudiante')
@@ -101,13 +102,33 @@ export class EstudianteController {
     return this.estudianteService.updateProfilePicture(id, imageFile);
   }
 
-  @Get(':id/profile-picture')
-  getProfilePicture(@Param('id') id: string) {
-    return this.estudianteService.getProfilePicture(id);
-  }
-
   @Patch('change-state/:id')
   updateEstado(@Param('id') id: string, @Body() updateEstadoEstudianteDto: UpdateEstadoEstudianteDto) {
     return this.estudianteService.updateEstado(id, updateEstadoEstudianteDto);
+  }
+
+  @Put('assign-files/:id')
+  @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: { type: 'string', format: 'binary' },
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    description: 'El registro ha sido actualizado exitosamente.',
+    type: Estudiante,
+  })
+  updateFiles(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.estudianteService.updateFiles(id, files);
   }
 }

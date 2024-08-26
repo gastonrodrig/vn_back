@@ -32,9 +32,12 @@ export class Estudiante {
   @Prop({ type: Types.ObjectId, ref: 'Multimedia'})
   multimedia: Types.ObjectId | Multimedia;
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Archivo' }] })
+  archivo: Types.ObjectId[]; 
+
   @Prop({ type: Types.ObjectId, ref: 'User'})
   user: Types.ObjectId;
-  
+
   @Prop({enum: EstadoEstudiante})
   estado: EstadoEstudiante;
 }

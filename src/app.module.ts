@@ -10,12 +10,10 @@ import { SeccionModule } from './seccion/seccion.module';
 import { SeccionGradoPeriodoModule } from './seccion-grado-periodo/seccion-grado-periodo.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MultimediaModule } from './multimedia/multimedia.module';
 import { DocenteModule } from './docente/docente.module';
 import { CursoModule } from './curso/curso.module';
 import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
-import { DocumentosEstudianteModule } from './documentos-estudiante/documentos-estudiante.module';
 import { ApoderadoModule } from './apoderado/apoderado.module';
 
 @Module({
@@ -28,7 +26,6 @@ import { ApoderadoModule } from './apoderado/apoderado.module';
       }),
       inject: [ConfigService],
     }),
-    MultimediaModule,
     DocumentoModule,
     PeriodoEscolarModule,
     AuthModule,
@@ -40,7 +37,6 @@ import { ApoderadoModule } from './apoderado/apoderado.module';
     GradoModule,
     GradoCursoHorasModule,
     EstudianteModule,
-    DocumentosEstudianteModule,
     ApoderadoModule
   ],
   controllers: [AppController],

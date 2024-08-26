@@ -71,11 +71,5 @@ export class DocenteController {
   ) {
     return this.docenteService.updateProfilePicture(id, imageFile);
   }
-
-  @Get(':id/profile-picture')
-  getProfilePicture(@Param('id') id: string) {
-    return this.docenteService.getProfilePicture(id);
-  }
-  
 }
 

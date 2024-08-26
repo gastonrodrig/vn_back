@@ -13,6 +13,7 @@ import { FirebaseService } from 'src/storage/firebase.service';
 import { User } from 'src/user/schema/user.schema';
 import { UpdateEstadoEstudianteDto } from './dto/update-estado.dto';
 import { UpdateSeccionDto } from './dto/update-seccion.dto';
+import { Archivo } from 'src/archivo/schema/archivo.schema';
 
 @Injectable()
 export class EstudianteService {
@@ -29,9 +30,11 @@ export class EstudianteService {
      private readonly seccionModel: Model<Seccion>,
      @InjectModel(Multimedia.name)
      private readonly multimediaModel: Model<Multimedia>,
-     private readonly firebaseService: FirebaseService,
+     @InjectModel(Archivo.name)
+     private readonly archivoModel: Model<Archivo>,
      @InjectModel(User.name)
-     private readonly userModel: Model<User>
+     private readonly userModel: Model<User>,
+     private readonly firebaseService: FirebaseService
   ) {}
 
   async create(createEstudianteDto: CreateEstudianteDto){
@@ -73,16 +76,19 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async findAll() {
     return await this.estudianteModel.find()
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async findOne(estudiante_id: string){
     return await this.estudianteModel.findById(estudiante_id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async update(estudiante_id: string, updateEstudianteDto: UpdateEstudianteDto){
@@ -134,6 +140,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }  
   
   async assignSeccion(estudiante_id: string, updateSeccionDto: UpdateSeccionDto) {
@@ -154,6 +161,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async removeSeccion(estudianteId: string) {
@@ -169,6 +177,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async remove(estudiante_id: string){
@@ -200,6 +209,7 @@ export class EstudianteService {
 
     const estudiantes = await this.estudianteModel.find({ grado: grado._id, periodo: periodo._id })
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
 
     return estudiantes.filter(estudiante => estudiante.seccion === null)
   }
@@ -224,7 +234,9 @@ export class EstudianteService {
       seccion: seccion._id,
       grado: grado._id,
       periodo: periodo._id,
-    }).populate(['documento','periodo','grado','seccion','multimedia','user'])
+    })
+    .populate(['documento','periodo','grado','seccion','multimedia','user'])
+    .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async asignarUsuario(estudiante_id: string, usuario_id: string){
@@ -244,6 +256,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async removeUsuario(estudiante_id: string) {
@@ -258,6 +271,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async updateProfilePicture(estudiante_id: string, file: Express.Multer.File) {
@@ -290,21 +304,7 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
-  }
-
-  async getProfilePicture(estudiante_id: string) {
-    const estudiante = await this.estudianteModel.findById(estudiante_id)
-      .populate('multimedia')
-    if (!estudiante) {
-      throw new BadRequestException('Estudiante no encontrado')
-    }
-
-    if (!estudiante.multimedia) {
-      return { url: 'no existe' };
-    }
-    
-    return this.estudianteModel.findById(estudiante._id)
-    .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 
   async updateEstado(estudiante_id: string, updateEstadoEstudianteDto: UpdateEstadoEstudianteDto) {
@@ -319,5 +319,50 @@ export class EstudianteService {
 
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
+  }
+
+  async updateFiles(estudiante_id: string, files: Express.Multer.File[]) {
+    if (files.length > 4) {
+      throw new BadRequestException('No se pueden subir más de 4 archivos');
+    }
+  
+    const estudiante = await this.estudianteModel.findById(estudiante_id).populate('archivo');
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+
+    if (estudiante.archivo && estudiante.archivo.length > 0) {
+      const oldArchivo = await this.archivoModel.find({ _id: { $in: estudiante.archivo } })
+      
+      for (const archivo of oldArchivo) {
+        if (archivo.url) {
+          await this.firebaseService.deleteFileFromFirebase(archivo.url);
+        }
+      }
+      
+      await this.archivoModel.deleteMany({ _id: { $in: estudiante.archivo } })
+    }
+  
+    const uploadedFiles = await this.firebaseService.uploadDocumentsToFirebase('Estudiante', files) as UploadedFile[];
+  
+    const archivoEntries = await Promise.all(
+      uploadedFiles.map(async (file) => {
+        const createdArchivo = new this.archivoModel({
+          nombre: file.nombre,
+          url: file.url,
+          tamanio: file.tamanio,
+        });
+        return createdArchivo.save();
+      }),
+    );
+  
+    estudiante.archivo = archivoEntries.map(file => file._id);
+  
+    await estudiante.save();
+  
+    return this.estudianteModel.findById(estudiante._id)
+      .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
   }
 }

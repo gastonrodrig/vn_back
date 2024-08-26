@@ -11,6 +11,7 @@ import { Multimedia, MultimediaSchema } from 'src/multimedia/schema/multimedia.s
 import { User, UserSchema } from 'src/user/schema/user.schema';
 import { Estudiante, EstudianteSchema } from './schema/estudiante.schema';
 import { FirebaseService } from 'src/storage/firebase.service';
+import { Archivo, ArchivoSchema } from 'src/archivo/schema/archivo.schema';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FirebaseService } from 'src/storage/firebase.service';
       { name: Grado.name, schema: GradoSchema },
       { name: Seccion.name, schema: SeccionSchema },
       { name: Multimedia.name, schema: MultimediaSchema },
+      { name: Archivo.name, schema: ArchivoSchema },
       { name: User.name, schema: UserSchema }
     ])
   ],

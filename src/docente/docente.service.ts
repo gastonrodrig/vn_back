@@ -156,18 +156,4 @@ export class DocenteService {
     docente.multimedia = multimedia
     return await docente.save()
   }
-
-  async getProfilePicture(docente_id: string) {
-    const docente = await this.docenteModel.findById(docente_id)
-      .populate('multimedia')
-    if (!docente) {
-      throw new BadRequestException('Docente no encontrado')
-    }
-
-    if (!docente.multimedia) {
-      return { url: 'no existe' };
-    }
-    
-    return docente;
-  }
 }
