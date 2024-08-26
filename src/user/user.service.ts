@@ -135,17 +135,17 @@ export class UserService {
       .populate({
         path: 'estudiante',
         strictPopulate: false,
-        populate: ['documento', 'grado', 'apoderado', 'periodo', 'seccion', 'multimedia']
+        populate: ['documento', 'grado', 'periodo', 'seccion', 'multimedia', 'user']
       })
       .populate({
         path: 'docente',
         strictPopulate: false,
-        populate: ['documento', 'multimedia']
+        populate: ['documento', 'multimedia', 'user']
       })
       .populate({
         path: 'apoderado',
         strictPopulate: false,
-        populate: ['documento', 'estudiante', 'multimedia']
+        populate: ['documento', 'estudiante', 'multimedia', 'user']
       })
   }
 
@@ -154,17 +154,17 @@ export class UserService {
       .populate({
         path: 'estudiante',
         strictPopulate: false,
-        populate: ['documento', 'grado', 'apoderado', 'periodo', 'seccion', 'multimedia']
+        populate: ['documento', 'grado', 'periodo', 'seccion', 'multimedia', 'user']
       })
       .populate({
         path: 'docente',
         strictPopulate: false,
-        populate: ['documento', 'multimedia']
+        populate: ['documento', 'multimedia', 'user']
       })
       .populate({
         path: 'apoderado',
         strictPopulate: false,
-        populate: ['documento', 'estudiante', 'multimedia']
+        populate: ['documento', 'estudiante', 'multimedia', 'user']
       })
   }
 
@@ -191,17 +191,17 @@ export class UserService {
       .populate({
         path: 'estudiante',
         strictPopulate: false,
-        populate: ['documento', 'grado', 'apoderado', 'periodo', 'seccion', 'multimedia']
+        populate: ['documento', 'grado', 'periodo', 'seccion', 'multimedia', 'user']
       })
       .populate({
         path: 'docente',
         strictPopulate: false,
-        populate: ['documento', 'multimedia']
+        populate: ['documento', 'multimedia', 'user']
       })
       .populate({
         path: 'apoderado',
         strictPopulate: false,
-        populate: ['documento', 'estudiante', 'multimedia']
+        populate: ['documento', 'estudiante', 'multimedia', 'user']
       })
   }
 
