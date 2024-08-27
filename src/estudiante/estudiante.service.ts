@@ -14,6 +14,7 @@ import { User } from 'src/user/schema/user.schema';
 import { UpdateEstadoEstudianteDto } from './dto/update-estado.dto';
 import { UpdateSeccionDto } from './dto/update-seccion.dto';
 import { Archivo } from 'src/archivo/schema/archivo.schema';
+import { Apoderado } from 'src/apoderado/schema/apoderado.schema';
 
 @Injectable()
 export class EstudianteService {
@@ -34,6 +35,8 @@ export class EstudianteService {
      private readonly archivoModel: Model<Archivo>,
      @InjectModel(User.name)
      private readonly userModel: Model<User>,
+     @InjectModel(Apoderado.name)
+     private readonly apoderadoModel: Model<Apoderado>,
      private readonly firebaseService: FirebaseService
   ) {}
 
@@ -192,6 +195,10 @@ export class EstudianteService {
       const user = estudiante.user._id
       await this.userModel.findByIdAndDelete(user)
     }
+
+    const estudianteId = new Types.ObjectId(estudiante_id)
+
+    await this.apoderadoModel.deleteMany({ 'estudiante._id': estudianteId});
 
     return { sucess: true }
   }

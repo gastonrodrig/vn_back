@@ -12,6 +12,7 @@ import { User, UserSchema } from 'src/user/schema/user.schema';
 import { Estudiante, EstudianteSchema } from './schema/estudiante.schema';
 import { FirebaseService } from 'src/storage/firebase.service';
 import { Archivo, ArchivoSchema } from 'src/archivo/schema/archivo.schema';
+import { Apoderado, ApoderadoSchema } from 'src/apoderado/schema/apoderado.schema';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { Archivo, ArchivoSchema } from 'src/archivo/schema/archivo.schema';
       { name: Seccion.name, schema: SeccionSchema },
       { name: Multimedia.name, schema: MultimediaSchema },
       { name: Archivo.name, schema: ArchivoSchema },
-      { name: User.name, schema: UserSchema }
+      { name: User.name, schema: UserSchema },
+      { name: Apoderado.name, schema: ApoderadoSchema }
     ])
   ],
   controllers: [EstudianteController],

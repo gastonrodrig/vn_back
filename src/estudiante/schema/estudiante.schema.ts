@@ -38,7 +38,7 @@ export class Estudiante {
   @Prop({ type: Types.ObjectId, ref: 'User'})
   user: Types.ObjectId;
 
-  @Prop({enum: EstadoEstudiante})
+  @Prop({ enum: EstadoEstudiante, default: EstadoEstudiante.PENDIENTE })
   estado: EstadoEstudiante;
 }
 

@@ -99,15 +99,16 @@ export class ApoderadoService {
 
   async remove(apoderado_id: string){
     const apoderado = await this.apoderadoModel.findById(apoderado_id)
-      .populate('user')
     if(!apoderado){
         throw new BadRequestException('Apoderado no encontrado')
     }
 
-    await this.estudianteModel.findByIdAndDelete(apoderado_id)
+    await this.apoderadoModel.findByIdAndDelete(apoderado_id)
 
-    const user = apoderado.user._id
-    await this.userModel.findByIdAndDelete(user)
+    if(apoderado.user) {
+      const user = apoderado.user._id
+      await this.userModel.findByIdAndDelete(user)
+    }
 
     return { sucess: true }
   }
@@ -171,6 +172,13 @@ export class ApoderadoService {
     apoderado.multimedia = multimedia
 
     return await apoderado.save()
+  }
+
+  async removeByEstudianteId(estudiante_id: string) {
+    const estudianteId = new Types.ObjectId(estudiante_id)
+    await this.apoderadoModel.deleteMany({ estudiante: estudianteId });
+    
+    return await this.apoderadoModel.deleteMany({ estudiante: estudiante_id });
   }
 
   async listarApoderadosPorEstudiante(estudiante_id: string) {

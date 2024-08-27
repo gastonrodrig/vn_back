@@ -72,6 +72,11 @@ export class ApoderadoController {
     return this.apoderadoService.updateProfilePicture(id, imageFile);
   }
 
+  @Delete('estudiante/:id')
+  removeByEstudianteId(@Param('id') id: string){
+    return this.apoderadoService.removeByEstudianteId(id);
+  }
+
   @Get('estudiante/:id')
   listarApoderadosPorEstudiante(@Param('id') id: string) {
     return this.apoderadoService.listarApoderadosPorEstudiante(id);
