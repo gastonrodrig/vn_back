@@ -129,4 +129,13 @@ export class HorarioService {
       curso: curso._id,
     });
   }
+
+  async listerHorariosPorDocente(docente_id: string){
+    const docente = await this.docenteModel.findById(docente_id)
+    if(!docente){
+      throw new BadRequestException('Docente no encontrado')
+    }
+    return this.horarioModel.find({ docente: docente._id })
+    .populate(['seccion', 'grado', 'curso', 'docente'])
+  }
 }

@@ -44,4 +44,9 @@ export class HorarioController {
   ) {
     return this.horarioService.obtenerRegistroBySeccionGradoAndCurso(seccionId, gradoId, cursoId);
   }
+
+  @Get('docente/:id')
+  listerHorariosPorDocente(@Param('id') id: string) {
+    return this.horarioService.listerHorariosPorDocente(id);
+  }
 }
