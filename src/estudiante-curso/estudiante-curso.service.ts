@@ -88,4 +88,14 @@ export class EstudianteCursoService {
 
     return { sucess: true }
   }
+
+  async listarCursosPorEstudiante(estudiante_id: string){
+    const estudiante = await this.estudianteModel.findById(estudiante_id)
+    if(!estudiante){
+      throw new BadRequestException('Estudiante no encontrado')
+    }
+
+    return this.cursoModel.find({ estudiante: estudiante._id})
+    .populate(['estudiante','curso'])
+  }
 }

@@ -33,4 +33,9 @@ export class EstudianteCursoController {
   remove(@Param('id') id: string) {
     return this.estudianteCursoService.remove(id);
   }
+  
+  @Get('estudiante/:id')
+  listarCursosPorEstudiante(@Param('id') id:string){
+    return this.estudianteCursoService.listarCursosPorEstudiante(id);
+  } 
 }
