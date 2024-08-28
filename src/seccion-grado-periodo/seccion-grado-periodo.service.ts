@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
 import { SeccionGradoPeriodo } from './schema/seccion.schema';
 import { Grado } from 'src/grado/schema/grado.schema';
@@ -107,19 +107,23 @@ export class SeccionGradoPeriodoService {
   }
 
   async listarSeccionesPorGradoYPeriodo(gradoId: string, periodoId: string) {
-    const grado = await this.gradoModel.findById(gradoId)
+    // Convierte los IDs a ObjectId
+    const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
+    const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
+
+    const grado = await this.gradoModel.findById(gradoObjectId);
     if (!grado) {
-      throw new BadRequestException('Grado no encontrado')
+      throw new BadRequestException('Grado no encontrado');
     }
 
-    const periodo = await this.periodoEscolarModel.findById(periodoId)
+    const periodo = await this.periodoEscolarModel.findById(periodoObjectId);
     if (!periodo) {
-      throw new BadRequestException('Periodo no encontrado')
+      throw new BadRequestException('Periodo no encontrado');
     }
 
     return await this.seccionGradoPeriodoModel
-      .find({ grado: gradoId, periodo: periodoId })
-      .populate(['seccion', 'grado', 'periodo'])
+      .find({ grado: gradoObjectId, periodo: periodoObjectId })
+      .populate(['seccion', 'grado', 'periodo']);
   }
 
 }
