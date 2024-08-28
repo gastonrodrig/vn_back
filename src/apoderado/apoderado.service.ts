@@ -97,7 +97,7 @@ export class ApoderadoService {
       .populate(['documento','estudiante','multimedia','user'])
   }
 
-  async remove(apoderado_id: string){
+  async remove(apoderado_id: string) {
     const apoderado = await this.apoderadoModel.findById(apoderado_id)
     if(!apoderado){
         throw new BadRequestException('Apoderado no encontrado')
@@ -108,6 +108,16 @@ export class ApoderadoService {
     if(apoderado.user) {
       const user = apoderado.user._id
       await this.userModel.findByIdAndDelete(user)
+    }
+
+    const multimediaId = apoderado.multimedia ? apoderado.multimedia._id : null
+
+    if (multimediaId) {
+      const multimedia = await this.multimediaModel.findById(multimediaId).exec()
+      if (multimedia) {
+        await this.firebaseService.deleteFileFromFirebase(multimedia.url);
+        await this.multimediaModel.findByIdAndDelete(multimediaId);
+      }
     }
 
     return { sucess: true }

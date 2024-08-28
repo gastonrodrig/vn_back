@@ -21,17 +21,18 @@ export class GradoCursoHorasService {
   async create(createGradoCursoHorasDto: CreateGradoCursoHorasDto) {
     const grado = await this.gradoModel.findById(createGradoCursoHorasDto.grado_id)
     if (!grado) {
-      throw new BadRequestException('Curso no encontrado')
+      throw new BadRequestException('Grado no encontrado')
     }
 
     const curso = await this.cursoModel.findById(createGradoCursoHorasDto.curso_id)
     if (!curso) {
-      throw new BadRequestException('Grado no encontrada')
+      throw new BadRequestException('Curso no encontrado')
     }
 
     const gradoCursoHoras = new this.gradoCursoHorasModel({
       grado,
-      curso
+      curso,
+      horas: null
     })
 
     await gradoCursoHoras.save()
@@ -42,12 +43,12 @@ export class GradoCursoHorasService {
 
   async findAll() {
     return await this.gradoCursoHorasModel.find()
-    .populate(['seccion', 'grado', 'periodo'])
+      .populate(['grado', 'curso'])
   }
 
   async findOne(gradoch_id: string) {
     return await this.gradoCursoHorasModel.findById(gradoch_id)
-    .populate(['seccion', 'grado', 'periodo'])
+      .populate(['grado', 'curso'])
   }
 
   async updateHoras(curso_id: string, grado_id: string, updateDto: UpdateGradoCursoHorasDto) {
@@ -66,7 +67,7 @@ export class GradoCursoHorasService {
   }
 
   async listarCursosPorGrado(grado_id: string) {
-    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ grado: grado_id })
+    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ 'grado._id' : grado_id })
       .populate('curso')
     if (gradoCursoHoras.length === 0) {
       throw new BadRequestException('No se encontraron cursos para el grado proporcionado');
@@ -76,13 +77,13 @@ export class GradoCursoHorasService {
   }
 
   async listarGradosPorCurso(curso_id: string) {
-    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ curso: curso_id })
+    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ 'curso._id' : curso_id })
       .populate('grado')
-    if(gradoCursoHoras.length === 0) {
+    if(!gradoCursoHoras) {
       throw new BadRequestException('No se encontraron grados para el curso proporcionado');
     }  
 
-    return gradoCursoHoras.map(e => e.grado)
+    return gradoCursoHoras
   }
 
   async removeByGradoAndCurso(grado_id: string, curso_id: string) {

@@ -36,6 +36,7 @@ export class DocenteService {
       telefono: createDocenteDto.telefono,
       numero_documento: createDocenteDto.numero_documento,
       documento,
+      multimedia: null,
     });
 
     await docente.save()

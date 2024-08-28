@@ -72,6 +72,7 @@ export class EstudianteService {
       documento,
       periodo,
       grado,
+      multimedia: null,
       seccion: seccion ? seccion._id : null,
     })
 
@@ -196,9 +197,17 @@ export class EstudianteService {
       await this.userModel.findByIdAndDelete(user)
     }
 
-    const estudianteId = new Types.ObjectId(estudiante_id)
+    const multimediaId = estudiante.multimedia ? estudiante.multimedia._id : null
 
-    await this.apoderadoModel.deleteMany({ 'estudiante._id': estudianteId});
+    if (multimediaId) {
+      const multimedia = await this.multimediaModel.findById(multimediaId).exec()
+      if (multimedia) {
+        await this.firebaseService.deleteFileFromFirebase(multimedia.url);
+        await this.multimediaModel.findByIdAndDelete(multimediaId);
+      }
+    }
+
+    await this.apoderadoModel.deleteMany({ 'estudiante._id': estudiante_id })
 
     return { sucess: true }
   }

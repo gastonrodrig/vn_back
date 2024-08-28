@@ -11,7 +11,7 @@ import { GradoCursoHoras, GradoCursoHorasSchema } from './schema/grado-curso-hor
     MongooseModule.forFeature([
       { name: GradoCursoHoras.name, schema: GradoCursoHorasSchema },
       { name: Grado.name, schema: GradoSchema },
-      { name: Curso.name, schema: CursoSchema }
+      { name: Curso.name, schema: CursoSchema },
     ])
   ],
   providers: [GradoCursoHorasService],

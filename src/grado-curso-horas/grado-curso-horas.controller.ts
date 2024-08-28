@@ -25,7 +25,7 @@ export class GradoCursoHorasController {
   }
 
   @Patch(':gradoId/:cursoId')
-  async updateHoras(
+  updateHoras(
     @Param('gradoId') gradoId: string,
     @Param('cursoId') cursoId: string,
     @Body() updateDto: UpdateGradoCursoHorasDto,

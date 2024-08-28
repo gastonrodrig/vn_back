@@ -6,4 +6,4 @@ export class Grado {
   nombre: string;
 }
 
-export const GradoSchema = SchemaFactory.createForClass(Grado);
+export const GradoSchema = SchemaFactory.createForClass(Grado)

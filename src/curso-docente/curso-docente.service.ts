@@ -25,7 +25,7 @@ export class CursoDocenteService {
     }
 
     const docente = await this.docenteModel.findById(createCursoDocenteDto.docente_id)
-    if(!curso){
+    if(!docente){
       throw new BadRequestException('Docente no encontrado');
     }
 
