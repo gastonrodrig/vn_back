@@ -67,7 +67,7 @@ export class GradoCursoHorasService {
   }
 
   async listarCursosPorGrado(grado_id: string) {
-    const grado = new Types.ObjectId(grado_id);
+    const grado = new Types.ObjectId(grado_id)
     const gradoCursoHoras = await this.gradoCursoHorasModel.find({ grado : grado })
       .populate(['grado', 'curso'])
 
@@ -79,7 +79,7 @@ export class GradoCursoHorasService {
   }
 
   async listarGradosPorCurso(curso_id: string) {
-    const curso = new Types.ObjectId(curso_id);
+    const curso = new Types.ObjectId(curso_id)
     const gradoCursoHoras = await this.gradoCursoHorasModel.find({ curso: curso })
       .populate(['grado', 'curso']);
     

@@ -90,7 +90,8 @@ export class EstudianteCursoService {
   }
 
   async listarCursosPorEstudiante(estudiante_id: string){
-    const estudiante = await this.estudianteModel.findById(estudiante_id)
+    const estudianteId = new Types.ObjectId(estudiante_id)
+    const estudiante = await this.estudianteModel.findById(estudianteId)
     if(!estudiante){
       throw new BadRequestException('Estudiante no encontrado')
     }

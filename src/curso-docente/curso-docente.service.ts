@@ -90,13 +90,15 @@ export class CursoDocenteService {
   }
 
   async listarDocentesPorCurso(curso_id: string) {
-    const curso = await this.cursoModel.findById(curso_id)
-    if (!curso) {
-      throw new BadRequestException(`Curso no encontrado`);
+    const curso = new Types.ObjectId(curso_id)
+    const cursoDocente = await this.cursoModel.find({ curso: curso })
+      .populate(['curso','docente'])
+      
+    if (cursoDocente.length === 0) {
+      throw new BadRequestException('No se encontraron docentes para el curso proporcionado');
     }
 
-    return this.docenteModel.find({ curso: curso._id })
-      .populate(['curso','docente'])
+    return cursoDocente
   }
 
   async removeByCursoAndDocente(curso_id: string, docente_id: string) {
