@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Curso } from 'src/curso/schema/curso.schema';
 import { Grado } from 'src/grado/schema/grado.schema';
 import { GradoCursoHoras } from './schema/grado-curso-horas.schema';
@@ -67,28 +67,27 @@ export class GradoCursoHorasService {
   }
 
   async listarCursosPorGrado(grado_id: string) {
-    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ 'grado._id' : grado_id })
-      .populate('curso')
+    const grado = new Types.ObjectId(grado_id);
+    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ grado : grado })
+      .populate(['grado', 'curso'])
+
     if (gradoCursoHoras.length === 0) {
       throw new BadRequestException('No se encontraron cursos para el grado proporcionado');
     }
 
-    return gradoCursoHoras.map(e => e.curso);
+    return gradoCursoHoras
   }
 
-  async listarGradosPorCurso(cursoId: string) {
-    // Asegúrate de convertir cursoId a ObjectId
-    const cursoObjectId = new mongoose.Types.ObjectId(cursoId);
+  async listarGradosPorCurso(curso_id: string) {
+    const curso = new Types.ObjectId(curso_id);
+    const gradoCursoHoras = await this.gradoCursoHorasModel.find({ curso: curso })
+      .populate(['grado', 'curso']);
     
-    const gradoCursosHoras = await this.gradoCursoHorasModel.find({ curso: cursoObjectId })
-      .populate('grado curso', 'gradoch_id horas') // Opcional: si necesitas hacer populate
-      .select('gradoch_id horas grado curso');
-    
-    if (gradoCursosHoras.length === 0) {
+    if (gradoCursoHoras.length === 0) {
       throw new BadRequestException('No se encontraron grados para el curso proporcionado');
     }
     
-    return gradoCursosHoras;
+    return gradoCursoHoras
   }
 
   async removeByGradoAndCurso(grado_id: string, curso_id: string) {
