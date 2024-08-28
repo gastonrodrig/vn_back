@@ -91,7 +91,7 @@ export class CursoDocenteService {
 
   async listarDocentesPorCurso(curso_id: string) {
     const curso = new Types.ObjectId(curso_id)
-    const cursoDocente = await this.cursoModel.find({ curso: curso })
+    const cursoDocente = await this.cursoDocenteModel.find({ curso: curso })
       .populate(['curso','docente'])
       
     if (cursoDocente.length === 0) {
@@ -102,7 +102,9 @@ export class CursoDocenteService {
   }
 
   async removeByCursoAndDocente(curso_id: string, docente_id: string) {
-    const cursosDocente = await this.cursoDocenteModel.findOne({ curso: curso_id, docente: docente_id })
+    const curso = new Types.ObjectId(curso_id)
+    const docente = new Types.ObjectId(docente_id)
+    const cursosDocente = await this.cursoDocenteModel.findOne({ curso: curso, docente: docente })
     if (!cursosDocente) {
       throw new BadRequestException('CursoDocente no fue encontrada');
     }

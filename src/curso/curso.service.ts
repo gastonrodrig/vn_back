@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Curso } from './schema/curso.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
 import { GradoCursoHoras } from 'src/grado-curso-horas/schema/grado-curso-horas.schema';
+import { CursoDocente } from 'src/curso-docente/schema/curso-docente.schema';
 
 @Injectable()
 export class CursoService {
@@ -12,7 +13,9 @@ export class CursoService {
     @InjectModel(Curso.name)
     private cursoModel: Model<Curso>,
     @InjectModel(GradoCursoHoras.name) 
-    private readonly gradoCursoHorasModel: Model<GradoCursoHoras>
+    private readonly gradoCursoHorasModel: Model<GradoCursoHoras>,
+    @InjectModel(CursoDocente.name) 
+    private readonly cursoDocenteModel: Model<CursoDocente>
   ) {}
 
   async create(createCursoDto: CreateCursoDto) {
@@ -42,13 +45,14 @@ export class CursoService {
   }
 
   async remove(curso_id: string) {
+    const cursoId = new Types.ObjectId(curso_id)
     const curso = await this.cursoModel.findByIdAndDelete(curso_id)
     if (!curso) {
       throw new BadRequestException('Curso no encontrado')
     }
 
-    // Elimina los documentos en GradoCursoHoras que tienen el curso_id
-    await this.gradoCursoHorasModel.deleteMany({ curso: curso_id });
+    await this.gradoCursoHorasModel.deleteMany({ curso: cursoId })
+    await this.cursoDocenteModel.deleteMany({ curso: cursoId })
 
     return { success: true }
   }

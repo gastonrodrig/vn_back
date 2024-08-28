@@ -52,7 +52,9 @@ export class GradoCursoHorasService {
   }
 
   async updateHoras(curso_id: string, grado_id: string, updateDto: UpdateGradoCursoHorasDto) {
-    const gradoCursoHoras = await this.gradoCursoHorasModel.findOne({ curso: curso_id, grado: grado_id })
+    const gradoId = new Types.ObjectId(grado_id)
+    const cursoId = new Types.ObjectId(curso_id)
+    const gradoCursoHoras = await this.gradoCursoHorasModel.findOne({ curso: cursoId, grado: gradoId })
       .populate(['grado', 'curso']);
     if (!gradoCursoHoras) {
       throw new BadRequestException(`GradoCursosHoras not found`);
@@ -91,7 +93,9 @@ export class GradoCursoHorasService {
   }
 
   async removeByGradoAndCurso(grado_id: string, curso_id: string) {
-    const gradoch = await this.gradoCursoHorasModel.findOne({ grado: grado_id, curso: curso_id })
+    const gradoId = new Types.ObjectId(grado_id)
+    const cursoId = new Types.ObjectId(curso_id)
+    const gradoch = await this.gradoCursoHorasModel.findOne({ grado: gradoId, curso: cursoId })
     if (!gradoch) {
       throw new BadRequestException('La relación entre el grado y el curso no fue encontrada');
     }
@@ -102,7 +106,9 @@ export class GradoCursoHorasService {
   }
 
   async obtenerHorasPorCursoYGrado(curso_id: string, grado_id: string) {
-    const gradoCursoHoras = await this.gradoCursoHorasModel.findOne({ curso: curso_id, grado: grado_id })
+    const cursoId = new Types.ObjectId(curso_id)
+    const gradoId = new Types.ObjectId(grado_id)
+    const gradoCursoHoras = await this.gradoCursoHorasModel.findOne({ curso: cursoId, grado: gradoId })
       .populate(['grado', 'curso']);
     if (!gradoCursoHoras) {
       throw new BadRequestException(`GradoCursosHoras not found`);

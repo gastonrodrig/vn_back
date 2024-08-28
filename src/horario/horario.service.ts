@@ -91,49 +91,43 @@ export class HorarioService {
   }
 
   async findHorariosBySeccionAndGrado(seccion_id: string, grado_id: string) {
-    // Convertir los IDs en ObjectId
-    const seccionObjectId = new Types.ObjectId(seccion_id);
-    const gradoObjectId = new Types.ObjectId(grado_id);
+    const seccionId = new Types.ObjectId(seccion_id);
+    const gradoId = new Types.ObjectId(grado_id);
   
-    // Buscar la sección por su ObjectId
-    const seccion = await this.seccionModel.findById(seccionObjectId);
+    const seccion = await this.seccionModel.findById(seccionId);
     if (!seccion) {
       throw new BadRequestException('Sección no encontrada');
     }
   
-    const grado = await this.gradoModel.findById(gradoObjectId);
+    const grado = await this.gradoModel.findById(gradoId);
     if (!grado) {
       throw new BadRequestException('Grado no encontrado');
     }
   
     const horarios = await this.horarioModel.find({
-      seccion: seccionObjectId,
-      grado: gradoObjectId,
+      seccion: seccionId,
+      grado: gradoId,
     }).populate(['seccion', 'grado', 'curso', 'docente']);
-  
-    if (horarios.length === 0) {
-      throw new BadRequestException('No se encontraron horarios para la sección y grado proporcionados');
-    }
   
     return horarios;
   }
 
   async obtenerRegistroBySeccionGradoAndCurso(seccion_id: string, grado_id: string, curso_id: string) {
-    const seccionObjectId = new Types.ObjectId(seccion_id);
-    const gradoObjectId = new Types.ObjectId(grado_id);
-    const cursoObjectId = new Types.ObjectId(curso_id);
+    const seccionId = new Types.ObjectId(seccion_id);
+    const gradoId = new Types.ObjectId(grado_id);
+    const cursoId = new Types.ObjectId(curso_id);
   
-    const seccion = await this.seccionModel.findById(seccionObjectId);
+    const seccion = await this.seccionModel.findById(seccionId);
     if (!seccion) {
       throw new BadRequestException('Sección no encontrada');
     }
   
-    const grado = await this.gradoModel.findById(gradoObjectId);
+    const grado = await this.gradoModel.findById(gradoId);
     if (!grado) {
       throw new BadRequestException('Grado no encontrado');
     }
   
-    const curso = await this.cursoModel.findById(cursoObjectId);
+    const curso = await this.cursoModel.findById(cursoId);
     if (!curso) {
       throw new BadRequestException('Curso no encontrado');
     }
