@@ -24,37 +24,41 @@ export class HorarioService {
   ) {}
 
   async create(createHorarioDto: CreateHorarioDto) {
-    const seccion = await this.seccionModel.findById(createHorarioDto.seccion_id)
+    const seccion = await this.seccionModel.findById(createHorarioDto.seccion_id);
     if (!seccion) {
       throw new BadRequestException('Sección no encontrada');
     }
-
-    const grado = await this.gradoModel.findById(createHorarioDto.grado_id)
+  
+    const grado = await this.gradoModel.findById(createHorarioDto.grado_id);
     if (!grado) {
       throw new BadRequestException('Grado no encontrado');
     }
-
-    const curso = await this.cursoModel.findById(createHorarioDto.curso_id)
+  
+    const curso = await this.cursoModel.findById(createHorarioDto.curso_id);
     if (!curso) {
       throw new BadRequestException('Curso no encontrado');
     }
-
-    const docente = await this.docenteModel.findById(createHorarioDto.docente_id)
+  
+    const docente = await this.docenteModel.findById(createHorarioDto.docente_id);
     if (!docente) {
       throw new BadRequestException('Docente no encontrado');
     }
-
+  
     const conflictoHorario = await this.horarioModel.findOne({
-      docente,
+      docente: docente._id,
       dia_semana: createHorarioDto.dia_semana,
-      hora_inicio: createHorarioDto.hora_inicio,
-      hora_fin: createHorarioDto.hora_fin
+      $or: [
+        {
+          hora_inicio: { $lt: createHorarioDto.hora_fin }, 
+          hora_fin: { $gt: createHorarioDto.hora_inicio }
+        }
+      ]
     });
-
+  
     if (conflictoHorario) {
-      throw new BadRequestException('El docente ya tiene una clase asignada en el mismo horario.');
+      throw new BadRequestException('El docente ya tiene una clase asignada que solapa con el horario solicitado.');
     }
-
+  
     const horario = new this.horarioModel({
       dia_semana: createHorarioDto.dia_semana,
       hora_inicio: createHorarioDto.hora_inicio,
@@ -64,11 +68,11 @@ export class HorarioService {
       curso,
       docente
     });
-
+  
     await horario.save();
-
+  
     return this.horarioModel.findById(horario._id)
-      .populate(['seccion', 'grado', 'curso', 'docente'])
+      .populate(['seccion', 'grado', 'curso', 'docente']);
   }
 
   async findAll() {
