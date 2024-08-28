@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Curso } from 'src/curso/schema/curso.schema';
 import { Docente } from 'src/docente/schema/docente.schema';
 import { Grado } from 'src/grado/schema/grado.schema';
@@ -91,38 +91,53 @@ export class HorarioService {
   }
 
   async findHorariosBySeccionAndGrado(seccion_id: string, grado_id: string) {
-    const seccion = await this.seccionModel.findOne({ seccion_id })
+    // Convertir los IDs en ObjectId
+    const seccionObjectId = new Types.ObjectId(seccion_id);
+    const gradoObjectId = new Types.ObjectId(grado_id);
+  
+    // Buscar la sección por su ObjectId
+    const seccion = await this.seccionModel.findById(seccionObjectId);
     if (!seccion) {
       throw new BadRequestException('Sección no encontrada');
     }
-
-    const grado = await this.gradoModel.findOne({ grado_id })
+  
+    const grado = await this.gradoModel.findById(gradoObjectId);
     if (!grado) {
       throw new BadRequestException('Grado no encontrado');
     }
-
-    return await this.horarioModel.find({
-      seccion: seccion._id,
-      grado: grado._id,
-    }).populate(['seccion', 'grado', 'curso', 'docente'])
+  
+    const horarios = await this.horarioModel.find({
+      seccion: seccionObjectId,
+      grado: gradoObjectId,
+    }).populate(['seccion', 'grado', 'curso', 'docente']);
+  
+    if (horarios.length === 0) {
+      throw new BadRequestException('No se encontraron horarios para la sección y grado proporcionados');
+    }
+  
+    return horarios;
   }
 
   async obtenerRegistroBySeccionGradoAndCurso(seccion_id: string, grado_id: string, curso_id: string) {
-    const seccion = await this.seccionModel.findOne({ seccion_id })
+    const seccionObjectId = new Types.ObjectId(seccion_id);
+    const gradoObjectId = new Types.ObjectId(grado_id);
+    const cursoObjectId = new Types.ObjectId(curso_id);
+  
+    const seccion = await this.seccionModel.findById(seccionObjectId);
     if (!seccion) {
       throw new BadRequestException('Sección no encontrada');
     }
-
-    const grado = await this.gradoModel.findOne({ grado_id })
+  
+    const grado = await this.gradoModel.findById(gradoObjectId);
     if (!grado) {
       throw new BadRequestException('Grado no encontrado');
     }
-
-    const curso = await this.cursoModel.findOne({ curso_id })
+  
+    const curso = await this.cursoModel.findById(cursoObjectId);
     if (!curso) {
       throw new BadRequestException('Curso no encontrado');
     }
-
+  
     return await this.horarioModel.countDocuments({
       seccion: seccion._id,
       grado: grado._id,
