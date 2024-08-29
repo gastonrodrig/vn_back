@@ -18,6 +18,7 @@ import { ApoderadoModule } from './apoderado/apoderado.module';
 import { EstudianteCursoModule } from './estudiante-curso/estudiante-curso.module';
 import { CursoDocenteModule } from './curso-docente/curso-docente.module';
 import { HorarioModule } from './horario/horario.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { HorarioModule } from './horario/horario.module';
     ApoderadoModule,
     EstudianteCursoModule,
     CursoDocenteModule,
-    HorarioModule
+    HorarioModule,
+    PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],
