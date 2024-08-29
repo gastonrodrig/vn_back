@@ -19,6 +19,8 @@ import { EstudianteCursoModule } from './estudiante-curso/estudiante-curso.modul
 import { CursoDocenteModule } from './curso-docente/curso-docente.module';
 import { HorarioModule } from './horario/horario.module';
 import { PaymentModule } from './payment/payment.module';
+import { GmailService } from './gmail/gmail.service';
+import { GmailController } from './gmail/gmail.controller';
 
 @Module({
   imports: [
@@ -47,7 +49,7 @@ import { PaymentModule } from './payment/payment.module';
     HorarioModule,
     PaymentModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, GmailController],
+  providers: [AppService, GmailService],
 })
 export class AppModule { }
