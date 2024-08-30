@@ -13,6 +13,6 @@ export class GmailController {
   async sendEmail(@Body() createEmailDto: CreateGmailDto) {
     const { to, subject, text } = createEmailDto;
     await this.gmailService.sendEmail(to, subject, text);
-    return { message: 'Email sent successfully' };
+    return { message: 'Correo enviado satisfactoriamente' };
   }
 }

@@ -21,6 +21,7 @@ import { HorarioModule } from './horario/horario.module';
 import { PaymentModule } from './payment/payment.module';
 import { GmailService } from './gmail/gmail.service';
 import { GmailController } from './gmail/gmail.controller';
+import { GmailModule } from './gmail/gmail.module';
 
 @Module({
   imports: [
@@ -47,9 +48,10 @@ import { GmailController } from './gmail/gmail.controller';
     EstudianteCursoModule,
     CursoDocenteModule,
     HorarioModule,
-    PaymentModule
+    PaymentModule,
+    GmailModule
   ],
-  controllers: [AppController, GmailController],
-  providers: [AppService, GmailService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }
