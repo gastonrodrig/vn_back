@@ -48,7 +48,6 @@ import { GmailModule } from './gmail/gmail.module';
     EstudianteCursoModule,
     CursoDocenteModule,
     HorarioModule,
-    PaymentModule,
     GmailModule
   ],
   controllers: [AppController],
