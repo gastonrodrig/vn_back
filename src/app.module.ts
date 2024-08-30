@@ -18,7 +18,6 @@ import { ApoderadoModule } from './apoderado/apoderado.module';
 import { EstudianteCursoModule } from './estudiante-curso/estudiante-curso.module';
 import { CursoDocenteModule } from './curso-docente/curso-docente.module';
 import { HorarioModule } from './horario/horario.module';
-import { PaymentModule } from './payment/payment.module';
 import { GmailService } from './gmail/gmail.service';
 import { GmailController } from './gmail/gmail.controller';
 import { GmailModule } from './gmail/gmail.module';
