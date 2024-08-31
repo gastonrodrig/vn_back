@@ -96,7 +96,7 @@ export class EstudianteCursoService {
       throw new BadRequestException('Estudiante no encontrado')
     }
 
-    return this.cursoModel.find({ estudiante: estudiante._id})
+    return this.estudianteCursoModel.find({ estudiante: estudiante._id })
     .populate(['estudiante','curso'])
   }
 }
