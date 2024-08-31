@@ -18,9 +18,9 @@ import { ApoderadoModule } from './apoderado/apoderado.module';
 import { EstudianteCursoModule } from './estudiante-curso/estudiante-curso.module';
 import { CursoDocenteModule } from './curso-docente/curso-docente.module';
 import { HorarioModule } from './horario/horario.module';
-import { GmailService } from './gmail/gmail.service';
-import { GmailController } from './gmail/gmail.controller';
 import { GmailModule } from './gmail/gmail.module';
+import { PagoModule } from './pago/pago.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -47,7 +47,9 @@ import { GmailModule } from './gmail/gmail.module';
     EstudianteCursoModule,
     CursoDocenteModule,
     HorarioModule,
-    GmailModule
+    GmailModule,
+    PagoModule,
+    StripeModule
   ],
   controllers: [AppController],
   providers: [AppService],
