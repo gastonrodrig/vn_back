@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { google } from 'googleapis';
+import * as PDFDocument from 'pdfkit';
+import * as streamBuffers from 'stream-buffers';
+import { CreateGmailPdfDto } from './dto/create-gmail-pdf.dto';
 
 @Injectable()
 export class GmailService {
@@ -40,14 +43,43 @@ export class GmailService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string) {
+  async sendEmailWithPdf(dto: CreateGmailPdfDto) {
+    const pdfBuffer = await this.generatePdf(dto.pdfContent);
+
     const mailOptions = {
       from: process.env.GMAIL_USER,
-      to,
-      subject,
-      text,
+      to: dto.to,
+      subject: dto.subject,
+      text: dto.text,
+      attachments: [
+        {
+          filename: 'ejemplo.pdf',
+          content: pdfBuffer,
+        },
+      ],
     };
 
     await this.transporter.sendMail(mailOptions);
+  }
+
+  private generatePdf(content: string): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const doc = new PDFDocument();
+      const buffer = new streamBuffers.WritableStreamBuffer();
+
+      doc.pipe(buffer);
+
+      doc.fontSize(25).text(content, 100, 100);
+
+      doc.end();
+
+      buffer.on('finish', () => {
+        resolve(buffer.getContents());
+      });
+
+      buffer.on('error', (error) => {
+        reject(error);
+      });
+    });
   }
 }

@@ -35,8 +35,10 @@
     "mongoose": "^8.5.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.14",
+    "pdfkit": "^0.15.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "stream-buffers": "^3.0.3",
     "stripe": "^16.8.0"
   },
   "devDependencies": {
