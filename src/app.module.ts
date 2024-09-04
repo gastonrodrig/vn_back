@@ -21,6 +21,7 @@ import { HorarioModule } from './horario/horario.module';
 import { GmailModule } from './gmail/gmail.module';
 import { PagoModule } from './pago/pago.module';
 import { StripeModule } from './stripe/stripe.module';
+import { CuposModule } from './cupos/cupos.module';
 
 @Module({
   imports: [
@@ -49,7 +50,8 @@ import { StripeModule } from './stripe/stripe.module';
     HorarioModule,
     GmailModule,
     PagoModule,
-    StripeModule
+    StripeModule,
+    CuposModule
   ],
   controllers: [AppController],
   providers: [AppService],
