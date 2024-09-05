@@ -5,20 +5,23 @@ import { PagoStatus } from '../enums/estado-pago.enum';
 
 @Schema({ collection: 'Pago' })
 export class Pago extends Document {
-  @Prop({ required: true })
+  @Prop()
   amount: number;
 
-  @Prop({ required: true })
+  @Prop()
   currency: string;
 
-  @Prop({ required: true })
+  @Prop()
   paymentMethodId: string;
 
-  @Prop({ enum: PagoStatus, default: PagoStatus.PENDIENTE })
+  @Prop()
+  transactionDetails: string;
+
+  @Prop({ enum: PagoStatus })
   status: PagoStatus;
 
   @Prop()
-  stripeOperationId: string; // Stripe's unique operation ID
+  stripeOperationId: string;
 }
 
 export const PagoSchema = SchemaFactory.createForClass(Pago);

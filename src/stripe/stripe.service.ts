@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import Stripe from 'stripe';
@@ -15,15 +15,14 @@ export class StripeService {
     @InjectModel(Pago.name) private readonly pagoModel: Model<Pago>,
     private readonly pagoService: PagoService,
   ) {
-    this.stripe = new Stripe('sk_test_51Pr2OvGk8XuMQuxy0ABi7akl8PupLQQdqSjxUwjmwzlYVAn0y4smWGp4zQ9quYkMP8WH6m4ugtOZNXBdOHeBXDCL001wGX9xMW', {
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2024-06-20',
-    });
+    })
   }
 
-  async processPayment(createPagoDto: CreatePagoDto): Promise<any> {
-    try {
-      console.log('Received DTO:', createPagoDto);
-  
+  async processPayment(createPagoDto: CreatePagoDto) {
+      // Validar que el rol del usuario sea Temporal
+
       // Create a PaymentIntent with the PaymentMethodId
       const paymentIntent = await this.stripe.paymentIntents.create({
         amount: createPagoDto.amount * 100,
@@ -33,21 +32,15 @@ export class StripeService {
         return_url: 'http://localhost:4200/',
       });
   
-      console.log('Created PaymentIntent:', paymentIntent);
-  
-      // Save payment details to database
       const createdPago = await this.pagoService.create({
         amount: createPagoDto.amount,
         currency: createPagoDto.currency,
         paymentMethodId: createPagoDto.paymentMethodId,
         stripeOperationId: paymentIntent.id,
-        status: PagoStatus.PENDIENTE
+        status: paymentIntent.status === 'succeeded' ? PagoStatus.APROBADO : PagoStatus.RECHAZADO,
+        transactionDetails: paymentIntent.status,
       });
-  
+
       return { paymentIntent, createdPago };
-    } catch (error) {
-      console.error('Error in processing payment:', error);
-      throw new Error(`Error en el procesamiento del pago: ${error.message}`);
-    }
   }
 }

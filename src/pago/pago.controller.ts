@@ -12,6 +12,4 @@ export class PagoController {
   async create(@Body() createPagoDto: CreatePagoDto): Promise<Pago> {
     return this.pagoService.create(createPagoDto);
   }
-
-  // Otros endpoints pueden ser añadidos aquí.
 }

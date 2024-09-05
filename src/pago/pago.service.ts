@@ -13,6 +13,4 @@ export class PagoService {
     const createdPago = new this.pagoModel(createPagoDto);
     return createdPago.save();
   }
-
-  // Otros métodos como find, findById, etc. pueden ser añadidos aquí.
 }

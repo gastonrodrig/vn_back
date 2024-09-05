@@ -13,6 +13,6 @@ import { PagoModule } from 'src/pago/pago.module';
   ],
   controllers: [StripeController],
   providers: [StripeService],
-  exports: [StripeService], // Export StripeService if you need it in other modules
+  exports: [StripeService],
 })
 export class StripeModule {}
