@@ -22,31 +22,31 @@ export class StripeService {
 
   async processPayment(createPagoDto: CreatePagoDto): Promise<any> {
     try {
-      // Create a PaymentMethod from the token
-      const paymentMethod = await this.stripe.paymentMethods.create({
-        type: 'card',
-        card: { token: createPagoDto.token },
-      });
-
-      // Create a PaymentIntent with the PaymentMethod
+      console.log('Received DTO:', createPagoDto);
+  
+      // Create a PaymentIntent with the PaymentMethodId
       const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: createPagoDto.amount * 100, // Stripe works with cents
+        amount: createPagoDto.amount * 100,
         currency: createPagoDto.currency,
-        payment_method: paymentMethod.id, // Use the PaymentMethod ID
-        confirm: true, // Automatically confirms the PaymentIntent
-        return_url: 'http://localhost:4200/', // Replace with your actual return URL
+        payment_method: createPagoDto.paymentMethodId,
+        confirm: true,
+        return_url: 'http://localhost:4200/',
       });
-
+  
+      console.log('Created PaymentIntent:', paymentIntent);
+  
       // Save payment details to database
       const createdPago = await this.pagoService.create({
         amount: createPagoDto.amount,
         currency: createPagoDto.currency,
-        token: createPagoDto.token,
-        // status: this.paymentIntent.status, // Map status to enum
+        paymentMethodId: createPagoDto.paymentMethodId,
+        stripeOperationId: paymentIntent.id,
+        status: PagoStatus.PENDIENTE
       });
-
+  
       return { paymentIntent, createdPago };
     } catch (error) {
+      console.error('Error in processing payment:', error);
       throw new Error(`Error en el procesamiento del pago: ${error.message}`);
     }
   }
