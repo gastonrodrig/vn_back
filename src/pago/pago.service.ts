@@ -9,7 +9,7 @@ import { Pago } from './schema/pago.schema';
 export class PagoService {
   constructor(@InjectModel(Pago.name) private readonly pagoModel: Model<Pago>) {}
 
-  async create(createPagoDto: CreatePagoDto): Promise<Pago> {
+  async create(createPagoDto: CreatePagoDto) {
     const createdPago = new this.pagoModel(createPagoDto);
     return createdPago.save();
   }

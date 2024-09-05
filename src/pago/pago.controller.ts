@@ -9,7 +9,7 @@ export class PagoController {
   constructor(private readonly pagoService: PagoService) {}
 
   @Post()
-  async create(@Body() createPagoDto: CreatePagoDto): Promise<Pago> {
+  async create(@Body() createPagoDto: CreatePagoDto) {
     return this.pagoService.create(createPagoDto);
   }
 }

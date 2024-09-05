@@ -1,18 +1,17 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import Stripe from 'stripe';
 import { PagoService } from '../pago/pago.service';
 import { CreatePagoDto } from '../pago/dto/create-pago.dto';
 import { Pago } from '../pago/schema/pago.schema';
 import { PagoStatus } from 'src/pago/enums/estado-pago.enum';
+import Stripe from 'stripe';
 
 @Injectable()
 export class StripeService {
   private stripe: Stripe;
 
   constructor(
-    @InjectModel(Pago.name) private readonly pagoModel: Model<Pago>,
+    @InjectModel(Pago.name) 
     private readonly pagoService: PagoService,
   ) {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
