@@ -8,7 +8,7 @@ import { GmailService } from 'src/gmail/gmail.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Pago.name, schema: PagoSchema }])],
-  providers: [PagoService, GmailService],
+  providers: [PagoService],
   controllers: [PagoController],
   exports: [PagoService],
 })
