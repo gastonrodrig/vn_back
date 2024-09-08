@@ -7,7 +7,7 @@ export class CreateGmailPdfDto {
   @IsNotEmpty()
   to: string;
 
-  @ApiProperty({ example: 'Asunto del correo', description: 'Asunto del email' })
+  @ApiProperty({ example: 'Constancia de pago - Virgen de la Natividad', description: 'Asunto del email' })
   @IsString()
   @IsNotEmpty()
   subject: string;

@@ -10,6 +10,6 @@ import { GmailService } from 'src/gmail/gmail.service';
   imports: [MongooseModule.forFeature([{ name: Pago.name, schema: PagoSchema }])],
   providers: [PagoService],
   controllers: [PagoController],
-  exports: [PagoService],
+  exports: [PagoService, MongooseModule],
 })
 export class PagoModule {}

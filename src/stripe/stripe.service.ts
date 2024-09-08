@@ -42,4 +42,22 @@ export class StripeService {
 
       return { paymentIntent, createdPago };
   }
+
+  async getPaymentDetails(stripeOperationId: string, paymentMethodId: string): Promise<any> {
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.retrieve(stripeOperationId);
+
+      const paymentMethod = await this.stripe.paymentMethods.retrieve(paymentMethodId);
+
+      const paymentDate = new Date(paymentIntent.created * 1000).toLocaleString();
+
+      return {
+        paymentIntent,
+        paymentMethod,
+        paymentDate,
+      };
+    } catch (error) {
+      throw new Error(`Error al recuperar los detalles del pago: ${error.message}`);
+    }
+  }
 }

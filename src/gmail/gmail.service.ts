@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Apoderado } from 'src/apoderado/schema/apoderado.schema';
 import { Model } from 'mongoose';
 import puppeteer from 'puppeteer';
+import { StripeService } from 'src/stripe/stripe.service';
 
 @Injectable()
 export class GmailService {
@@ -14,7 +15,8 @@ export class GmailService {
 
   constructor(
     @InjectModel(Apoderado.name)
-    private readonly apoderadoModel: Model<Apoderado>
+    private readonly apoderadoModel: Model<Apoderado>,
+    private readonly stripeService: StripeService
   ) {
     this.oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
@@ -48,15 +50,16 @@ export class GmailService {
     });
   }
 
-  async sendEmailWithPdf(dto: CreateGmailPdfDto) {
+  async sendEmailWithPdf(paymentMethodId: string,stripeOperationId: string,dto: CreateGmailPdfDto) {
     const { to, subject, dni } = dto;
+    const { paymentIntent, paymentDate } = await this.stripeService.getPaymentDetails(stripeOperationId, paymentMethodId);
 
     const apoderado = await this.apoderadoModel.findOne({ numero_documento: dni });
     if (!apoderado) {
       throw new BadRequestException('Apoderado no encontrado');
     }
 
-    const pdfBuffer = await this.generatePdf(apoderado);
+    const pdfBuffer = await this.generatePdf(paymentIntent, paymentDate, apoderado);
 
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -74,7 +77,7 @@ export class GmailService {
     await this.transporter.sendMail(mailOptions);
   }
 
-  private async generatePdf(apoderado: Apoderado): Promise<Buffer> {
+  private async generatePdf(paymentIntent: any, paymentDate: string, apoderado: Apoderado): Promise<Buffer> {
     const htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
@@ -132,11 +135,10 @@ export class GmailService {
         </table>
         
         <section class="detalleFinal">
-            <h3>SON: TRECIENTOS SOLES 00/CÉNTIMO</h3>
-            <h3>Datos del Pago:</h3>
-            <h3>Tipo de Operación: Tarjeta</h3>
-            <h3>Fecha de Operación: 2024-09-15</h3>
-            <h3>Número de Operación: 1234567890</h3>
+            <h3>Monto: ${(paymentIntent.amount / 100).toFixed(2)} ${paymentIntent.currency.toUpperCase()}</h3>
+            <h3>Datos del Pago: ${paymentIntent.status}</h3>
+            <h3>Tipo de Operación: ${paymentIntent.payment_method_types}</h3>
+            <h3>Fecha de Operación: ${paymentDate}</h3>
         </section>
         
         <footer class="footerBoleta">
