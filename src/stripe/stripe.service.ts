@@ -29,6 +29,7 @@ export class StripeService {
         payment_method: createPagoDto.paymentMethodId,
         confirm: true,
         return_url: 'http://localhost:4200/',
+        metadata: createPagoDto.metadata
       });
   
       const createdPago = await this.pagoService.create({
@@ -43,7 +44,7 @@ export class StripeService {
       return { paymentIntent, createdPago };
   }
 
-  async getPaymentDetails(stripeOperationId: string, paymentMethodId: string): Promise<any> {
+  async getPaymentDetails(stripeOperationId: string, paymentMethodId: string) {
     try {
       const paymentIntent = await this.stripe.paymentIntents.retrieve(stripeOperationId);
 

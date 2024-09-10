@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreatePeriodoEscolarDto {
     @ApiProperty({ example: '2024' })
@@ -8,12 +8,12 @@ export class CreatePeriodoEscolarDto {
     anio: string;
   
     @ApiProperty({ example: '2024-03-18' })
-    @IsDateString()
+    @IsString()
     @IsNotEmpty()
     fechaInicio: string;
   
     @ApiProperty({ example: '2024-12-15' })
-    @IsDateString()
+    @IsString()
     @IsNotEmpty()
     fechaFin: string;
 }

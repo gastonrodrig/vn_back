@@ -9,11 +9,12 @@ export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post()
-  async processPayment(@Body() createPagoDto: CreatePagoDto) {
+  processPayment(@Body() createPagoDto: CreatePagoDto) {
     return this.stripeService.processPayment(createPagoDto);
   }
+  
   @Get(':stripeOperationId/:paymentMethodId')
-  async getPaymentDetails(@Param('stripeOperationId')stripeOperationId: string,  @Param('paymentMethodId') paymentMethodId: string){
+  getPaymentDetails(@Param('stripeOperationId') stripeOperationId: string,  @Param('paymentMethodId') paymentMethodId: string){
     return this.stripeService.getPaymentDetails(stripeOperationId, paymentMethodId)
   }
 }
