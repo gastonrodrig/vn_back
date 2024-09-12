@@ -1,4 +1,4 @@
 export enum TipoRegistro {
-    PRESENCIAL = 'Presencial',
-    VIRTUAL = 'Virtual',
-  }                 
+  PRESENCIAL = 'Presencial',
+  VIRTUAL = 'Virtual',
+}

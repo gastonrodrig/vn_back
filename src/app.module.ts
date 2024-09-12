@@ -23,6 +23,7 @@ import { PagoModule } from './pago/pago.module';
 import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
+import { MatriculaModule } from './matricula/matricula.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { SolicitudModule } from './solicitud/solicitud.module';
     StripeModule,
     CuposModule,
     SolicitudModule,
+    MatriculaModule
   ],
   controllers: [AppController],
   providers: [AppService],

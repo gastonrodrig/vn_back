@@ -28,9 +28,4 @@ export class PeriodoEscolarController {
   update(@Param('id') id: string, @Body() updatePeriodoEscolarDto: UpdatePeriodoEscolarDto) {
     return this.periodoEscolarService.update(id, updatePeriodoEscolarDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.periodoEscolarService.remove(id);
-  }
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, IsEnum, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsString, IsEnum, IsOptional, IsNotEmpty, IsObject } from 'class-validator';
 import { PagoStatus } from '../enums/estado-pago.enum';
 
 export class CreatePagoDto {
@@ -32,4 +32,12 @@ export class CreatePagoDto {
   @IsString()
   @IsOptional()
   stripeOperationId?: string; 
+
+  @ApiProperty({ type: Object })
+  @IsObject()
+  @IsOptional()
+  metadata?: {
+    tipoDocumento: string;
+    nroDocumento: string;
+  };
 }

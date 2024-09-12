@@ -6,10 +6,10 @@ export class PeriodoEscolar {
   anio: string;
 
   @Prop()
-  fechaInicio: Date;
+  fechaInicio: string;
 
   @Prop()
-  fechaFin: Date;
+  fechaFin: string;
 }
 
 export const PeriodoEscolarSchema = SchemaFactory.createForClass(PeriodoEscolar);

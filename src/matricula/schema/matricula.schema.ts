@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { TipoRegistro } from '../enums/tipo-registro.enum';
+import { MetodoPago } from '../enums/metodo-pago.enum';
 
 @Schema({ collection: 'Matricula' })
 export class Matricula {
   @Prop()
-  monto: string;
+  monto: number;
 
-  @Prop()
+  @Prop({ enum: MetodoPago })
   metodo_pago: string;
 
   @Prop()
@@ -24,7 +25,6 @@ export class Matricula {
 
   @Prop({ enum: TipoRegistro})
   tipo: TipoRegistro;
-
 }
 
 export const MatriculaSchema = SchemaFactory.createForClass(Matricula);

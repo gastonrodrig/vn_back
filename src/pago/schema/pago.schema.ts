@@ -1,4 +1,3 @@
-// src/pago/schemas/pago.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { PagoStatus } from '../enums/estado-pago.enum';
@@ -22,6 +21,12 @@ export class Pago extends Document {
 
   @Prop()
   stripeOperationId: string;
+
+  @Prop({ type: Object })
+  metadata: {
+    tipoDocumento: string;
+    nroDocumento: string;
+  };
 }
 
 export const PagoSchema = SchemaFactory.createForClass(Pago);

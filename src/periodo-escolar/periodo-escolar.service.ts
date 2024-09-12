@@ -13,6 +13,13 @@ export class PeriodoEscolarService {
   ) {}
 
   async create(createPeriodoEscolarDto: CreatePeriodoEscolarDto) {
+    const conflictoPeriodo = await this.periodoEscolarModel.findOne({
+      anio: createPeriodoEscolarDto.anio
+    })
+    if(conflictoPeriodo) {
+      throw new BadRequestException('Ya existe un periodo escolar con el mismo año.')
+    }
+
     const periodo = new this.periodoEscolarModel({
       anio: createPeriodoEscolarDto.anio,
       fechaInicio: createPeriodoEscolarDto.fechaInicio,
@@ -36,18 +43,9 @@ export class PeriodoEscolarService {
     }
 
     periodo.anio = updatePeriodoEscolarDto.anio
-    periodo.fechaInicio = new Date(updatePeriodoEscolarDto.fechaInicio)
-    periodo.fechaFin = new Date(updatePeriodoEscolarDto.fechaFin)
+    periodo.fechaInicio = updatePeriodoEscolarDto.fechaInicio
+    periodo.fechaFin = updatePeriodoEscolarDto.fechaFin
 
     return await periodo.save()
-  }
-
-  async remove(periodo_id: string) {
-    const periodo = await this.periodoEscolarModel.findByIdAndDelete(periodo_id)
-    if (!periodo) {
-      throw new BadRequestException('Periodo Escolar no encontrado')
-    }
-
-    return { success: true }
   }
 }
