@@ -29,13 +29,21 @@ export class CuposService {
       throw new BadRequestException('Periodo no encontrado');
     }
 
+    const confictoCupo = await this.cuposModel.findOne({
+      grado: grado._id,
+      periodo: periodo._id
+    })
+    if(confictoCupo){
+      throw new BadRequestException('El grado o periodo se repite');
+    }
+
     const cupos = new this.cuposModel({
       capacidad: createCuposDto.capacidad,
       vacantes_disponibles: createCuposDto.vacantes_disponibles,
       grado,
       periodo
     });
-
+   
     await cupos.save()
 
     return this.cuposModel.findById(cupos._id)
@@ -68,6 +76,7 @@ export class CuposService {
     if(!periodo){
       throw new BadRequestException('Periodo no encontrado')
     }
+    
     
     cupos.capacidad = updateCuposDto.capacidad,
     cupos.vacantes_disponibles = updateCuposDto.vacantes_disponibles,
