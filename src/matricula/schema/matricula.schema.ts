@@ -25,7 +25,6 @@ export class Matricula {
 
   @Prop({ enum: TipoRegistro})
   tipo: TipoRegistro;
-
 }
 
 export const MatriculaSchema = SchemaFactory.createForClass(Matricula);
