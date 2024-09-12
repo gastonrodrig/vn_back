@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { EstadoSolicitud } from '../enums/estado-solicitud.enum';
 
 export class UpdateEstadoSolicitudDto {
-    //ESTO SE ENCARGA GASTON
-   @ApiProperty()
-  @IsString()
+  @ApiProperty()
   @IsNotEmpty()
+  @IsEnum(EstadoSolicitud)
+  estado: EstadoSolicitud;
   
-  readonly estado: string; // Nuevo estado de la solicitud
+   
 }

@@ -1,33 +1,33 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import { EstadoSolicitud } from '../enums/estado-solicitud.enum';
 
 @Schema({ collection: 'Solicitud' })
 export class Solicitud {
 
     //CREO QUE YA ESTA LISTO POR AHORA DECLARE VARAIBLES Y LISTO
-  @Prop({ required: true })
+  @Prop()
   nombre_hijo: string;
 
-  @Prop({ required: true })
+  @Prop()
   apellido_hijo: string;
 
-  @Prop({ required: true })
+  @Prop()
   dni_hijo: string;
 
-  @Prop({ required: true })
+  @Prop()
   telefono_padre: string;
 
-  @Prop({ required: true })
+  @Prop()
   correo_padre: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Grado', required: true })
-  grado_ID: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Grado', })
+  grado: Types.ObjectId;
 
-  @Prop({ required: true })
-  estado: string; // PENDIENTE, APROBADO, RECHAZADO
+  @Prop({ default:EstadoSolicitud.PENDIENTE  })
+  estado: string; 
 
-  @Prop({ required: true })
+  @Prop()
   fecha_solicitud: Date;
 }
 

@@ -31,8 +31,7 @@ export class SolicitudService {
       telefono_padre: createSolicitudDto.telefono_padre,
       correo_padre: createSolicitudDto.correo_padre,
       grado,
-      estado: "PENDIENTE",
-      fecha_solictud: createSolicitudDto.fecha_solictud,
+      fecha_solicitud: new Date(),
     });
     return await solicitud.save();
     }
@@ -59,7 +58,6 @@ export class SolicitudService {
     solicitud.dni_hijo = updateSolicitudDto.dni_hijo;
     solicitud.telefono_padre = updateSolicitudDto.telefono_padre;
     solicitud.correo_padre = updateSolicitudDto.correo_padre;
-    solicitud.fecha_solicitud = updateSolicitudDto.fecha_solictud;
 
     return await solicitud.save();
   }

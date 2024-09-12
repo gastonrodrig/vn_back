@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { EstadoSolicitud } from "../enums/estado-solicitud.enum";
 
 export class CreateSolicitudDto {
 
@@ -30,19 +31,9 @@ export class CreateSolicitudDto {
   correo_padre: string;
 
   @ApiProperty()
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
   grado_ID: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  estado: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  fecha_solictud: Date;
-
-
+  
 }

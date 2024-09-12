@@ -27,20 +27,10 @@ export class SolicitudController {
   }
   //todavia no se implementa
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateEstudianteDto: UpdateSolicitudDto){
-  return this.solicitudService.update(id, updateEstudianteDto)
-  }
-/*
-
+ /*
   @Patch(':id/estado')
   updateEstado(@Param('id') id: string, @Body() updateEstadoDto: UpdateEstadoSolicitudDto) {
     return this.solicitudService.updateEstado(id, updateEstadoDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.solicitudService.remove(id);
-  }
-  */
+*/
 }
