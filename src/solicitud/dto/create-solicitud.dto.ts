@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateSolicitudDto {
+
+  //LISTO DTO
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -32,7 +34,15 @@ export class CreateSolicitudDto {
   @IsNotEmpty()
   grado_ID: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  estado: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  fecha_solictud: Date;
 
 
 }
