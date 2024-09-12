@@ -77,6 +77,7 @@ export class CuposService {
       throw new BadRequestException('Periodo no encontrado')
     }
     
+    
     cupos.capacidad = updateCuposDto.capacidad,
     cupos.vacantes_disponibles = updateCuposDto.vacantes_disponibles,
     cupos.grado = gradoId,

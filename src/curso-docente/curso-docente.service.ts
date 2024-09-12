@@ -100,6 +100,17 @@ export class CursoDocenteService {
 
     return cursoDocente
   }
+  async listarCursosPorDocentes(docente_id: string) {
+    const docente = new Types.ObjectId(docente_id)
+    const docenteCurso = await this.cursoDocenteModel.find({ docente: docente })
+      .populate(['curso','docente'])
+      
+    if (docenteCurso.length === 0) {
+      throw new BadRequestException('No se encontraron cursos para el docente proporcionado');
+    }
+
+    return docenteCurso
+  }  
 
   async removeByCursoAndDocente(curso_id: string, docente_id: string) {
     const curso = new Types.ObjectId(curso_id)

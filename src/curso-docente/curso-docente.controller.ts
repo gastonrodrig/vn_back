@@ -38,6 +38,10 @@ export class CursoDocenteController {
   listarDocentesPorCurso(@Param('id') id: string) {
     return this.cursoDocenteService.listarDocentesPorCurso(id);
   }
+  @Get('docente/:id')
+  listarCursosPorDocentes(@Param('id') id: string) {
+    return this.cursoDocenteService.listarCursosPorDocentes(id);
+  }
 
   @Delete(':cursoId/:docenteId')
   removeCursoDocente(
