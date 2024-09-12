@@ -18,7 +18,6 @@ export class MatriculaService {
     private readonly estudianteModel: Model<Estudiante>,
   ) {}
 
-
   async create(createMatriculaDto: CreateMatriculaDto) {
     const periodo = await this.periodoModel.findById(createMatriculaDto.periodo_id)
     if (!periodo) {
@@ -34,7 +33,7 @@ export class MatriculaService {
       monto: createMatriculaDto.monto,
       metodo_pago: createMatriculaDto.metodo_pago,
       n_operacion: createMatriculaDto.n_operacion,
-      fecha: new Date(),
+      fecha: createMatriculaDto.fecha,
       periodo,
       estudiante,
       tipo: createMatriculaDto.tipo,

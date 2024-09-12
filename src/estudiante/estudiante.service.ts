@@ -381,4 +381,16 @@ export class EstudianteService {
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
       .populate({ path: 'archivo', model: 'Archivo' })
   }
+
+  async findByNumeroDocumento(numero_documento: string) {
+    const estudiante = await this.estudianteModel.findOne({ numero_documento })
+      .populate(['documento', 'periodo', 'grado', 'seccion', 'multimedia', 'user'])
+      .populate({ path: 'archivo', model: 'Archivo' });
+
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+
+    return estudiante;
+  }
 }

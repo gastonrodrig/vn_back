@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { TipoRegistro } from "../enums/tipo-registro.enum";
 import { MetodoPago } from "../enums/metodo-pago.enum";
 
@@ -33,4 +33,9 @@ export class CreateMatriculaDto {
   @IsEnum(TipoRegistro)
   @IsNotEmpty()
   tipo: TipoRegistro;
+
+  @ApiProperty()
+  @IsDateString()
+  @IsNotEmpty()
+  fecha: Date;
 }
