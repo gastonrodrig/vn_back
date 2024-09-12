@@ -131,4 +131,9 @@ export class EstudianteController {
   ) {
     return this.estudianteService.updateFiles(id, files);
   }
+
+  @Get('documento/:numero_documento')
+  getEstudianteByNumeroDocumento(@Param('numero_documento') numero_documento: string) {
+    return this.estudianteService.findByNumeroDocumento(numero_documento);
+  }
 }
