@@ -16,39 +16,40 @@ export class StripeService {
   ) {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2024-06-20',
-    })
+    });
   }
 
   async processPayment(createPagoDto: CreatePagoDto) {
-      // Validar que el rol del usuario sea Temporal
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: createPagoDto.monto * 100,
+      currency: createPagoDto.divisa,
+      payment_method: createPagoDto.paymentMethodId,
+      confirm: true,
+      return_url: 'http://localhost:4200/',
+      metadata: createPagoDto.metadata,
+    });
 
-      // Create a PaymentIntent with the PaymentMethodId
-      const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: createPagoDto.amount * 100,
-        currency: createPagoDto.currency,
-        payment_method: createPagoDto.paymentMethodId,
-        confirm: true,
-        return_url: 'http://localhost:4200/',
-        metadata: createPagoDto.metadata
-      });
-  
-      const createdPago = await this.pagoService.create({
-        amount: createPagoDto.amount,
-        currency: createPagoDto.currency,
-        paymentMethodId: createPagoDto.paymentMethodId,
-        stripeOperationId: paymentIntent.id,
-        status: paymentIntent.status === 'succeeded' ? PagoStatus.APROBADO : PagoStatus.RECHAZADO,
-        transactionDetails: paymentIntent.status,
-      });
+    const paymentDate = new Date(paymentIntent.created * 1000).toISOString();
 
-      return { paymentIntent, createdPago };
+    const createdPago = await this.pagoService.create({
+      monto: createPagoDto.monto,
+      divisa: createPagoDto.divisa,
+      paymentMethodId: createPagoDto.paymentMethodId,
+      nombre_completo: createPagoDto.nombre_completo,
+      transactionDetails: paymentIntent.status,
+      stripeOperationId: paymentIntent.id,
+      status: paymentIntent.status === 'succeeded' ? PagoStatus.APROBADO : PagoStatus.RECHAZADO,
+      metadata: createPagoDto.metadata,
+      paymentDate,
+    });
+
+    return { paymentIntent, createdPago, stripeOperationId: paymentIntent.id};
   }
 
-  async getPaymentDetails(stripeOperationId: string, paymentMethodId: string) {
+  async getPaymentDetails(stripeOperationId: string) {
     try {
       const paymentIntent = await this.stripe.paymentIntents.retrieve(stripeOperationId);
-
-      const paymentMethod = await this.stripe.paymentMethods.retrieve(paymentMethodId);
+      const paymentMethod = await this.stripe.paymentMethods.retrieve(paymentIntent.payment_method as string);
 
       const paymentDate = new Date(paymentIntent.created * 1000).toLocaleString();
 

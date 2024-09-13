@@ -3,10 +3,10 @@ import * as nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import { CreateGmailPdfDto } from './dto/create-gmail-pdf.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Apoderado } from 'src/apoderado/schema/apoderado.schema';
 import { Model } from 'mongoose';
 import puppeteer from 'puppeteer';
 import { StripeService } from 'src/stripe/stripe.service';
+import { Pago } from 'src/pago/schema/pago.schema';
 
 @Injectable()
 export class GmailService {
@@ -14,8 +14,8 @@ export class GmailService {
   private transporter;
 
   constructor(
-    @InjectModel(Apoderado.name)
-    private readonly apoderadoModel: Model<Apoderado>,
+    @InjectModel(Pago.name)
+    private readonly pagoModel: Model<Pago>,
     private readonly stripeService: StripeService
   ) {
     this.oauth2Client = new google.auth.OAuth2(
@@ -50,16 +50,16 @@ export class GmailService {
     });
   }
 
-  async sendEmailWithPdf(paymentMethodId: string,stripeOperationId: string,dto: CreateGmailPdfDto) {
+  async sendEmailWithPdf(stripeOperationId: string, dto: CreateGmailPdfDto) {
     const { to, subject, dni } = dto;
-    const { paymentIntent, paymentDate } = await this.stripeService.getPaymentDetails(stripeOperationId, paymentMethodId);
 
-    const apoderado = await this.apoderadoModel.findOne({ numero_documento: dni });
-    if (!apoderado) {
-      throw new BadRequestException('Apoderado no encontrado');
+    const pago = await this.pagoModel.findOne({ stripeOperationId }).exec();
+    if (!pago) {
+      throw new BadRequestException('No se encontró el pago con el stripeOperationId proporcionado.');
     }
+    const { paymentIntent, paymentDate } = await this.stripeService.getPaymentDetails(stripeOperationId);
 
-    const pdfBuffer = await this.generatePdf(paymentIntent, paymentDate, apoderado);
+    const pdfBuffer = await this.generatePdf(pago, paymentIntent, paymentDate);
 
     const mailOptions = {
       from: process.env.GMAIL_USER,
@@ -68,7 +68,7 @@ export class GmailService {
       text: 'Se adjunta la boleta del pago de matricula.',
       attachments: [
         {
-          filename: `VIRGEN_NATIVIDAD_${apoderado.numero_documento}.pdf`,
+          filename: `VIRGEN_NATIVIDAD_BOLETA.pdf`,
           content: pdfBuffer,
         },
       ],
@@ -77,7 +77,7 @@ export class GmailService {
     await this.transporter.sendMail(mailOptions);
   }
 
-  private async generatePdf(paymentIntent: any, paymentDate: string, apoderado: Apoderado): Promise<Buffer> {
+  private async generatePdf(pago: Pago, paymentIntent: any, paymentDate: string): Promise<Buffer> {
     const htmlContent = `
     <!DOCTYPE html>
     <html lang="es">
@@ -100,8 +100,8 @@ export class GmailService {
             <h2>Detalle Cliente:</h2>
         </section>
         <section class="detalleCliente">
-            <p>Nombre del cliente: ${apoderado.nombre} ${apoderado.apellido}</p>
-            <p>DNI del cliente: ${apoderado.numero_documento}</p>
+            <p>Nombre del cliente: ${pago.nombre_completo}</p>
+            <p>DNI del cliente: ${pago.metadata?.nroDocumento}</p>
         </section>
         <section class="tituloPedido">
             <h2>Detalle del Servicio</h2>
