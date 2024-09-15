@@ -41,7 +41,6 @@ export class VacanteService {
       estudiante,
       grado,
       periodo,
-      estado: createVacanteDto.estado
     })
 
     return await vacante.save()

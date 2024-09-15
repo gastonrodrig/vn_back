@@ -19,8 +19,4 @@ export class CreateVacanteDto {
   @IsNotEmpty()
   periodo_id: string;
 
-  @ApiProperty()
-  @IsEnum(EstadoVacante)
-  @IsNotEmpty()
-  estado: EstadoVacante;
 }

@@ -14,7 +14,7 @@ export class Vacante{
     @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar'})
     periodo: Types.ObjectId;
 
-    @Prop({enum: EstadoVacante})
+    @Prop({enum: EstadoVacante, default: EstadoVacante.RESERVADO})
     estado: EstadoVacante;
 
 }
