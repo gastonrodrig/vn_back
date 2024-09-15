@@ -19,7 +19,6 @@ export class CuposService {
   ) {}    
 
   async create(createCuposDto: CreateCuposDto){
-
     const grado = await this.gradoModel.findById(createCuposDto.grado_id)
     if(!grado){
       throw new BadRequestException('Grado no encontrado');
