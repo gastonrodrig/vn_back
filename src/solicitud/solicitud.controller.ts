@@ -33,4 +33,9 @@ export class SolicitudController {
     return this.solicitudService.updateEstado(id, updateEstadoDto);
   }
 */
+  @Patch('approve/:id')
+    async approveSolicitud(@Param('id') id: string) {
+      const solicitud = await this.solicitudService.procesoSolicitud(id);
+      return { message: 'Solicitud en proceso y correo enviado', solicitud };
+    }
 }

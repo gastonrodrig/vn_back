@@ -24,6 +24,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 
 @Module({
   imports: [
@@ -55,7 +56,8 @@ import { MatriculaModule } from './matricula/matricula.module';
     StripeModule,
     CuposModule,
     SolicitudModule,
-    MatriculaModule
+    MatriculaModule,
+    GmailTemporalModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,6 @@
 export enum EstadoSolicitud {
     PENDIENTE = 'Pendiente',
-    RECHAZADO = 'No aprobado',
+    RECHAZADO = 'Cancelado',
+    PROCESO = ' En Proceso',
     APROBADO = 'Aprobado',
   }

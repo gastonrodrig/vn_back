@@ -9,6 +9,8 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { Docente } from 'src/docente/schema/docente.schema';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { Apoderado } from 'src/apoderado/schema/apoderado.schema';
+import * as crypto from 'crypto';
+import { Roles } from 'src/auth/enums/rol.enum';
 
 @Injectable()
 export class UserService {
@@ -248,5 +250,46 @@ export class UserService {
   
     await user.save()
     return { success: true }
+  }
+
+  async createTemporaryUser() {
+     const randomUsername = await this.generateUniqueUsername();
+     const randomPassword = this.generateRandomString(12);
+ 
+     const hashedPassword = await bcryptjs.hash(randomPassword, 10);
+ 
+     const newUser = new this.userModel({
+       usuario: randomUsername,
+       contrasena: hashedPassword,
+       email: `${randomUsername}@temporal.com`,
+       rol: Roles.TEMPORAL,
+     });
+ 
+     await newUser.save();
+ 
+     return {
+       usuario: randomUsername,
+       contrasena: randomPassword,
+       rol: newUser.rol,
+     };
+  }
+
+  async generateUniqueUsername(): Promise<string> {
+    let username: string;
+    let userExists = true;
+
+    do {
+      username = this.generateRandomString(8);
+      const existingUser = await this.userModel.findOne({ usuario: username });
+      if (!existingUser) {
+        userExists = false;
+      }
+    } while (userExists);
+
+    return username;
+  }
+
+  generateRandomString(length: number): string {
+    return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
   }
 }

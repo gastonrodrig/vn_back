@@ -18,6 +18,6 @@ import { Apoderado, ApoderadoSchema } from 'src/apoderado/schema/apoderado.schem
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService],
+  exports: [UserService, MongooseModule],
 })
 export class UserModule {}

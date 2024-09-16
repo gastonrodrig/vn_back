@@ -6,6 +6,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Solicitud } from './schema/solicitud.schema';
 import { Model, Types } from 'mongoose';
 import { Grado } from 'src/grado/schema/grado.schema';
+import { GmailTemporalService } from 'src/gmailTemporal/gmailTemporal.service';
+import { UserService } from 'src/user/user.service';
+import { EstadoSolicitud } from './enums/estado-solicitud.enum';
 
 @Injectable()
 export class SolicitudService {
@@ -16,6 +19,8 @@ export class SolicitudService {
     private readonly solicitudModel: Model<Solicitud>,
     @InjectModel(Grado.name)
     private readonly gradoModel: Model<Grado>,
+    private readonly gmailTemporalService: GmailTemporalService,
+    private readonly userService: UserService
   ) {}
 
   async create(createSolicitudDto: CreateSolicitudDto) {
@@ -71,4 +76,25 @@ export class SolicitudService {
     }
     return solicitud;
   }*/
+
+    async procesoSolicitud(solicitud_id: string) {
+      const solicitud = await this.solicitudModel.findById(solicitud_id);
+      if (!solicitud) {
+        throw new NotFoundException('Solicitud no encontrada');
+      }
+  
+      solicitud.estado = EstadoSolicitud.PROCESO;
+  
+      const { usuario, contrasena } = await this.userService.createTemporaryUser();
+  
+      await solicitud.save();
+  
+      await this.gmailTemporalService.sendTemporaryAccountEmail(
+        solicitud.correo_padre,
+        usuario,
+        contrasena
+      );
+  
+      return solicitud;
+    }
 }
