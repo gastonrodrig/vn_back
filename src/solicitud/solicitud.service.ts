@@ -94,4 +94,21 @@ export class SolicitudService {
 
     return solicitud;
   }
+
+  async cancelarSolicitud(solicitud_id: string){
+    const solicitud = await this.solicitudModel.findById(solicitud_id);
+    if (!solicitud) {
+      throw new NotFoundException('Solicitud no encontrada');
+    }
+
+    solicitud.estado = EstadoSolicitud.CANCELADO;
+
+    await solicitud.save();
+
+    await this.gmailTemporalService.enviarCorreoTemporalCancelado(
+      solicitud.correo_padre
+    );
+
+    return solicitud
+  }
 }

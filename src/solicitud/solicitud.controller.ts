@@ -33,4 +33,9 @@ export class SolicitudController {
   process(@Param('id') id: string) {
     return this.solicitudService.procesoSolicitud(id)
   }
+
+  @Patch('cancel/:id')
+  cancelarEstado(@Param('id') id: string){
+    return this.solicitudService.cancelarSolicitud(id)
+  }
 }
