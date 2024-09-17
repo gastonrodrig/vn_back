@@ -12,13 +12,12 @@ import { EstadoSolicitud } from './enums/estado-solicitud.enum';
 
 @Injectable()
 export class SolicitudService {
-    //NOSE SI ESTA BIEN
-
   constructor(
     @InjectModel(Solicitud.name) 
     private readonly solicitudModel: Model<Solicitud>,
     @InjectModel(Grado.name)
     private readonly gradoModel: Model<Grado>,
+
     private readonly gmailTemporalService: GmailTemporalService,
     private readonly userService: UserService
   ) {}
@@ -41,7 +40,6 @@ export class SolicitudService {
     return await solicitud.save();
     }
 
-  // Método para obtener todas las solicitudes
   async findAll(){
     return await this.solicitudModel.find()
   }
@@ -50,9 +48,7 @@ export class SolicitudService {
     return await this.solicitudModel.findById(solicitud_id).populate('grado')
   }
 
- // Método para actualizar una solicitud por su ID
- //NO ES NECESARIO POR AHORA
- async update(solicitud_id: string, updateSolicitudDto: UpdateSolicitudDto) {
+  async update(solicitud_id: string, updateSolicitudDto: UpdateSolicitudDto) {
     const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
       throw new BadRequestException('Solicitud no encontrada');
@@ -66,35 +62,36 @@ export class SolicitudService {
 
     return await solicitud.save();
   }
-  /*
-//NO ES NECESARIO POR AHORA
-  async remove(solicitud_id: string) {
-    const solicitudId = new Types.ObjectId(solicitud_id);
-    const solicitud = await this.solicitudModel.findByIdAndDelete(solicitudId)
-    if (!solicitud) {
-      throw new NotFoundException(`Solicitud con ID ${solicitud_id} no encontrada`);
-    }
-    return solicitud;
-  }*/
 
-    async procesoSolicitud(solicitud_id: string) {
-      const solicitud = await this.solicitudModel.findById(solicitud_id);
-      if (!solicitud) {
-        throw new NotFoundException('Solicitud no encontrada');
-      }
-  
-      solicitud.estado = EstadoSolicitud.PROCESO;
-  
-      const { usuario, contrasena } = await this.userService.createTemporaryUser();
-  
-      await solicitud.save();
-  
-      await this.gmailTemporalService.sendTemporaryAccountEmail(
-        solicitud.correo_padre,
-        usuario,
-        contrasena
-      );
-  
-      return solicitud;
+  async changeState(solicitud_id: string, updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
+    const solicitud = await this.solicitudModel.findById(solicitud_id)
+    if (!solicitud) {
+      throw new BadRequestException('Solicitud no encontrada');
     }
+
+    solicitud.estado = updateEstadoSolicitudDto.estado;
+
+    return await solicitud.save();
+  }
+
+  async procesoSolicitud(solicitud_id: string) {
+    const solicitud = await this.solicitudModel.findById(solicitud_id);
+    if (!solicitud) {
+      throw new NotFoundException('Solicitud no encontrada');
+    }
+
+    solicitud.estado = EstadoSolicitud.PROCESO;
+
+    const { usuario, contrasena } = await this.userService.createTemporaryUser();
+
+    await solicitud.save();
+
+    await this.gmailTemporalService.sendTemporaryAccountEmail(
+      solicitud.correo_padre,
+      usuario,
+      contrasena
+    );
+
+    return solicitud;
+  }
 }
