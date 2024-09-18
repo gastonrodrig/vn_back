@@ -7,10 +7,7 @@ import { Grado, GradoSchema } from 'src/grado/schema/grado.schema';
 import { GmailTemporalService } from 'src/gmailTemporal/gmailTemporal.service';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
-
-
 @Module({
-    //LISTO
   imports: [
     MongooseModule.forFeature([
       { name: Solicitud.name, schema: SolicitudSchema },

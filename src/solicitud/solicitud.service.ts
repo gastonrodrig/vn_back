@@ -23,7 +23,7 @@ export class SolicitudService {
   ) {}
 
   async create(createSolicitudDto: CreateSolicitudDto) {
-    const grado = await this.gradoModel.findById(createSolicitudDto.grado_ID)
+    const grado = await this.gradoModel.findById(createSolicitudDto.grado_id)
     if(!grado){
       throw new BadRequestException('Grado no encontrado')
     }
@@ -63,18 +63,18 @@ export class SolicitudService {
     return await solicitud.save();
   }
 
-  async changeState(solicitud_id: string, updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
+  async aprobarSolicitud(solicitud_id: string, updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
     const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
       throw new BadRequestException('Solicitud no encontrada');
     }
 
-    solicitud.estado = updateEstadoSolicitudDto.estado;
+    solicitud.estado = EstadoSolicitud.APROBADO
 
     return await solicitud.save();
   }
 
-  async procesoSolicitud(solicitud_id: string) {
+  async procesarSolicitud(solicitud_id: string) {
     const solicitud = await this.solicitudModel.findById(solicitud_id);
     if (!solicitud) {
       throw new NotFoundException('Solicitud no encontrada');

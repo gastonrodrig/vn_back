@@ -24,18 +24,18 @@ export class SolicitudController {
     return this.solicitudService.findOne(id);
   }
 
-  @Patch('change-state/:id')
-  changeState(@Param('id') id: string, @Body() updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
-    return this.solicitudService.changeState(id, updateEstadoSolicitudDto)
-  }
-
   @Patch('process/:id')
   process(@Param('id') id: string) {
-    return this.solicitudService.procesoSolicitud(id)
+    return this.solicitudService.procesarSolicitud(id)
+  }
+
+  @Patch('approve/:id')
+  approve(@Param('id') id: string, @Body() updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
+    return this.solicitudService.aprobarSolicitud(id, updateEstadoSolicitudDto)
   }
 
   @Patch('cancel/:id')
-  cancelarEstado(@Param('id') id: string){
+  cancel(@Param('id') id: string){
     return this.solicitudService.cancelarSolicitud(id)
   }
 }
