@@ -38,4 +38,9 @@ export class SolicitudController {
   cancel(@Param('id') id: string){
     return this.solicitudService.cancelarSolicitud(id)
   }
+
+  @Get('documento/:dni_hijo')
+  getSolicitudByNumeroDocumento(@Param('dni_hijo') dni_hijo: string){
+    return this.solicitudService.findByNumeroDocumentoSolicitud(dni_hijo);
+  }
 }
