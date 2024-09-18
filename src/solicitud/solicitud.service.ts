@@ -38,7 +38,7 @@ export class SolicitudService {
       fecha_solicitud: new Date(),
     });
     return await solicitud.save();
-    }
+  }
 
   async findAll(){
     return await this.solicitudModel.find()
@@ -63,7 +63,7 @@ export class SolicitudService {
     return await solicitud.save();
   }
 
-  async aprobarSolicitud(solicitud_id: string, updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
+  async aprobarSolicitud(solicitud_id: string) {
     const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
       throw new BadRequestException('Solicitud no encontrada');

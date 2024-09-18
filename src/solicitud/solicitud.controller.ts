@@ -30,8 +30,8 @@ export class SolicitudController {
   }
 
   @Patch('approve/:id')
-  approve(@Param('id') id: string, @Body() updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
-    return this.solicitudService.aprobarSolicitud(id, updateEstadoSolicitudDto)
+  approve(@Param('id') id: string) {
+    return this.solicitudService.aprobarSolicitud(id)
   }
 
   @Patch('cancel/:id')
