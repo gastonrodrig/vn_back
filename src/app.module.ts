@@ -24,6 +24,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { VacanteModule } from './vacante/vacante.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 
 @Module({
@@ -57,6 +58,7 @@ import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
+    VacanteModule,
     GmailTemporalModule
   ],
   controllers: [AppController],
