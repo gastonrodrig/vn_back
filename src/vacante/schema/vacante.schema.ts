@@ -17,5 +17,7 @@ export class Vacante{
     @Prop({enum: EstadoVacante, default: EstadoVacante.RESERVADO})
     estado: EstadoVacante;
 
+    @Prop({type: Date, default: Date.now})
+     fecha: Date;
 }
 export const VacanteSchema = SchemaFactory.createForClass(Vacante);

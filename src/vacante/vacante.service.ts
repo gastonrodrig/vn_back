@@ -36,6 +36,16 @@ export class VacanteService {
     if(!periodo){
       throw new BadRequestException('Periodo no encontrado');
     }
+
+    const vacanteExistente = await this.vacanteModel.findOne({
+      estudiante: estudiante._id,
+      grado: grado._id,
+      periodo: periodo._id
+    })
+
+    if(vacanteExistente){
+      throw new BadRequestException('Ya existe una vacante con estudiante, grando y')
+    }
     
     const vacante = new this.vacanteModel({
       estudiante,
