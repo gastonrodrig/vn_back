@@ -25,6 +25,7 @@ import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
 import { VacanteModule } from './vacante/vacante.module';
+import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 
 @Module({
   imports: [
@@ -57,7 +58,8 @@ import { VacanteModule } from './vacante/vacante.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
-    VacanteModule
+    VacanteModule,
+    GmailTemporalModule
   ],
   controllers: [AppController],
   providers: [AppService],

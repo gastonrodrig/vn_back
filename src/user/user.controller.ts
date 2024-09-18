@@ -54,4 +54,15 @@ export class UserController {
   removeApoderado(@Param('id') id: string){
     return this.userService.removeApoderado(id);
   }
+
+  @Post('create-temporary')
+  async createTemporaryUser() {
+    
+    const userData = await this.userService.createTemporaryUser();
+    
+    return {
+      message: 'Usuario temporal creado exitosamente',
+      data: userData,
+    };
+  }
 } 
