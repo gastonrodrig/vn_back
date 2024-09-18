@@ -33,4 +33,9 @@ export class VacanteController {
   updateEstado(@Param('id') id: string, @Body() updateEstadoVacanteDto: UpdateEstadoVacanteDto) {
     return this.vacanteService.updateEstado(id, updateEstadoVacanteDto);
   }
+
+  @Get('estudiante/:id')
+  listarDocentesPorCurso(@Param('id') id: string) {
+    return this.vacanteService.obtenerVacantePorEstudiante(id)
+  }
 }

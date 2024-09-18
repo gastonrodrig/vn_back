@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Vacante } from './schema/vacante.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateVacanteDto } from './dto/create-vacante.dto';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
@@ -89,5 +89,17 @@ export class VacanteService {
 
     return this.vacanteModel.findById(vacante._id)
       .populate(['estudiante','grado','periodo'])
+  }
+
+  async obtenerVacantePorEstudiante(estudiante_id: string) {
+    const estudiante = new Types.ObjectId(estudiante_id)
+    const vacante = await this.vacanteModel.find({ estudiante: estudiante })
+      .populate(['estudiante','grado','periodo'])
+      
+    if (vacante.length === 0) {
+      throw new BadRequestException('No se encontraron vacantes para el estudiante proporcionado');
+    }
+
+    return vacante
   }
 }
