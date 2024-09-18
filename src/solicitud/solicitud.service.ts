@@ -111,4 +111,15 @@ export class SolicitudService {
 
     return solicitud
   }
+  
+  async findByNumeroDocumentoSolicitud(dni_hijo: string){
+    const solicitud = await this.solicitudModel.findOne({dni_hijo})
+    .populate(['grado'])
+
+    if(!solicitud){
+      throw new BadRequestException('Solicitud no encontrada')
+    }
+
+    return solicitud;
+  }
 }
