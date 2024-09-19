@@ -8,6 +8,7 @@ import { Grado } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { UpdateEstadoVacanteDto } from './dto/update-estado.dto';
 import { CuposService } from 'src/cupos/cupos.service';
+import { EstadoVacante } from './enum/estado-vacante.enum';
 
 @Injectable()
 export class VacanteService {
@@ -78,8 +79,6 @@ export class VacanteService {
 
     await this.cuposService.actualizarVacantes(vacante.grado.toString(), vacante.periodo.toString(), 1);
 
-    await this.vacanteModel.findByIdAndDelete(vacante_id);
-
     await this.vacanteModel.findByIdAndDelete(vacante_id)
 
     return{sucess: true}
@@ -110,4 +109,29 @@ export class VacanteService {
 
     return vacante
   }
+
+  async cancelarVacante(vacante_id: string) {
+    const vacante = await this.vacanteModel.findById(vacante_id);
+    if (!vacante) {
+      throw new BadRequestException('Vacante no encontrada');
+    }
+
+    if (vacante.estado === EstadoVacante.CANCELADO) {
+      throw new BadRequestException('La vacante ya está cancelada');
+    }
+
+    vacante.estado = EstadoVacante.CANCELADO;
+
+    await vacante.save();
+
+    await this.cuposService.actualizarVacantes(
+      vacante.grado.toString(),
+      vacante.periodo.toString(),
+      1 // Liberar un cupo
+    );
+
+    return this.vacanteModel.findById(vacante._id)
+      .populate(['estudiante', 'grado', 'periodo']);
+  }
+
 }

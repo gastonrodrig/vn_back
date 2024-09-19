@@ -38,4 +38,9 @@ export class VacanteController {
   listarDocentesPorCurso(@Param('id') id: string) {
     return this.vacanteService.obtenerVacantePorEstudiante(id)
   }
+
+  @Patch(':id/cancelar')
+  async cancelarVacante(@Param('id') vacante_id: string) {
+    return await this.vacanteService.cancelarVacante(vacante_id);
+  }
 }
