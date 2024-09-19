@@ -7,6 +7,7 @@ import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { Grado } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { UpdateEstadoVacanteDto } from './dto/update-estado.dto';
+import { CuposService } from 'src/cupos/cupos.service';
 
 @Injectable()
 export class VacanteService {
@@ -18,7 +19,8 @@ export class VacanteService {
     @InjectModel(Grado.name)
     private readonly gradoModel: Model<Grado>,
     @InjectModel(PeriodoEscolar.name)
-    private readonly periodoModel: Model<PeriodoEscolar>
+    private readonly periodoModel: Model<PeriodoEscolar>,
+    private readonly cuposService: CuposService
   ){}
 
   async create(createVacanteDto: CreateVacanteDto){
@@ -44,7 +46,7 @@ export class VacanteService {
     })
 
     if(vacanteExistente){
-      throw new BadRequestException('Ya existe una vacante con estudiante, grando y')
+      throw new BadRequestException('Ya existe una vacante con estudiante, grando y periodo')
     }
     
     const vacante = new this.vacanteModel({
@@ -52,6 +54,8 @@ export class VacanteService {
       grado,
       periodo,
     })
+
+    await this.cuposService.actualizarVacantes(grado._id.toString(), periodo._id.toString(), -1);
 
     return await vacante.save()
   }
@@ -71,6 +75,10 @@ export class VacanteService {
     if(!vacante){
         throw new BadRequestException('Vacante no encontrada')
     }
+
+    await this.cuposService.actualizarVacantes(vacante.grado.toString(), vacante.periodo.toString(), 1);
+
+    await this.vacanteModel.findByIdAndDelete(vacante_id);
 
     await this.vacanteModel.findByIdAndDelete(vacante_id)
 
