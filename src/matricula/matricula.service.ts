@@ -29,6 +29,14 @@ export class MatriculaService {
     if (!estudiante) {
       throw new BadRequestException('Estudiante no encontrado');
     }
+
+    const matriculaExistente = await this.matriculaModel.findOne({
+      periodo: createMatriculaDto.periodo_id,
+      estudiante: createMatriculaDto.estudiante_id,
+    });
+    if (matriculaExistente) {
+      throw new BadRequestException('Ya existe una matrícula para este estudiante en el mismo periodo');
+    }
   
     const n_operacion = createMatriculaDto.metodo_pago === MetodoPago.EFECTIVO ? null : createMatriculaDto.n_operacion;
   

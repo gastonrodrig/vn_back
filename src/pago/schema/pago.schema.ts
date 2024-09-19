@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { PagoStatus } from '../enums/estado-pago.enum';
 
 @Schema({ collection: 'Pago' })
@@ -33,6 +33,9 @@ export class Pago extends Document {
 
   @Prop()
   paymentDate: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Estudiante' })
+  estudiante: Types.ObjectId;
 }
 
 export const PagoSchema = SchemaFactory.createForClass(Pago);
