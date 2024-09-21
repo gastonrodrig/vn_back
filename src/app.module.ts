@@ -26,6 +26,7 @@ import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
 import { VacanteModule } from './vacante/vacante.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
+import { RolModule } from './rol/rol.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
       }),
       inject: [ConfigService],
     }),
+    RolModule,
     DocumentoModule,
     PeriodoEscolarModule,
     AuthModule,

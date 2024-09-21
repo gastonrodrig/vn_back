@@ -13,8 +13,8 @@ export class User {
   @Prop()
   contrasena: string
 
-  @Prop({ enum: Roles })
-  rol: Roles
+  @Prop({ type: Types.ObjectId, ref: 'Rol' })
+  rol: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'Estudiante' })
   estudiante: Types.ObjectId;
