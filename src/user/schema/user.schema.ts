@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 import { Roles } from "src/auth/enums/rol.enum";
+import { EstadoUsuario } from "../enum/estado-usuario.enum";
 
 @Schema({ collection: 'User' })
 export class User {
@@ -15,6 +16,9 @@ export class User {
 
   @Prop({ enum: Roles })
   rol: Roles
+
+  @Prop({enum: EstadoUsuario, default: EstadoUsuario.DESHABILITADO})
+  estado: EstadoUsuario;
 
   @Prop({ type: Types.ObjectId, ref: 'Estudiante' })
   estudiante: Types.ObjectId;

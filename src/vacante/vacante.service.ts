@@ -24,43 +24,64 @@ export class VacanteService {
     private readonly cuposService: CuposService
   ){}
 
-  async create(createVacanteDto: CreateVacanteDto){
-    const estudiante = await this.estudianteModel.findById(createVacanteDto.estudiante_id)
-    if(!estudiante){
+  async create(createVacanteDto: CreateVacanteDto) {
+    const estudiante = await this.estudianteModel.findById(createVacanteDto.estudiante_id);
+    if (!estudiante) {
       throw new BadRequestException('Estudiante no encontrado');
     }
-
-    const grado = await this.gradoModel.findById(createVacanteDto.grado_id)
-    if(!grado){
+  
+    const gradoNuevo = await this.gradoModel.findById(createVacanteDto.grado_id);
+    if (!gradoNuevo) {
       throw new BadRequestException('Grado no encontrado');
     }
-
-    const periodo = await this.periodoModel.findById(createVacanteDto.periodo_id)
-    if(!periodo){
+  
+    const periodo = await this.periodoModel.findById(createVacanteDto.periodo_id);
+    if (!periodo) {
       throw new BadRequestException('Periodo no encontrado');
     }
-
+  
+    // Busca la vacante más reciente del estudiante y realiza el populate del campo grado
+    const vacanteMasReciente = await this.vacanteModel
+      .findOne({ estudiante: estudiante._id })
+      .sort({ fecha: -1 }) // Ordena por la fecha más reciente
+      .populate('grado'); // Popula el campo 'grado' para obtener el objeto completo
+  
+    // Si el estudiante ya tiene una vacante registrada
+    if (vacanteMasReciente && vacanteMasReciente.grado) {
+      const gradoActual = vacanteMasReciente.grado as any; // Aseguramos que contiene los campos 'nivel' y 'nombre'
+  
+      // Verifica que el nuevo grado tenga un nivel superior al actual
+      if (gradoNuevo.nivel <= gradoActual.nivel) {
+        throw new BadRequestException(
+          `El estudiante ya está registrado en un grado igual o superior (${gradoActual.nombre})`
+        );
+      }
+    }
+  
+    // Verifica si ya existe una vacante para este estudiante, grado y periodo
     const vacanteExistente = await this.vacanteModel.findOne({
       estudiante: estudiante._id,
-      grado: grado._id,
+      grado: gradoNuevo._id,
       periodo: periodo._id
-    })
-
-    if(vacanteExistente){
-      throw new BadRequestException('Ya existe una vacante con estudiante, grando y periodo')
+    });
+  
+    if (vacanteExistente) {
+      throw new BadRequestException('Ya existe una vacante para este estudiante en este grado y periodo');
     }
-    
+  
+    // Crea la nueva vacante
     const vacante = new this.vacanteModel({
       estudiante,
-      grado,
+      grado: gradoNuevo,
       periodo,
-    })
-
-    await this.cuposService.actualizarVacantes(grado._id.toString(), periodo._id.toString(), -1);
-
-    return await vacante.save()
+    });
+  
+    // Actualiza los cupos disponibles
+    await this.cuposService.actualizarVacantes(gradoNuevo._id.toString(), periodo._id.toString(), -1);
+  
+    return await vacante.save();
   }
-
+  
   async findAll(){
     return await this.vacanteModel.find()
       .populate(['estudiante','grado','periodo'])

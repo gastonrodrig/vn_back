@@ -14,7 +14,8 @@ export class GradoService {
 
   async create(createGradoDto: CreateGradoDto) {
     const grado = new this.gradoModel({
-      nombre: createGradoDto.nombre
+      nombre: createGradoDto.nombre,
+      nivel: createGradoDto.nivel
     });
     return await grado.save()
   }
@@ -34,6 +35,7 @@ export class GradoService {
     }
 
     grado.nombre = updateGradoDto.nombre
+    grado.nivel = updateGradoDto.nivel
 
     return await grado.save()
   }
