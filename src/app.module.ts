@@ -25,11 +25,12 @@ import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
+import { PensionModule } from './pension/pension.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRootAsync({
+      MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
@@ -57,7 +58,8 @@ import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
-    GmailTemporalModule
+    GmailTemporalModule,
+    PensionModule
   ],
   controllers: [AppController],
   providers: [AppService],

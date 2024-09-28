@@ -4,6 +4,7 @@ import { TipoRegistro } from "../enums/tipo-registro.enum";
 import { MetodoPago } from "../enums/metodo-pago.enum";
 
 export class CreateMatriculaDto {
+  
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
