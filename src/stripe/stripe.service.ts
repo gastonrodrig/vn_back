@@ -21,7 +21,7 @@ export class StripeService {
 
   async processPayment(createPagoDto: CreatePagoDto) {
     const paymentIntent = await this.stripe.paymentIntents.create({
-      amount: createPagoDto.monto * 100,
+      amount: createPagoDto.monto * 30,
       currency: createPagoDto.divisa,
       payment_method: createPagoDto.paymentMethodId,
       confirm: true,

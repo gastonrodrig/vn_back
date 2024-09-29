@@ -44,6 +44,7 @@ export class CreatePagoDto {
   metadata?: {
     tipoDocumento: string;
     nroDocumento: string;
+    estudiante_id: string;
   };
 
   @ApiProperty()

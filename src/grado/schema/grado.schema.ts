@@ -4,6 +4,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class Grado {
   @Prop()
   nombre: string;
+
+  @Prop()
+  nivel: number;
 }
 
 export const GradoSchema = SchemaFactory.createForClass(Grado)

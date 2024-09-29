@@ -19,7 +19,6 @@ export class CuposService {
   ) {}    
 
   async create(createCuposDto: CreateCuposDto){
-
     const grado = await this.gradoModel.findById(createCuposDto.grado_id)
     if(!grado){
       throw new BadRequestException('Grado no encontrado');
@@ -89,5 +88,22 @@ export class CuposService {
       .populate(['grado','periodo'])
   }
 
- 
+  async actualizarVacantes(gradoId: string, periodoId: string, cambioVacantes: number) {
+    const cupo = await this.cuposModel.findOne({
+      grado: new Types.ObjectId(gradoId),
+      periodo: new Types.ObjectId(periodoId),
+    });
+
+    if (!cupo) {
+      throw new BadRequestException('Cupo no encontrado para el grado y periodo especificados.');
+    }
+
+    cupo.vacantes_disponibles += cambioVacantes;
+
+    if (cupo.vacantes_disponibles < 0) {
+      throw new BadRequestException('No se pueden reducir más las vacantes, no hay suficientes disponibles.');
+    }
+
+    await cupo.save();
+  }
 }

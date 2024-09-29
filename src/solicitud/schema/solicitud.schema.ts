@@ -22,7 +22,7 @@ export class Solicitud {
   @Prop({ type: Types.ObjectId, ref: 'Grado', })
   grado: Types.ObjectId;
 
-  @Prop({ default: EstadoSolicitud.PENDIENTE  })
+  @Prop({ default: EstadoSolicitud.PENDIENTE })
   estado: string; 
 
   @Prop()

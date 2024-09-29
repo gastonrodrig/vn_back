@@ -30,5 +30,5 @@ export class CreateSolicitudDto {
   @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
-  grado_ID: string;  
+  grado_id: string;  
 }

@@ -24,8 +24,10 @@ import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { VacanteModule } from './vacante/vacante.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 import { PensionModule } from './pension/pension.module';
+import { TutorModule } from './tutor/tutor.module';
 
 @Module({
   imports: [
@@ -58,8 +60,10 @@ import { PensionModule } from './pension/pension.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
-    GmailTemporalModule,
     PensionModule
+    VacanteModule,
+    GmailTemporalModule,
+    TutorModule
   ],
   controllers: [AppController],
   providers: [AppService],

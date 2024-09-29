@@ -23,7 +23,7 @@ export class SolicitudService {
   ) {}
 
   async create(createSolicitudDto: CreateSolicitudDto) {
-    const grado = await this.gradoModel.findById(createSolicitudDto.grado_ID)
+    const grado = await this.gradoModel.findById(createSolicitudDto.grado_id)
     if(!grado){
       throw new BadRequestException('Grado no encontrado')
     }
@@ -38,7 +38,7 @@ export class SolicitudService {
       fecha_solicitud: new Date(),
     });
     return await solicitud.save();
-    }
+  }
 
   async findAll(){
     return await this.solicitudModel.find()
@@ -63,18 +63,18 @@ export class SolicitudService {
     return await solicitud.save();
   }
 
-  async changeState(solicitud_id: string, updateEstadoSolicitudDto: UpdateEstadoSolicitudDto) {
+  async aprobarSolicitud(solicitud_id: string) {
     const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
       throw new BadRequestException('Solicitud no encontrada');
     }
 
-    solicitud.estado = updateEstadoSolicitudDto.estado;
+    solicitud.estado = EstadoSolicitud.APROBADO
 
     return await solicitud.save();
   }
 
-  async procesoSolicitud(solicitud_id: string) {
+  async procesarSolicitud(solicitud_id: string) {
     const solicitud = await this.solicitudModel.findById(solicitud_id);
     if (!solicitud) {
       throw new NotFoundException('Solicitud no encontrada');
@@ -91,6 +91,34 @@ export class SolicitudService {
       usuario,
       contrasena
     );
+
+    return solicitud;
+  }
+
+  async cancelarSolicitud(solicitud_id: string){
+    const solicitud = await this.solicitudModel.findById(solicitud_id);
+    if (!solicitud) {
+      throw new NotFoundException('Solicitud no encontrada');
+    }
+
+    solicitud.estado = EstadoSolicitud.CANCELADO;
+
+    await solicitud.save();
+
+    await this.gmailTemporalService.enviarCorreoTemporalCancelado(
+      solicitud.correo_padre
+    );
+
+    return solicitud
+  }
+  
+  async findByNumeroDocumentoSolicitud(dni_hijo: string){
+    const solicitud = await this.solicitudModel.findOne({dni_hijo})
+    .populate(['grado'])
+
+    if(!solicitud){
+      throw new BadRequestException('Solicitud no encontrada')
+    }
 
     return solicitud;
   }

@@ -15,6 +15,7 @@ import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema
     ])
   ],
   providers: [CuposService],
-  controllers: [CuposController]
+  controllers: [CuposController],
+  exports: [CuposService]
 })
 export class CuposModule {}
