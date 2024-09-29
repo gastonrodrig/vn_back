@@ -26,6 +26,7 @@ import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
 import { VacanteModule } from './vacante/vacante.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
+import { TutorModule } from './tutor/tutor.module';
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
     SolicitudModule,
     MatriculaModule,
     VacanteModule,
-    GmailTemporalModule
+    GmailTemporalModule,
+    TutorModule
   ],
   controllers: [AppController],
   providers: [AppService],
