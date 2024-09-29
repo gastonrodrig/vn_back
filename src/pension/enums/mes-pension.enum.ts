@@ -1,13 +1,13 @@
 export enum MesPension {
-    MARZO = 'MARZO',
-    ABRIL = 'ABRIL',
-    MAYO = 'MAYO',
-    JUNIO = 'JUNIO',
-    JULIO = 'JULIO',
-    AGOSTO ='AGOSTO',
-    SEPTIEMBRE = 'SEPTIEMBRE',
-    OCTUBRE = 'OCTUBRE',
-    NOVIEMBRE = 'NOVIEMBRE',
-    DICIEMBRE = 'DICIEMBRE',
+    MARZO = 'Marzo',
+    ABRIL = 'Abril',
+    MAYO = 'Mayo',
+    JUNIO = 'Junio',
+    JULIO = 'Julio',
+    AGOSTO ='Agosto',
+    SEPTIEMBRE = 'Septiembre',
+    OCTUBRE = 'Octubre',
+    NOVIEMBRE = 'Noviembre',
+    DICIEMBRE = 'Diciembre',
   }
   

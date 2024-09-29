@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { CreatePensionDto } from './dto/create-pension.dto';
 import { updatePensionDto } from './dto/update-pension.dto';
+import { MetodoPago } from './enums/metodo-pago.enum';
 
 @Injectable()
 export class PensionService {
@@ -19,10 +20,16 @@ export class PensionService {
     if (!estudiante){
       throw new BadRequestException('Estudiante no encontrado')
     }
+    let n_operacion = createPensionDto.n_operacion;
+    if (createPensionDto.metodo_pago === MetodoPago.EFECTIVO) {
+      n_operacion = null;
+    }
     const pension = new this.pensionModel({
       estudiante,
       monto: createPensionDto.monto,
-      fecha_incio: createPensionDto.fecha_inicio,
+      metodo_pago: createPensionDto.metodo_pago,
+      n_operacion: n_operacion,
+      fecha_inicio: createPensionDto.fecha_inicio,
       fecha_limite: createPensionDto.fecha_limite,
       estado: createPensionDto.estado,
       mes: createPensionDto.mes,
@@ -49,8 +56,14 @@ export class PensionService {
       throw new BadRequestException('Estudiante no encontrado')
     }
     pension.monto = updatePensionDto.monto
-    pension.fecha_incio = updatePensionDto.fecha_inicio
-    pension.fecha_limite= updatePensionDto.fecha_limite
+    pension.metodo_pago = updatePensionDto.metodo_pago
+    if (updatePensionDto.metodo_pago === MetodoPago.EFECTIVO) {
+      pension.n_operacion = null;
+    } else {
+      pension.n_operacion = updatePensionDto.n_operacion;
+    }
+    pension.fecha_inicio = updatePensionDto.fecha_inicio
+    pension.fecha_limite = updatePensionDto.fecha_limite
     pension.estado = updatePensionDto.estado
     pension.mes = updatePensionDto.mes
 
