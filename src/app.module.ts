@@ -60,7 +60,7 @@ import { TutorModule } from './tutor/tutor.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
-    PensionModule
+    PensionModule,
     VacanteModule,
     GmailTemporalModule,
     TutorModule
