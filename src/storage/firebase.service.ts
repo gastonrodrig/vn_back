@@ -13,7 +13,7 @@ export class FirebaseService {
           privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
           clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         }),
-        storageBucket: "virgennatividad-a5c2b.appspot.com",
+        storageBucket: "virgen-natividad.appspot.com",
       });
       FirebaseService.initialized = true;
     }

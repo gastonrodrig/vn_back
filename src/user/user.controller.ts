@@ -40,26 +40,9 @@ export class UserController {
     return this.userService.changePassword(id, changePasswordDto);
   }
 
-  @Put('remove-estudiante/:id') 
-  removeEstudiante(@Param('id') id: string){
-    return this.userService.removeEstudiante(id);
-  }
-
-  @Put('remove-docente/:id')
-  removeDocente(@Param('id') id: string){
-    return this.userService.removeDocente(id);
-  }
-
-  @Put('remove-apoderado/:id')
-  removeApoderado(@Param('id') id: string){
-    return this.userService.removeApoderado(id);
-  }
-
   @Post('create-temporary')
   async createTemporaryUser() {
-    
     const userData = await this.userService.createTemporaryUser();
-    
     return {
       message: 'Usuario temporal creado exitosamente',
       data: userData,

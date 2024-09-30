@@ -1,4 +1,4 @@
 export enum EstadoUsuario {
-    HABILITADO = 'Habilitado',
-    DESHABILITADO = 'Deshabilitado'
-  }
+  HABILITADO = 'Habilitado',
+  DESHABILITADO = 'Deshabilitado'
+}

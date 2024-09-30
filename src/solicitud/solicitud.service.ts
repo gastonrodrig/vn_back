@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSolicitudDto } from './dto/create-solicitud.dto';
 import { UpdateSolicitudDto } from './dto/update-solicitud.dto';
-import { UpdateEstadoSolicitudDto } from './dto/update-estado.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Solicitud } from './schema/solicitud.schema';
 import { Model, Types } from 'mongoose';

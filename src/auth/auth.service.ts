@@ -3,6 +3,7 @@ import * as bcryptjs from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { Roles } from 'src/user/enum/rol.enum';
 
 @Injectable()export class AuthService {
   constructor(
@@ -21,25 +22,16 @@ import { JwtService } from '@nestjs/jwt';
       throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
-    const payload = { 
+    if (user.rol === Roles.ESTUDIANTE || user.rol === Roles.TUTOR) {
+      await user.populate({ path: 'perfil', model: user.rol })
+    }
+
+    const payload = {
       email: user.email,
       rol: user.rol,
       nombres: user.usuario,
-      estudiante: null,
-      docente: null,
-      apoderado: null
+      perfil: user.perfil || null, // Si el perfil está disponible, lo incluye, si no, es null
     };
-
-    // Incluir datos adicionales según el rol del usuario
-    if (user.rol === 'Estudiante' && user.estudiante) {
-      payload.estudiante = user.estudiante;
-    }
-    if (user.rol === 'Docente' && user.docente) {
-      payload.docente = user.docente;
-    }
-    if (user.rol === 'Apoderado' && user.apoderado) {
-      payload.apoderado = user.apoderado;
-    }
 
     const token = this.jwtService.sign(payload, { expiresIn: '1h' });
 
@@ -48,9 +40,7 @@ import { JwtService } from '@nestjs/jwt';
       email: user.email,
       rol: user.rol,
       usuario: user.usuario,
-      docente: user.rol === 'Docente' ? user.docente : null,
-      estudiante: user.rol === 'Estudiante' ? user.estudiante : null,
-      apoderado: user.rol === 'Apoderado' ? user.apoderado : null
+      perfil: user.perfil,
     };
   }
 }
