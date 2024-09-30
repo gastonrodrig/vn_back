@@ -10,6 +10,7 @@ import { Tutor } from 'src/tutor/schema/tutor.schema';
 import { Roles } from './enum/rol.enum';
 import * as bcryptjs from 'bcryptjs';
 import * as crypto from 'crypto';
+import { EstadoUsuario } from './enum/estado-usuario.enum';
 
 @Injectable()
 export class UserService {
@@ -144,6 +145,28 @@ export class UserService {
     }
   
     return { success: true }
+  }
+
+  async cambiarHabilitado(user_id: string){
+    const user = await this.userModel.findById(user_id);
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
+    user.estado = EstadoUsuario.HABILITADO;
+
+    return await user.save();
+  }
+
+  async cambiarDeshabilitado(user_id: string){
+    const user = await this.userModel.findById(user_id);
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
+    user.estado = EstadoUsuario.DESHABILITADO;
+
+    return await user.save();
   }
 
   async createTemporaryUser() {

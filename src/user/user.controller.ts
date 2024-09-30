@@ -35,6 +35,16 @@ export class UserController {
     return this.userService.remove(id);
   }
 
+  @Patch(':id/activate')
+  activate(@Param('id') id: string) {
+    return this.userService.cambiarHabilitado(id);
+  }
+
+  @Patch(':id/deactivate')
+  deactivate(@Param('id') id: string) {
+    return this.userService.cambiarDeshabilitado(id);
+  }
+
   @Patch(':id/change-password')
   changePassword(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto) {
     return this.userService.changePassword(id, changePasswordDto);
