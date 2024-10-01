@@ -29,6 +29,7 @@ import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 import { PensionModule } from './pension/pension.module';
 import { TutorModule } from './tutor/tutor.module';
 import { AsistenciaModule } from './asistencia/asistencia.module';
+import { TareasModule } from './tareas/tareas.module';
 
 @Module({
   imports: [
@@ -65,7 +66,8 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
     VacanteModule,
     GmailTemporalModule,
     TutorModule,
-    AsistenciaModule
+    AsistenciaModule,
+    TareasModule
   ],
   controllers: [AppController],
   providers: [AppService],

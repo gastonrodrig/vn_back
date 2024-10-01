@@ -83,4 +83,35 @@ export class FirebaseService {
       console.warn(`File not found: ${fileUrl}. It may have been already deleted.`);
     }
   }
+
+  async uploadTareasToFirebase(location: string, files: Express.Multer.File[] = []): Promise<object[]> {
+    if (!Array.isArray(files)) {
+      throw new Error('Files should be an array');
+    }
+
+    const uploadedUrls: object[] = [];
+
+    for (const file of files) {
+      const { originalname, buffer, mimetype } = file;
+      const storage = admin.storage();
+      const bucket = storage.bucket();
+
+      const uniqueFilename = `${Date.now()}-${originalname}`;
+      const fileBlob = bucket.file(`${location}/tareasEstudiante/${uniqueFilename}`);
+
+      await fileBlob.save(buffer, { contentType: mimetype });
+      await fileBlob.makePublic();
+
+      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileBlob.name}`;
+
+      const [metadata] = await fileBlob.getMetadata(); 
+      
+      uploadedUrls.push({
+        nombre: uniqueFilename,
+        url: publicUrl,
+        tamanio: metadata.size,
+      });
+    }
+    return uploadedUrls;
+  }
 }
