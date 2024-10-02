@@ -43,6 +43,11 @@ export class AsistenciaController {
     justificado(@Param('id') id: string){
         return this.asistenciaService.changeJustificado(id);
     }
+
+    @Patch(':id/Falta')
+    falta(@Param('id') id: string){
+        return this.asistenciaService.changeFalta(id);
+    }
     
     @Get('/:gradoId/:periodoId/:seccionId')
     listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){

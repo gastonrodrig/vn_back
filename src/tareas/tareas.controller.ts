@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { TareasService } from './tareas.service';
 import { CreateTareasDto } from './dto/create-tareas.dto';
@@ -67,5 +67,8 @@ export class TareasController {
         return this.tareasService.updateFiles(id, files);
     }
 
-    
+    @Delete(':id')
+    remove(@Param('id') id: string){
+        return this.tareasService.remove(id)
+    }    
 }

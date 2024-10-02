@@ -148,6 +148,17 @@ export class AsistenciaService {
         return await asistencia.save()
     }
 
+    async changeFalta(asistencia_id: string){
+        const asistencia = await this.asistenciaModel.findById(asistencia_id);
+        if(!asistencia){
+            throw new BadRequestException('Asistencia no encontrado')
+        }
+        asistencia.estado = EstadoAsistencia.FALTA
+
+        return await asistencia.save()
+    }
+
+
     async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
         const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
         const periodoObjectId = new mongoose.Types.ObjectId(periodoId);

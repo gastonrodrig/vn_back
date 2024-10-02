@@ -144,4 +144,17 @@ export class TareasService {
             .populate(['estudiante', 'curso'])
             .populate({ path: 'archivoTareas', model: 'ArchivoTareas' });
     }
+
+    async remove(tareas_id: string) {
+        const tarea = await this.tareasModel.findById(tareas_id).populate('archivoTareas');
+        if (!tarea) {
+            throw new BadRequestException('Tarea no encontrada');
+        }
+    
+        await this.archivoTareasModel.deleteMany({ _id: { $in: tarea.archivoTareas } });
+    
+        await this.tareasModel.findByIdAndDelete(tareas_id);
+    
+        return { success: true };
+    }
 }
