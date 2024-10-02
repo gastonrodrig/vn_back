@@ -50,7 +50,7 @@ export class UserService {
         }  
       } 
       if(createUserDto.rol === 'Tutor') {
-        perfil = await this.estudianteModel.findById(createUserDto.perfil_id)
+        perfil = await this.tutorModel.findById(createUserDto.perfil_id)
         if(!perfil) {
           throw new BadRequestException('Tutor no encontrado')
         }  
@@ -144,6 +144,19 @@ export class UserService {
       throw new BadRequestException('Usuario no encontrado')
     }
   
+    return { success: true }
+  }
+
+  async removePerfil(user_id: string) {
+    const user = await this.userModel.findById(user_id)
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado')
+    }
+
+    user.perfil = null;
+
+    await user.save();
+
     return { success: true }
   }
 

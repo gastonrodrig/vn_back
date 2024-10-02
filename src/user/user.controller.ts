@@ -35,6 +35,11 @@ export class UserController {
     return this.userService.remove(id);
   }
 
+  @Patch(':id/remove-profile')
+  removePerfil(@Param('id') id: string) {
+    return this.userService.removePerfil(id);
+  }
+
   @Patch(':id/activate')
   activate(@Param('id') id: string) {
     return this.userService.cambiarHabilitado(id);

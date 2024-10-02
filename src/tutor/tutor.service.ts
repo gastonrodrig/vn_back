@@ -73,6 +73,7 @@ export class TutorService {
       grado,
       seccion,
       multimedia: null,
+      user: null
     })
 
     return await tutor.save()
@@ -246,6 +247,21 @@ export class TutorService {
       }
     }
     return { sucess: true }
+  }
+
+  async findByNumeroDocumento(numero_documento: string) {
+    const tutor = await this.tutorModel.findOne({ numero_documento })
+      .populate(['documento', 'periodo', 'grado', 'seccion', 'multimedia', 'user'])
+
+    if (!tutor) {
+      throw new BadRequestException('Tutor no encontrado');
+    }
+
+    if (tutor.user) {
+      throw new BadRequestException('Este tutor ya tiene un usuario asociado');
+    }
+
+    return tutor;
   }
   
 }

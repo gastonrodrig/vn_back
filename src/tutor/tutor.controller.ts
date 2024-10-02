@@ -80,4 +80,9 @@ export class TutorController {
   remove(@Param('id') id: string) {
     return this.tutorService.remove(id); 
   }
+
+  @Get('documento/:numero_documento')
+  getTutorByNumeroDocumento(@Param('numero_documento') numero_documento: string) {
+    return this.tutorService.findByNumeroDocumento(numero_documento);
+  }
 }

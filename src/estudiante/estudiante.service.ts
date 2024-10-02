@@ -74,6 +74,7 @@ export class EstudianteService {
       grado,
       multimedia: null,
       seccion: seccion ? seccion._id : null,
+      user: null
     })
 
     await estudiante.save()
@@ -389,6 +390,10 @@ export class EstudianteService {
 
     if (!estudiante) {
       throw new BadRequestException('Estudiante no encontrado');
+    }
+
+    if (estudiante.user) {
+      throw new BadRequestException('Este estudiante ya tiene un usuario asignado');
     }
 
     return estudiante;

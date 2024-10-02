@@ -22,6 +22,9 @@ export class User {
 
   @Prop()
   perfil: Types.ObjectId;
+
+  @Prop()
+  numero_documento: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
