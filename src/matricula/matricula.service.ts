@@ -7,6 +7,8 @@ import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { CreateMatriculaDto } from './dto/create-matricula.dto';
 import { UpdateMatriculaDto } from './dto/update-matricula.dto';
 import { MetodoPago } from './enums/metodo-pago.enum';
+import { EstadoVacante } from 'src/vacante/enum/estado-vacante.enum';
+import { Vacante } from 'src/vacante/schema/vacante.schema';
 
 @Injectable()
 export class MatriculaService {
@@ -17,6 +19,8 @@ export class MatriculaService {
     private readonly periodoModel: Model<PeriodoEscolar>,
     @InjectModel(Estudiante.name)
     private readonly estudianteModel: Model<Estudiante>,
+    @InjectModel(Vacante.name)
+    private readonly vacanteModel: Model<Vacante>
   ) {}
 
   async create(createMatriculaDto: CreateMatriculaDto) {
@@ -31,12 +35,28 @@ export class MatriculaService {
     }
 
     const matriculaExistente = await this.matriculaModel.findOne({
-      periodo: createMatriculaDto.periodo_id,
-      estudiante: createMatriculaDto.estudiante_id,
+      periodo: new Types.ObjectId(createMatriculaDto.periodo_id),
+      estudiante: new Types.ObjectId(createMatriculaDto.estudiante_id),
     });
+
     if (matriculaExistente) {
       throw new BadRequestException('Ya existe una matrícula para este estudiante en el mismo periodo');
     }
+
+    const vacanteReservada = await this.vacanteModel.findOne({
+      estudiante: estudiante._id
+    });
+  
+    if (!vacanteReservada) {
+      throw new BadRequestException('Este estudiante no cuenta con vacante.');
+    }
+ 
+    if (vacanteReservada.estado !== EstadoVacante.RESERVADO) {
+      throw new BadRequestException('El estado de la vacante no permite la matrícula.');
+    }
+  
+    vacanteReservada.estado = EstadoVacante.CONFIRMADO;
+    await vacanteReservada.save();
   
     const n_operacion = createMatriculaDto.metodo_pago === MetodoPago.EFECTIVO ? null : createMatriculaDto.n_operacion;
   
