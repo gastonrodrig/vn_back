@@ -24,6 +24,8 @@ import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { SemanasModule } from './semanas/semanas.module';
+import { PeriodoSeccionCursoModule } from './periodo-seccion-curso/periodo-seccion-curso.module';
 
 @Module({
   imports: [
@@ -55,7 +57,9 @@ import { MatriculaModule } from './matricula/matricula.module';
     StripeModule,
     CuposModule,
     SolicitudModule,
-    MatriculaModule
+    MatriculaModule,
+    SemanasModule,
+    PeriodoSeccionCursoModule
   ],
   controllers: [AppController],
   providers: [AppService],
