@@ -93,7 +93,7 @@ export class PeriodoSeccionCursoService {
     
         await periodoSeccionCurso.save()
     
-        return this.periodoEscolarModel.findById(periodoSeccionCurso._id)
+        return this.periodoSeccionCursoModel.findById(periodoSeccionCurso._id)
           .populate(['periodo', 'secccion', 'curso'])
       }
     
