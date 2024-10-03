@@ -35,12 +35,12 @@ export class PeriodoSeccionCursoController {
       return this.periodoSeccionCursoService.remove(id);
     }
   
-    @Get('/:seccionId/:cursoId')
+    @Get('/:seccionId/:periodoId')
     listarPeriodoSeccionCurso(
       @Param('seccionId') seccionId: string, 
-      @Param('cursoId') cursoId: string
+      @Param('periodoId') periodoId: string
     ) {
-      return this.periodoSeccionCursoService.listarPeriodoSeccionYCurso(seccionId, cursoId);
+      return this.periodoSeccionCursoService.listarCursoSeccionyPeriodo(seccionId, periodoId);
     }
 
 }

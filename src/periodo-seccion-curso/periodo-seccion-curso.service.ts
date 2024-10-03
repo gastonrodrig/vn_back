@@ -111,13 +111,13 @@ export class PeriodoSeccionCursoService {
         return { success: true }
       }
     
-      async listarPeriodoSeccionYCurso(seccionId: string, cursoId: string) {
+      async listarCursoSeccionyPeriodo(seccionId: string, periodoId: string) {
         const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
-        const cursoObjectId = new mongoose.Types.ObjectId(cursoId);
+        const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
     
-        const curso = await this.cursoModel.findById(cursoObjectId);
-        if (!curso) {
-          throw new BadRequestException('Curso no encontrado');
+        const periodo = await this.cursoModel.findById(periodoObjectId);
+        if (!periodo) {
+          throw new BadRequestException('Periodo no encontrado');
         }
     
         const seccion = await this.seccionModel.findById(seccionObjectId);
@@ -126,10 +126,8 @@ export class PeriodoSeccionCursoService {
         }
     
         return await this.periodoSeccionCursoModel
-          .find({ seccion: seccionObjectId, curso: cursoObjectId })
-          .populate(['periodo', 'seccion', 'curso']);
+          .find({ seccion: seccionObjectId, periodo: periodoObjectId })
+          .populate(['curso', 'seccion', 'periodo']);
       }
-    
-
 
 }
