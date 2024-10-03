@@ -30,6 +30,7 @@ import { PensionModule } from './pension/pension.module';
 import { TutorModule } from './tutor/tutor.module';
 import { AsistenciaModule } from './asistencia/asistencia.module';
 import { TareasModule } from './tareas/tareas.module';
+import { NotasModule } from './notas/notas.module';
 
 @Module({
   imports: [
@@ -67,7 +68,8 @@ import { TareasModule } from './tareas/tareas.module';
     GmailTemporalModule,
     TutorModule,
     AsistenciaModule,
-    TareasModule
+    TareasModule,
+    NotasModule
   ],
   controllers: [AppController],
   providers: [AppService],
