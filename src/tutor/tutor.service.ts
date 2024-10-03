@@ -249,7 +249,7 @@ export class TutorService {
     return { sucess: true }
   }
 
-  async findByNumeroDocumento(numero_documento: string) {
+  async findByNumeroDocumento(numero_documento: string, validarUsuarioAsignado: boolean) {
     const tutor = await this.tutorModel.findOne({ numero_documento })
       .populate(['documento', 'periodo', 'grado', 'seccion', 'multimedia', 'user'])
 
@@ -257,7 +257,7 @@ export class TutorService {
       throw new BadRequestException('Tutor no encontrado');
     }
 
-    if (tutor.user) {
+    if (validarUsuarioAsignado && tutor.user) {
       throw new BadRequestException('Este tutor ya tiene un usuario asociado');
     }
 

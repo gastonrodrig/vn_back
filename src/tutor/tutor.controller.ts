@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { TutorService } from './tutor.service';
 import { CreateTutorDto } from './dto/create-tutor.dto';
@@ -82,7 +82,11 @@ export class TutorController {
   }
 
   @Get('documento/:numero_documento')
-  getTutorByNumeroDocumento(@Param('numero_documento') numero_documento: string) {
-    return this.tutorService.findByNumeroDocumento(numero_documento);
+  getTutorByNumeroDocumento(
+    @Param('numero_documento') numero_documento: string,
+    @Query('validarUsuarioAsignado') validarUsuarioAsignado: string
+  ) {
+    const validar = validarUsuarioAsignado === 'true'
+    return this.tutorService.findByNumeroDocumento(numero_documento, validar)
   }
 }

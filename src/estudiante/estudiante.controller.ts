@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { EstudianteService } from './estudiante.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
@@ -133,7 +133,11 @@ export class EstudianteController {
   }
 
   @Get('documento/:numero_documento')
-  getEstudianteByNumeroDocumento(@Param('numero_documento') numero_documento: string) {
-    return this.estudianteService.findByNumeroDocumento(numero_documento);
+  getEstudianteByNumeroDocumento(
+    @Param('numero_documento') numero_documento: string,
+    @Query('validarUsuarioAsignado') validarUsuarioAsignado: string
+  ) {
+    const validar = validarUsuarioAsignado === 'true'
+    return this.estudianteService.findByNumeroDocumento(numero_documento, validar)
   }
 }
