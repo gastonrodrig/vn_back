@@ -28,5 +28,10 @@ export class MatriculaController {
   update(@Param('id') id: string, @Body() updateMatriculaDto: UpdateMatriculaDto) {
     return this.matriculaService.update(id, updateMatriculaDto);
   }
+
+  @Get('estudiante/:id')
+  listarMatriculasPorEstudiante(@Param('id') id: string) {
+    return this.matriculaService.listerMatriculasPorEstudiante(id);
+  }
 }
 

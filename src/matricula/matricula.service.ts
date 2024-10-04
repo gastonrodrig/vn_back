@@ -44,7 +44,8 @@ export class MatriculaService {
     }
 
     const vacanteReservada = await this.vacanteModel.findOne({
-      estudiante: estudiante._id
+      estudiante: estudiante._id,
+      periodo: periodo._id,
     });
   
     if (!vacanteReservada) {
@@ -63,7 +64,7 @@ export class MatriculaService {
     const matricula = new this.matriculaModel({
       monto: createMatriculaDto.monto,
       metodo_pago: createMatriculaDto.metodo_pago,
-      n_operacion,  // Si es efectivo, el número de operación es null
+      n_operacion,
       fecha: createMatriculaDto.fecha,
       periodo,
       estudiante,
@@ -115,6 +116,17 @@ export class MatriculaService {
   
     return this.matriculaModel.findById(matricula._id)
       .populate(['estudiante', 'periodo']);
+  }
+
+  async listerMatriculasPorEstudiante(estudiante_id: string){
+    const estudianteId = new Types.ObjectId(estudiante_id);
+    const estudiante = await this.estudianteModel.findById(estudianteId)
+    if(!estudiante){
+      throw new BadRequestException('Estudiante no encontrado')
+    }
+
+    return this.matriculaModel.find({ estudiante: estudiante._id })
+      .populate(['estudiante', 'periodo'])
   }
   
 }
