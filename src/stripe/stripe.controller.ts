@@ -13,8 +13,8 @@ export class StripeController {
     return this.stripeService.processPayment(createPagoDto);
   }
   
-  @Get(':stripeOperationId/:paymentMethodId')
-  getPaymentDetails(@Param('stripeOperationId') stripeOperationId: string,  @Param('paymentMethodId') paymentMethodId: string){
-    return this.stripeService.getPaymentDetails(stripeOperationId, paymentMethodId)
+  @Get(':stripeOperationId')
+  getPaymentDetails(@Param('stripeOperationId') stripeOperationId: string){
+    return this.stripeService.getPaymentDetails(stripeOperationId)
   }
 }

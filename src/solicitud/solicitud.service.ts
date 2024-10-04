@@ -1,25 +1,28 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSolicitudDto } from './dto/create-solicitud.dto';
 import { UpdateSolicitudDto } from './dto/update-solicitud.dto';
-import { UpdateEstadoSolicitudDto } from './dto/update-estado.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Solicitud } from './schema/solicitud.schema';
 import { Model, Types } from 'mongoose';
 import { Grado } from 'src/grado/schema/grado.schema';
+import { GmailTemporalService } from 'src/gmailTemporal/gmailTemporal.service';
+import { UserService } from 'src/user/user.service';
+import { EstadoSolicitud } from './enums/estado-solicitud.enum';
 
 @Injectable()
 export class SolicitudService {
-    //NOSE SI ESTA BIEN
-
   constructor(
     @InjectModel(Solicitud.name) 
     private readonly solicitudModel: Model<Solicitud>,
     @InjectModel(Grado.name)
     private readonly gradoModel: Model<Grado>,
+
+    private readonly gmailTemporalService: GmailTemporalService,
+    private readonly userService: UserService
   ) {}
 
   async create(createSolicitudDto: CreateSolicitudDto) {
-    const grado = await this.gradoModel.findById(createSolicitudDto.grado_ID)
+    const grado = await this.gradoModel.findById(createSolicitudDto.grado_id)
     if(!grado){
       throw new BadRequestException('Grado no encontrado')
     }
@@ -34,9 +37,8 @@ export class SolicitudService {
       fecha_solicitud: new Date(),
     });
     return await solicitud.save();
-    }
+  }
 
-  // Método para obtener todas las solicitudes
   async findAll(){
     return await this.solicitudModel.find()
   }
@@ -45,9 +47,7 @@ export class SolicitudService {
     return await this.solicitudModel.findById(solicitud_id).populate('grado')
   }
 
- // Método para actualizar una solicitud por su ID
- //NO ES NECESARIO POR AHORA
- async update(solicitud_id: string, updateSolicitudDto: UpdateSolicitudDto) {
+  async update(solicitud_id: string, updateSolicitudDto: UpdateSolicitudDto) {
     const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
       throw new BadRequestException('Solicitud no encontrada');
@@ -61,14 +61,64 @@ export class SolicitudService {
 
     return await solicitud.save();
   }
-  /*
-//NO ES NECESARIO POR AHORA
-  async remove(solicitud_id: string) {
-    const solicitudId = new Types.ObjectId(solicitud_id);
-    const solicitud = await this.solicitudModel.findByIdAndDelete(solicitudId)
+
+  async aprobarSolicitud(solicitud_id: string) {
+    const solicitud = await this.solicitudModel.findById(solicitud_id)
     if (!solicitud) {
-      throw new NotFoundException(`Solicitud con ID ${solicitud_id} no encontrada`);
+      throw new BadRequestException('Solicitud no encontrada');
     }
+
+    solicitud.estado = EstadoSolicitud.APROBADO
+
+    return await solicitud.save();
+  }
+
+  async procesarSolicitud(solicitud_id: string) {
+    const solicitud = await this.solicitudModel.findById(solicitud_id);
+    if (!solicitud) {
+      throw new NotFoundException('Solicitud no encontrada');
+    }
+
+    solicitud.estado = EstadoSolicitud.PROCESO;
+
+    const { usuario, contrasena } = await this.userService.createTemporaryUser();
+
+    await solicitud.save();
+
+    await this.gmailTemporalService.sendTemporaryAccountEmail(
+      solicitud.correo_padre,
+      usuario,
+      contrasena
+    );
+
     return solicitud;
-  }*/
+  }
+
+  async cancelarSolicitud(solicitud_id: string){
+    const solicitud = await this.solicitudModel.findById(solicitud_id);
+    if (!solicitud) {
+      throw new NotFoundException('Solicitud no encontrada');
+    }
+
+    solicitud.estado = EstadoSolicitud.CANCELADO;
+
+    await solicitud.save();
+
+    await this.gmailTemporalService.enviarCorreoTemporalCancelado(
+      solicitud.correo_padre
+    );
+
+    return solicitud
+  }
+  
+  async findByNumeroDocumentoSolicitud(dni_hijo: string){
+    const solicitud = await this.solicitudModel.findOne({dni_hijo})
+    .populate(['grado'])
+
+    if(!solicitud){
+      throw new BadRequestException('Solicitud no encontrada')
+    }
+
+    return solicitud;
+  }
 }

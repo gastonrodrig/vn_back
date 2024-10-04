@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Roles } from 'src/auth/enums/rol.enum';
-
+import { Roles } from '../enum/rol.enum';
 export class UpdateUserDto {
   @ApiProperty()
   @IsString()
@@ -16,20 +15,10 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsEnum(Roles)
   @IsNotEmpty()
-  rol: Roles;
+  rol: Roles
 
   @ApiProperty()
   @IsOptional()
   @IsMongoId()
-  estudiante_id: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsMongoId()
-  docente_id: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsMongoId()
-  apoderado_id: string;
+  perfil_id: string;
 }

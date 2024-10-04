@@ -6,17 +6,22 @@ export class CreatePagoDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  amount: number;
+  monto: number;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  currency: string;
+  divisa: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   paymentMethodId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  nombre_completo: string;
 
   @ApiProperty()
   @IsString()
@@ -39,5 +44,10 @@ export class CreatePagoDto {
   metadata?: {
     tipoDocumento: string;
     nroDocumento: string;
+    estudiante_id: string;
   };
+
+  @ApiProperty()
+  @IsOptional()
+  paymentDate?: string;
 }

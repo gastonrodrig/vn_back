@@ -8,8 +8,8 @@ export class GmailController {
   constructor(private readonly gmailService: GmailService) {}
 
   @Patch('send-email/:stripeOperationId')
-  async sendEmailPdf(@Param('stripeOperationId') stripeOperationId: string, @Param('paymentMethodId') paymentMethodId: string,@Body() createGmailPdfDto: CreateGmailPdfDto) {
-    await this.gmailService.sendEmailWithPdf(stripeOperationId,paymentMethodId,createGmailPdfDto);
+  async sendEmailPdf(@Param('stripeOperationId') stripeOperationId: string, @Body() createGmailPdfDto: CreateGmailPdfDto) {
+    await this.gmailService.sendEmailWithPdf(stripeOperationId,createGmailPdfDto);
     return { message: 'Correo con PDF enviado satisfactoriamente' };
   }
 }

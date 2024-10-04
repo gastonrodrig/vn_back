@@ -4,8 +4,6 @@ import { EstadoSolicitud } from '../enums/estado-solicitud.enum';
 
 @Schema({ collection: 'Solicitud' })
 export class Solicitud {
-
-    //CREO QUE YA ESTA LISTO POR AHORA DECLARE VARAIBLES Y LISTO
   @Prop()
   nombre_hijo: string;
 
@@ -24,7 +22,7 @@ export class Solicitud {
   @Prop({ type: Types.ObjectId, ref: 'Grado', })
   grado: Types.ObjectId;
 
-  @Prop({ default:EstadoSolicitud.PENDIENTE  })
+  @Prop({ default: EstadoSolicitud.PENDIENTE })
   estado: string; 
 
   @Prop()

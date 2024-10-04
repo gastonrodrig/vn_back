@@ -74,6 +74,7 @@ export class EstudianteService {
       grado,
       multimedia: null,
       seccion: seccion ? seccion._id : null,
+      user: null
     })
 
     await estudiante.save()
@@ -380,5 +381,21 @@ export class EstudianteService {
     return this.estudianteModel.findById(estudiante._id)
       .populate(['documento','periodo','grado','seccion','multimedia','user'])
       .populate({ path: 'archivo', model: 'Archivo' })
+  }
+
+  async findByNumeroDocumento(numero_documento: string, validarUsuarioAsignado: boolean) {
+    const estudiante = await this.estudianteModel.findOne({ numero_documento })
+      .populate(['documento', 'periodo', 'grado', 'seccion', 'multimedia', 'user'])
+      .populate({ path: 'archivo', model: 'Archivo' });
+  
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+  
+    if (validarUsuarioAsignado && estudiante.user) {
+      throw new BadRequestException('Este estudiante ya tiene un usuario asignado');
+    }
+  
+    return estudiante;
   }
 }

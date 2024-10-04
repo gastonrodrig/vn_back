@@ -1,29 +1,30 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Types } from "mongoose";
-import { Roles } from "src/auth/enums/rol.enum";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
+import { Roles } from '../enum/rol.enum';
+import { EstadoUsuario } from '../enum/estado-usuario.enum';
 
 @Schema({ collection: 'User' })
 export class User {
   @Prop()
-  usuario: string
+  usuario: string;
 
   @Prop()
-  email: string
+  email: string;
 
   @Prop()
-  contrasena: string
+  contrasena: string;
 
   @Prop({ enum: Roles })
-  rol: Roles
+  rol: Roles;
 
-  @Prop({ type: Types.ObjectId, ref: 'Estudiante' })
-  estudiante: Types.ObjectId;
+  @Prop({ enum: EstadoUsuario, default: EstadoUsuario.DESHABILITADO })
+  estado: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Docente' })
-  docente: Types.ObjectId;
+  @Prop()
+  perfil: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Apoderado' })
-  apoderado: Types.ObjectId;
+  @Prop()
+  numero_documento: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

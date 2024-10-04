@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { EstudianteService } from './estudiante.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
@@ -8,7 +8,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Estudiante } from './schema/estudiante.schema';
 import { UpdateSeccionDto } from './dto/update-seccion.dto';
 import { UpdateEstadoEstudianteDto } from './dto/update-estado.dto';
-import { ObjectId, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Controller('estudiante')
 @ApiTags('Estudiante')
@@ -17,22 +17,22 @@ export class EstudianteController {
 
   @Post()
   create(@Body() createEstudianteDto: CreateEstudianteDto){
-  return this.estudianteService.create(createEstudianteDto)
+    return this.estudianteService.create(createEstudianteDto)
   }
 
   @Get()
   findAll(){
-  return this.estudianteService.findAll();
+    return this.estudianteService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string){
-  return this.estudianteService.findOne(id);
+    return this.estudianteService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateEstudianteDto: UpdateEstudianteDto){
-  return this.estudianteService.update(id, updateEstudianteDto)
+    return this.estudianteService.update(id, updateEstudianteDto)
   }
 
   @Patch('assign-seccion/:id')
@@ -47,7 +47,7 @@ export class EstudianteController {
 
   @Delete(':id')
   remove(@Param('id') id: string){
-  return this.estudianteService.remove(id);
+    return this.estudianteService.remove(id);
   }
 
   @Get('grado/:grado_id/periodo/:periodo_id')
@@ -130,5 +130,14 @@ export class EstudianteController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return this.estudianteService.updateFiles(id, files);
+  }
+
+  @Get('documento/:numero_documento')
+  getEstudianteByNumeroDocumento(
+    @Param('numero_documento') numero_documento: string,
+    @Query('validarUsuarioAsignado') validarUsuarioAsignado: string
+  ) {
+    const validar = validarUsuarioAsignado === 'true'
+    return this.estudianteService.findByNumeroDocumento(numero_documento, validar)
   }
 }

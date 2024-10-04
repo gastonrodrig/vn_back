@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { GmailService } from './gmail.service';
 import { GmailController } from './gmail.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Apoderado, ApoderadoSchema } from 'src/apoderado/schema/apoderado.schema';
 import { StripeService } from 'src/stripe/stripe.service';
 import { PagoModule } from 'src/pago/pago.module';
+import { Pago, PagoSchema } from 'src/pago/schema/pago.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {name: Apoderado.name, schema: ApoderadoSchema}
+      {name: Pago.name, schema: PagoSchema}
     ]),
     PagoModule
   ],

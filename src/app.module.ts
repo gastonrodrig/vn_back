@@ -26,11 +26,18 @@ import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
 import { SemanasModule } from './semanas/semanas.module';
 import { PeriodoSeccionCursoModule } from './periodo-seccion-curso/periodo-seccion-curso.module';
+import { VacanteModule } from './vacante/vacante.module';
+import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
+import { PensionModule } from './pension/pension.module';
+import { TutorModule } from './tutor/tutor.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
+import { TareasModule } from './tareas/tareas.module';
+import { NotasModule } from './notas/notas.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRootAsync({
+      MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
@@ -60,6 +67,13 @@ import { PeriodoSeccionCursoModule } from './periodo-seccion-curso/periodo-secci
     MatriculaModule,
     SemanasModule,
     PeriodoSeccionCursoModule
+    PensionModule,
+    VacanteModule,
+    GmailTemporalModule,
+    TutorModule,
+    AsistenciaModule,
+    TareasModule,
+    NotasModule
   ],
   controllers: [AppController],
   providers: [AppService],
