@@ -24,6 +24,8 @@ import { StripeModule } from './stripe/stripe.module';
 import { CuposModule } from './cupos/cupos.module';
 import { SolicitudModule } from './solicitud/solicitud.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { SemanasModule } from './semanas/semanas.module';
+import { PeriodoSeccionCursoModule } from './periodo-seccion-curso/periodo-seccion-curso.module';
 import { VacanteModule } from './vacante/vacante.module';
 import { GmailTemporalModule } from './gmailTemporal/gmailTemporal.module';
 import { PensionModule } from './pension/pension.module';
@@ -63,6 +65,8 @@ import { NotasModule } from './notas/notas.module';
     CuposModule,
     SolicitudModule,
     MatriculaModule,
+    SemanasModule,
+    PeriodoSeccionCursoModule
     PensionModule,
     VacanteModule,
     GmailTemporalModule,
