@@ -42,7 +42,6 @@ export class CreateMatriculaDto {
   tipoMa: tipoMatricula;
 
   @ApiProperty()
-  @IsDateString()
   @IsNotEmpty()
   fecha: Date;
 }
