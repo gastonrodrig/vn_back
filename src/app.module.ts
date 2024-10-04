@@ -66,7 +66,7 @@ import { NotasModule } from './notas/notas.module';
     SolicitudModule,
     MatriculaModule,
     SemanasModule,
-    PeriodoSeccionCursoModule
+    PeriodoSeccionCursoModule,
     PensionModule,
     VacanteModule,
     GmailTemporalModule,
