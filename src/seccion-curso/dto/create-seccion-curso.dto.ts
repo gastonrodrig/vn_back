@@ -1,12 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsNotEmpty } from "class-validator";
 
-export class CreatePeriodoSeccionCursoDto {
-  @ApiProperty()
-  @IsMongoId()
-  @IsNotEmpty()
-  periodo_id: string;
-  
+export class CreateSeccionCursoDto {
   @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
