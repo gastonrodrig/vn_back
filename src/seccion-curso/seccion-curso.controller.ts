@@ -34,6 +34,11 @@ export class SeccionCursoController {
     remove(@Param('id') id: string) {
       return this.seccionCursoService.remove(id);
     }
+
+    @Delete('seccion/:seccion_id')
+    removeBySeccionId(@Param('seccion_id') seccion_id: string) {
+      return this.seccionCursoService.removeBySeccionId(seccion_id);
+    }
   
     // @Get('/:seccionId/:periodoId')
     // listarPeriodoSeccionCurso(

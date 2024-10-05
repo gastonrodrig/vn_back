@@ -87,5 +87,16 @@ export class SeccionCursoService {
   
         return { success: true }
       }
+
+      async removeBySeccionId(seccion_id: string) {
+        const seccionId = new Types.ObjectId(seccion_id);
+        const result = await this.seccionCursoModel.deleteMany({ seccion: seccionId });
+      
+        if (result.deletedCount === 0) {
+          throw new BadRequestException('No se encontraron registros para eliminar');
+        }
+      
+        return { success: true, deletedCount: result.deletedCount };
+      }
   
 }
