@@ -398,4 +398,15 @@ export class EstudianteService {
   
     return estudiante;
   }
+
+  async listarEstudiantesPorSeccion(seccion_id: string) {
+    const seccion = await this.seccionModel.findById(seccion_id)
+    if (!seccion) {
+      throw new BadRequestException('Sección no encontrada');
+    }
+
+    return this.estudianteModel.find({ seccion: seccion._id })
+      .populate(['documento','periodo','grado','seccion','multimedia','user'])
+      .populate({ path: 'archivo', model: 'Archivo' })
+  }
 }
