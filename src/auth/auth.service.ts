@@ -22,9 +22,24 @@ import { Roles } from 'src/user/enum/rol.enum';
       throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
+    console.log('Antes del populate:', user);
+
     if (user.rol === Roles.ESTUDIANTE || user.rol === Roles.TUTOR) {
-      await user.populate({ path: 'perfil', model: user.rol })
+      await user.populate({
+        path: 'perfil',
+        model: user.rol,
+        populate: [
+          { path: 'documento', model: 'Documento' },
+          { path: 'periodo', model: 'PeriodoEscolar' },
+          { path: 'grado', model: 'Grado' },
+          { path: 'seccion', model: 'Seccion' },
+          { path: 'multimedia', model: 'Multimedia' },
+          { path: 'user', model: 'User' }
+        ]
+      });
     }
+    
+    console.log('Después del populate:', user);
 
     const payload = {
       email: user.email,

@@ -5,7 +5,7 @@ import { CreatePeriodoSeccionCursoDto } from './dto/create-periodo-seccion-curso
 import { UpdatePeriodoSeccionCursoDto } from './dto/update-periodo-seccion-curso.dto';
 
 @Controller('periodo-seccion-curso')
-@ApiTags('periodo-seccion-curso')
+@ApiTags('Periodo-Seccion-Curso')
 
 export class PeriodoSeccionCursoController {
     constructor(private readonly periodoSeccionCursoService: PeriodoSeccionCursoService) {}
