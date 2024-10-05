@@ -140,4 +140,9 @@ export class EstudianteController {
     const validar = validarUsuarioAsignado === 'true'
     return this.estudianteService.findByNumeroDocumento(numero_documento, validar)
   }
+
+  @Get('seccion/:seccion_id')
+  listarEstudiantesPorSeccion(@Param('seccion_id') seccion_id: string) {
+    return this.estudianteService.listarEstudiantesPorSeccion(seccion_id);
+  }
 }
