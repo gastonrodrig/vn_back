@@ -28,4 +28,8 @@ export class PeriodoEscolarController {
   update(@Param('id') id: string, @Body() updatePeriodoEscolarDto: UpdatePeriodoEscolarDto) {
     return this.periodoEscolarService.update(id, updatePeriodoEscolarDto);
   }
+  @Get('anio/:anio')
+  findByAnio(@Param('anio') anio: string) {
+    return this.periodoEscolarService.findByAnio(anio);
+  }
 }

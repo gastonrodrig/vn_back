@@ -48,4 +48,12 @@ export class PeriodoEscolarService {
 
     return await periodo.save()
   }
+  async findByAnio(anio: string) {
+    const periodo = await this.periodoEscolarModel.findOne({ anio });
+    if (!periodo) {
+      throw new BadRequestException(`No se encontró un periodo escolar para el año ${anio}`);
+    }
+    return periodo;
+  }
+
 }
