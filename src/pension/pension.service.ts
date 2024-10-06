@@ -20,15 +20,12 @@ export class PensionService {
     if (!estudiante){
       throw new BadRequestException('Estudiante no encontrado')
     }
-    let n_operacion = createPensionDto.n_operacion;
-    if (createPensionDto.metodo_pago === MetodoPago.EFECTIVO) {
-      n_operacion = null;
-    }
+
     const pension = new this.pensionModel({
       estudiante,
       monto: createPensionDto.monto,
-      metodo_pago: createPensionDto.metodo_pago,
-      n_operacion: n_operacion,
+      metodo_pago: null,
+      n_operacion: null,
       fecha_inicio: createPensionDto.fecha_inicio,
       fecha_limite: createPensionDto.fecha_limite,
       estado: createPensionDto.estado,
@@ -57,11 +54,7 @@ export class PensionService {
     }
     pension.monto = updatePensionDto.monto
     pension.metodo_pago = updatePensionDto.metodo_pago
-    if (updatePensionDto.metodo_pago === MetodoPago.EFECTIVO) {
-      pension.n_operacion = null;
-    } else {
-      pension.n_operacion = updatePensionDto.n_operacion;
-    }
+    pension.n_operacion = updatePensionDto.n_operacion
     pension.fecha_inicio = updatePensionDto.fecha_inicio
     pension.fecha_limite = updatePensionDto.fecha_limite
     pension.estado = updatePensionDto.estado

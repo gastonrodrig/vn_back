@@ -22,8 +22,6 @@ import { Roles } from 'src/user/enum/rol.enum';
       throw new UnauthorizedException('La contraseña es incorrecta.');
     }
 
-    console.log('Antes del populate:', user);
-
     if (user.rol === Roles.ESTUDIANTE || user.rol === Roles.TUTOR) {
       await user.populate({
         path: 'perfil',
@@ -38,14 +36,12 @@ import { Roles } from 'src/user/enum/rol.enum';
         ]
       });
     }
-    
-    console.log('Después del populate:', user);
 
     const payload = {
       email: user.email,
       rol: user.rol,
       nombres: user.usuario,
-      perfil: user.perfil || null, // Si el perfil está disponible, lo incluye, si no, es null
+      perfil: user.perfil || null,
     };
 
     const token = this.jwtService.sign(payload, { expiresIn: '1h' });

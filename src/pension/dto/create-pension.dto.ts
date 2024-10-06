@@ -16,8 +16,8 @@ export class CreatePensionDto {
   monto: number;
   @ApiProperty()
   @IsEnum(MetodoPago)
-  @IsNotEmpty()
-  metodo_pago: MetodoPago;
+  @IsOptional()
+  metodo_pago?: MetodoPago;
 
   @ApiProperty()
   @IsString()

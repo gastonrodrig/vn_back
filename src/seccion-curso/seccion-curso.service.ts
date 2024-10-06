@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
 import { SeccionCurso } from './schema/seccionCurso.schema';
 import { Curso } from 'src/curso/schema/curso.schema';
