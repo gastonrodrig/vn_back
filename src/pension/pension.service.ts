@@ -5,7 +5,8 @@ import { Model, Types } from 'mongoose';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { CreatePensionDto } from './dto/create-pension.dto';
 import { updatePensionDto } from './dto/update-pension.dto';
-import { MetodoPago } from './enums/metodo-pago.enum';
+import { PagarPensionDto } from './dto/pagar-pension.dto';
+import { EstadoPension } from './enums/estado-pension.enum';
 
 @Injectable()
 export class PensionService {
@@ -28,8 +29,8 @@ export class PensionService {
       n_operacion: null,
       fecha_inicio: createPensionDto.fecha_inicio,
       fecha_limite: createPensionDto.fecha_limite,
-      estado: createPensionDto.estado,
       mes: createPensionDto.mes,
+      tiempo_pago: null
     });
     return await pension.save()
   }
@@ -64,5 +65,22 @@ export class PensionService {
 
     return this.pensionModel.findById(pension._id)
     .populate(['estudiante'])
+  }
+
+  async payment(pension_id: string, pagarPensionDto: PagarPensionDto) {
+    const pension = await this.pensionModel.findById(pension_id);
+    if (!pension) {
+      throw new BadRequestException('Pensión no encontrada');
+    }
+
+    pension.metodo_pago = pagarPensionDto.metodo_pago;
+    pension.n_operacion = pagarPensionDto.n_operacion;
+    pension.estado = EstadoPension.PAGADO;
+    pension.tiempo_pago = new Date().toISOString();
+
+    await pension.save();
+
+    return this.pensionModel.findById(pension._id)
+    .populate(['estudiante']);
   }
 }

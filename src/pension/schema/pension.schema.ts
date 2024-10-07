@@ -24,11 +24,14 @@ export class Pension{
   @Prop()
   fecha_limite: string;
 
-  @Prop({enum: EstadoPension, default: 'PENDIENTE'})
+  @Prop({ enum: EstadoPension, default: EstadoPension.PENDIENTE })
   estado: string;
 
   @Prop()
   mes: string;
+
+  @Prop()
+  tiempo_pago: string;
 }
 
 export const PensionSchema = SchemaFactory.createForClass(Pension);

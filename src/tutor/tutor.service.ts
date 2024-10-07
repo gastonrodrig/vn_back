@@ -246,6 +246,12 @@ export class TutorService {
         await this.multimediaModel.findByIdAndDelete(multimediaId);
       }
     }
+
+    if(tutor.user) {
+      const user = tutor.user._id
+      await this.userModel.findByIdAndDelete(user)
+    }
+
     return { sucess: true }
   }
 

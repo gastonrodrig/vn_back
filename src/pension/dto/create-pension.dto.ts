@@ -12,17 +12,7 @@ export class CreatePensionDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  
   monto: number;
-  @ApiProperty()
-  @IsEnum(MetodoPago)
-  @IsOptional()
-  metodo_pago?: MetodoPago;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  n_operacion?: string;
    
   @ApiProperty({ example: '2024-12-15' })
   @IsString()
@@ -33,11 +23,6 @@ export class CreatePensionDto {
   @IsString()
   @IsNotEmpty()
   fecha_limite: string;
-
-  @ApiProperty()
-  @IsEnum(EstadoPension)
-  @IsNotEmpty()
-  estado: EstadoPension;
 
   @ApiProperty()
   @IsString()

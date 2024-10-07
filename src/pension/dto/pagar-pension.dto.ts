@@ -18,4 +18,9 @@ export class PagarPensionDto {
   @IsEnum(EstadoPension)
   @IsNotEmpty()
   estado: EstadoPension;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  tiempo_pago: string;
 }
