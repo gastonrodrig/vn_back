@@ -10,10 +10,26 @@ export class PagoService {
 
   async create(createPagoDto: CreatePagoDto) {
     const createdPago = new this.pagoModel(createPagoDto);
-    return createdPago.save();
+
+    await createdPago.save()
+
+    return await createdPago.populate({
+      path: 'metadata',
+      populate: [
+        { path: 'tipoDocumento', model: 'Documento' },
+        { path: 'estudiante', model: 'Estudiante' }
+      ]
+    })
   }
 
   async findAll() {
-    return this.pagoModel.find().exec();
+    return this.pagoModel.find()
+      .populate({
+        path: 'metadata',
+        populate: [
+          { path: 'tipoDocumento', model: 'Documento' },
+          { path: 'estudiante', model: 'Estudiante' }
+        ]
+      })
   }
 }

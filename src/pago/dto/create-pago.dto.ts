@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, IsEnum, IsOptional, IsNotEmpty, IsObject } from 'class-validator';
+import { IsNumber, IsString, IsEnum, IsOptional, IsNotEmpty, IsObject, IsMongoId } from 'class-validator';
 import { PagoStatus } from '../enums/estado-pago.enum';
 
 export class CreatePagoDto {
@@ -10,13 +10,13 @@ export class CreatePagoDto {
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
-  divisa: string;
+  @IsOptional()
+  divisa?: string;
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
-  paymentMethodId: string;
+  @IsOptional()
+  paymentMethodId?: string;
 
   @ApiProperty()
   @IsString()
@@ -44,7 +44,7 @@ export class CreatePagoDto {
   metadata?: {
     tipoDocumento: string;
     nroDocumento: string;
-    estudiante_id: string;
+    estudiante: string;
   };
 
   @ApiProperty()
