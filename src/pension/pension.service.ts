@@ -93,7 +93,8 @@ export class PensionService {
       estudiante,
       estado: EstadoPension.PENDIENTE
     }).populate(['estudiante']);
-
+  }
+  
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async verificarPensionesVencidas() {
     const hoy = new Date();
