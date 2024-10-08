@@ -7,7 +7,7 @@ import { CreatePensionDto } from './dto/create-pension.dto';
 import { updatePensionDto } from './dto/update-pension.dto';
 import { PagarPensionDto } from './dto/pagar-pension.dto';
 import { EstadoPension } from './enums/estado-pension.enum';
-
+import { Cron, CronExpression } from '@nestjs/schedule';
 @Injectable()
 export class PensionService {
   constructor(
@@ -15,7 +15,8 @@ export class PensionService {
     private readonly pensionModel: Model<Pension>,
     @InjectModel(Estudiante.name)
     private readonly estudianteModel: Model<Estudiante>,
-  ) {}
+  ){}
+
   async create(createPensionDto: CreatePensionDto){
     const estudiante = await this.estudianteModel.findById(createPensionDto.estudiante_id)
     if (!estudiante){
@@ -39,10 +40,12 @@ export class PensionService {
     return await this.pensionModel.find()
     .populate(['estudiante'])
   }
+
   async findOne(pension_id: string){
     return await this.pensionModel.findById(pension_id)
     .populate(['estudiante'])
   }
+  
   async update(pension_id: string,updatePensionDto: updatePensionDto){
     const pension = await this.pensionModel.findById(pension_id)
     if(!pension){
@@ -83,11 +86,26 @@ export class PensionService {
     return this.pensionModel.findById(pension._id)
     .populate(['estudiante']);
   }
+
   async findPendienteByEstudiante(estudiante_id: string) {
     const estudiante = new Types.ObjectId(estudiante_id)
     return await this.pensionModel.find({
       estudiante,
       estado: EstadoPension.PENDIENTE
     }).populate(['estudiante']);
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async verificarPensionesVencidas() {
+    const hoy = new Date();
+
+    const pensionesVencidas = await this.pensionModel.find({
+      fecha_limite: { $lt: hoy },
+      estado: { $ne: EstadoPension.PAGADO }, 
+    });
+
+    for (const pension of pensionesVencidas) {
+      pension.estado = EstadoPension.VENCIDO;
+      await pension.save();
+    }
   }
 }

@@ -29,13 +29,11 @@ export class Pago extends Document {
   metadata: {
     tipoDocumento: string;
     nroDocumento: string;
+    estudiante: { type: Types.ObjectId, ref: 'Estudiante' },
   };
 
   @Prop()
   paymentDate: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'Estudiante' })
-  estudiante: Types.ObjectId;
 }
 
 export const PagoSchema = SchemaFactory.createForClass(Pago);
