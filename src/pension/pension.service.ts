@@ -83,4 +83,11 @@ export class PensionService {
     return this.pensionModel.findById(pension._id)
     .populate(['estudiante']);
   }
+  async findPendienteByEstudiante(estudiante_id: string) {
+    const estudiante = new Types.ObjectId(estudiante_id)
+    return await this.pensionModel.find({
+      estudiante,
+      estado: EstadoPension.PENDIENTE
+    }).populate(['estudiante']);
+  }
 }

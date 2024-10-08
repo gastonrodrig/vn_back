@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PensionService } from './pension.service';
 import { CreatePensionDto } from './dto/create-pension.dto';
@@ -30,8 +30,13 @@ export class PensionController {
     return this.pensionService.update(id, updatePensionDto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   payment(@Param('id') id: string, @Body() pagarPensionDto: PagarPensionDto) {
     return this.pensionService.payment(id, pagarPensionDto);
+  }
+
+  @Get('pendiente/:estudiante_id')
+  findPendientesByEstudiante(@Param('estudiante_id') estudiante_id: string) {
+  return this.pensionService.findPendienteByEstudiante(estudiante_id);
   }
 }
