@@ -34,4 +34,9 @@ export class PensionController {
   payment(@Param('id') id: string, @Body() pagarPensionDto: PagarPensionDto) {
     return this.pensionService.payment(id, pagarPensionDto);
   }
+
+  @Get('pendiente/:estudiante_id')
+  findPendientesByEstudiante(@Param('estudiante_id') estudiante_id: string) {
+  return this.pensionService.findPendienteByEstudiante(estudiante_id);
+  }
 }
