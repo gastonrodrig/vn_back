@@ -8,6 +8,8 @@ import { updatePensionDto } from './dto/update-pension.dto';
 import { PagarPensionDto } from './dto/pagar-pension.dto';
 import { EstadoPension } from './enums/estado-pension.enum';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { formatInTimeZone, getTimezoneOffset } from 'date-fns-tz';
+
 @Injectable()
 export class PensionService {
   constructor(
@@ -94,19 +96,28 @@ export class PensionService {
       estado: EstadoPension.PENDIENTE
     }).populate(['estudiante']);
   }
-  
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async verificarPensionesVencidas() {
-    const hoy = new Date();
 
-    const pensionesVencidas = await this.pensionModel.find({
-      fecha_limite: { $lt: hoy },
-      estado: { $ne: EstadoPension.PAGADO }, 
-    });
+  @Cron('* * * * *')
+    async verificarPensionesVencidas() {
+        const hoy = new Date();
+        const limaTimeZone = 'America/Lima';
 
-    for (const pension of pensionesVencidas) {
-      pension.estado = EstadoPension.VENCIDO;
-      await pension.save();
+        const offset = getTimezoneOffset(limaTimeZone, hoy);
+        
+        const limaTime = new Date(hoy.getTime() + offset);
+
+        console.log(`Fecha y hora de hoy en Lima: ${limaTime.toISOString()}`);
+
+        const pensionesVencidas = await this.pensionModel.find({
+            fecha_limite: { $lt: limaTime },
+            estado: { $ne: EstadoPension.PAGADO },
+        });
+
+        console.log(`Pensiones vencidas encontradas: ${pensionesVencidas.length}`);
+
+        for (const pension of pensionesVencidas) {
+            pension.estado = EstadoPension.VENCIDO;
+            await pension.save();
+        }
     }
-  }
 }

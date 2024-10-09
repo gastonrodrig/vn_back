@@ -32,6 +32,8 @@
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "firebase-admin": "^12.5.0",
     "googleapis": "^143.0.0",
     "mongoose": "^8.5.4",
