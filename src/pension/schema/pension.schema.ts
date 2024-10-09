@@ -19,10 +19,10 @@ export class Pension{
   n_operacion: string;
 
   @Prop()
-  fecha_inicio: string;
+  fecha_inicio: Date;
 
   @Prop()
-  fecha_limite: string;
+  fecha_limite: Date;
 
   @Prop({ enum: EstadoPension, default: EstadoPension.PENDIENTE })
   estado: string;

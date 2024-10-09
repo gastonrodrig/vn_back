@@ -59,8 +59,8 @@ export class PensionService {
     pension.monto = updatePensionDto.monto
     pension.metodo_pago = updatePensionDto.metodo_pago
     pension.n_operacion = updatePensionDto.n_operacion
-    pension.fecha_inicio = updatePensionDto.fecha_inicio
-    pension.fecha_limite = updatePensionDto.fecha_limite
+    pension.fecha_inicio = new Date(updatePensionDto.fecha_inicio)
+    pension.fecha_limite = new Date(updatePensionDto.fecha_limite)
     pension.estado = updatePensionDto.estado
     pension.mes = updatePensionDto.mes
 

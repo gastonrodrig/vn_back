@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString, IsDateString,IsNumber, IsNotEmpty, IsMongoId, IsOptional } from "class-validator";
-import { EstadoPension } from "../enums/estado-pension.enum";
-import { MetodoPago } from "../enums/metodo-pago.enum";
+import { IsString,IsNumber, IsNotEmpty, IsMongoId } from "class-validator";
 
 export class CreatePensionDto {
   @ApiProperty()
@@ -17,12 +15,12 @@ export class CreatePensionDto {
   @ApiProperty({ example: '2024-12-15' })
   @IsString()
   @IsNotEmpty()
-  fecha_inicio: string;
+  fecha_inicio: Date;
 
   @ApiProperty({ example: '2024-03-18' })
   @IsString()
   @IsNotEmpty()
-  fecha_limite: string;
+  fecha_limite: Date;
 
   @ApiProperty()
   @IsString()
