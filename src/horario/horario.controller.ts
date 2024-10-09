@@ -49,4 +49,12 @@ export class HorarioController {
   listerHorariosPorDocente(@Param('id') id: string) {
     return this.horarioService.listerHorariosPorDocente(id);
   }
+
+  @Get('docente/:docenteId/curso/:cursoId')
+  listarHorariosPorDocenteYCurso(
+    @Param('docenteId') docenteId: string,
+    @Param('cursoId') cursoId: string
+  ) {
+    return this.horarioService.listarHorariosPorDocenteYCurso(docenteId, cursoId);
+  }
 }

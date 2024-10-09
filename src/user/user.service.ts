@@ -11,6 +11,7 @@ import { Roles } from './enum/rol.enum';
 import * as bcryptjs from 'bcryptjs';
 import * as crypto from 'crypto';
 import { EstadoUsuario } from './enum/estado-usuario.enum';
+import { Docente } from 'src/docente/schema/docente.schema';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,9 @@ export class UserService {
     @InjectModel(Estudiante.name)
     private readonly estudianteModel: Model<Estudiante>,
     @InjectModel(Tutor.name)
-    private readonly tutorModel: Model<Tutor>
+    private readonly tutorModel: Model<Tutor>,
+    @InjectModel(Docente.name)
+    private readonly docenteModel: Model<Docente>
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -53,6 +56,12 @@ export class UserService {
         perfil = await this.tutorModel.findById(createUserDto.perfil_id)
         if(!perfil) {
           throw new BadRequestException('Tutor no encontrado')
+        }  
+      } 
+      if(createUserDto.rol === 'Docente') {
+        perfil = await this.docenteModel.findById(createUserDto.perfil_id)
+        if(!perfil) {
+          throw new BadRequestException('Docente no encontrado')
         }  
       } 
     }
@@ -94,7 +103,8 @@ export class UserService {
         user.perfil = null
       }
   
-    } else if (updateUserDto.rol === 'Tutor') {
+    }
+    if (updateUserDto.rol === 'Tutor') {
       if (updateUserDto.perfil_id) {
         const tutorId = new Types.ObjectId(updateUserDto.perfil_id)
         const tutor = await this.tutorModel.findById(tutorId)
@@ -103,6 +113,20 @@ export class UserService {
           throw new BadRequestException('Tutor no encontrado.')
         }
         user.perfil = tutorId
+      } else {
+        user.perfil = null
+      }
+    }
+
+    if (updateUserDto.rol === 'Docente') {
+      if (updateUserDto.perfil_id) {
+        const docenteId = new Types.ObjectId(updateUserDto.perfil_id)
+        const docente = await this.docenteModel.findById(docenteId)
+          .populate(['documento', 'multimedia', 'user'])
+        if (!docente) {
+          throw new BadRequestException('Docente no encontrado.')
+        }
+        user.perfil = docenteId
       } else {
         user.perfil = null
       }
