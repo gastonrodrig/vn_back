@@ -37,6 +37,18 @@ import { Roles } from 'src/user/enum/rol.enum';
       });
     }
 
+    if(user.rol === Roles.DOCENTE) {
+      await user.populate({
+        path: 'perfil',
+        model: user.rol,
+        populate: [
+          { path: 'documento', model: 'Documento' },
+          { path: 'multimedia', model: 'Multimedia' },
+          { path: 'user', model: 'User' }
+        ]
+      });
+    }
+
     const payload = {
       email: user.email,
       rol: user.rol,
