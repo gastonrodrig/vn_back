@@ -28,34 +28,35 @@ export class AsistenciaService {
         private readonly periodoModel: Model<PeriodoEscolar>,
     ) {}
 
-    async create(createAsistenciaDto: CreateAsistenciaDto){
-        const estudiante = await this.estudianteModel.findById(createAsistenciaDto.estudiante_id)
-        if(!estudiante){
+    async create(createAsistenciaDto: CreateAsistenciaDto) {
+        const estudiante = await this.estudianteModel.findById(createAsistenciaDto.estudiante_id);
+        if (!estudiante) {
             throw new BadRequestException('Estudiante no encontrado');
         }
-        const tutor = await this.tutorModel.findById(createAsistenciaDto.tutor_id)
-        if(!tutor){
-            throw new BadRequestException('Tutor no encontrado')
+        const tutor = await this.tutorModel.findById(createAsistenciaDto.tutor_id);
+        if (!tutor) {
+            throw new BadRequestException('Tutor no encontrado');
         }
-        const seccion = await this.seccionModel.findById(createAsistenciaDto.seccion_id)
-        if(!seccion){
-            throw new BadRequestException('Seccion no encontrada')
+        const seccion = await this.seccionModel.findById(createAsistenciaDto.seccion_id);
+        if (!seccion) {
+            throw new BadRequestException('Seccion no encontrada');
         }
-        const grado = await this.gradoModel.findById(createAsistenciaDto.grado_id)
-        if(!grado){
-            throw new BadRequestException('Grado no encontrado')
+        const grado = await this.gradoModel.findById(createAsistenciaDto.grado_id);
+        if (!grado) {
+            throw new BadRequestException('Grado no encontrado');
         }
-        const periodo = await this.periodoModel.findById(createAsistenciaDto.periodo_id)
-        if(!periodo){
-            throw new BadRequestException('Periodo no encontrado')
+        const periodo = await this.periodoModel.findById(createAsistenciaDto.periodo_id);
+        if (!periodo) {
+            throw new BadRequestException('Periodo no encontrado');
         }
-
+    
         const asistencia = new this.asistenciaModel({
             estudiante,
             tutor,
             seccion,
             grado,
-            periodo
+            periodo,
+            fecha: new Date().toISOString()
         });
         return await asistencia.save();
     }

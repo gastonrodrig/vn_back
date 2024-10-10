@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { IsDateString, IsMongoId, IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateAsistenciaDto {
     @ApiProperty()

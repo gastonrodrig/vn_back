@@ -10,7 +10,7 @@ export class CreateNotasDto {
     @ApiProperty()
     @IsMongoId()
     @IsNotEmpty()
-    tutor_id: string;
+    docente_id: string;
 
     @ApiProperty()
     @IsMongoId()

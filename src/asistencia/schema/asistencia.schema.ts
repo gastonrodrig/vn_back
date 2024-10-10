@@ -5,23 +5,26 @@ import { EstadoAsistencia } from '../enums/estado-asistencia.enum';
 
 @Schema({ collection: 'Asistencia' })
 export class Asistencia {
-    @Prop({ types: Types.ObjectId, ref: 'Estudiante'})
-    estudiante: Types.ObjectId;
- 
-    @Prop({ types: Types.ObjectId, ref: 'Tutor'})
-    tutor: Types.ObjectId;
+  @Prop({ types: Types.ObjectId, ref: 'Estudiante'})
+  estudiante: Types.ObjectId;
 
-    @Prop({enum: EstadoAsistencia, default: EstadoAsistencia.FALTA})
-    estado: string;
+  @Prop({ types: Types.ObjectId, ref: 'Tutor'})
+  tutor: Types.ObjectId;
 
-    @Prop({ type: Types.ObjectId, ref: 'Seccion'})
-    seccion: Types.ObjectId;
+  @Prop({enum: EstadoAsistencia, default: EstadoAsistencia.FALTA})
+  estado: string;
 
-    @Prop({ type: Types.ObjectId, ref: 'Grado'})
-    grado: Types.ObjectId; 
+  @Prop({ type: Types.ObjectId, ref: 'Seccion'})
+  seccion: Types.ObjectId;
 
-    @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar' })
-    periodo: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Grado'})
+  grado: Types.ObjectId; 
+
+  @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar' })
+  periodo: Types.ObjectId;
+
+  @Prop()
+  fecha: string;
 }
 
 export const AsistenciaSchema = SchemaFactory.createForClass(Asistencia);
