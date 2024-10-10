@@ -40,12 +40,12 @@ export class PensionService {
   
   async findAll(){
     return await this.pensionModel.find()
-    .populate(['estudiante'])
+    .populate(['estudiante','periodo'])
   }
 
   async findOne(pension_id: string){
     return await this.pensionModel.findById(pension_id)
-    .populate(['estudiante'])
+    .populate(['estudiante','periodo'])
   }
   
   async update(pension_id: string,updatePensionDto: updatePensionDto){
@@ -69,7 +69,7 @@ export class PensionService {
     await pension.save()
 
     return this.pensionModel.findById(pension._id)
-    .populate(['estudiante'])
+    .populate(['estudiante','periodo'])
   }
 
   async payment(pension_id: string, pagarPensionDto: PagarPensionDto) {
@@ -86,7 +86,7 @@ export class PensionService {
     await pension.save();
 
     return this.pensionModel.findById(pension._id)
-    .populate(['estudiante']);
+    .populate(['estudiante','periodo']);
   }
 
   async findPendienteByEstudiante(estudiante_id: string) {
@@ -94,7 +94,7 @@ export class PensionService {
     return await this.pensionModel.find({
       estudiante,
       estado: EstadoPension.PENDIENTE
-    }).populate(['estudiante']);
+    }).populate(['estudiante','periodo']);
   }
 
   @Cron('* * * * *')

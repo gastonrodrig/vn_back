@@ -217,6 +217,7 @@ export class UserService {
       contrasena: hashedPassword,
       email: `${randomUsername}@temporal.com`,
       rol: Roles.TEMPORAL,
+      estado: "Habilitado",
     })
 
     await newUser.save()
