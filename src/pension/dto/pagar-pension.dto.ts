@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { IsEnum, IsString, IsNotEmpty, IsOptional, IsMongoId } from "class-validator";
 import { EstadoPension } from "../enums/estado-pension.enum";
 import { MetodoPago } from "../enums/metodo-pago.enum";
 
@@ -13,6 +13,11 @@ export class PagarPensionDto {
   @IsString()
   @IsOptional()
   n_operacion?: string;
+  
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  periodo_id: string;
 
   @ApiProperty()
   @IsEnum(EstadoPension)

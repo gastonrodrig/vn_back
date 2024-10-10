@@ -9,14 +9,17 @@ import { PagarPensionDto } from './dto/pagar-pension.dto';
 import { EstadoPension } from './enums/estado-pension.enum';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { formatInTimeZone, getTimezoneOffset } from 'date-fns-tz';
+import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 
 @Injectable()
 export class PensionService {
   constructor(
     @InjectModel(Pension.name)
     private readonly pensionModel: Model<Pension>,
+    @InjectModel(PeriodoEscolar.name)
+    private readonly periodoModel: Model<PeriodoEscolar>,
     @InjectModel(Estudiante.name)
-    private readonly estudianteModel: Model<Estudiante>,
+    private readonly estudianteModel: Model<Estudiante>
   ){}
 
   async create(createPensionDto: CreatePensionDto){
@@ -24,12 +27,17 @@ export class PensionService {
     if (!estudiante){
       throw new BadRequestException('Estudiante no encontrado')
     }
+    const periodo = await this.periodoModel.findById(createPensionDto.periodo_id);
+    if (!periodo) {
+      throw new BadRequestException('Periodo no encontrado');
+    }
 
     const pension = new this.pensionModel({
       estudiante,
       monto: createPensionDto.monto,
       metodo_pago: null,
       n_operacion: null,
+      periodo,
       fecha_inicio: createPensionDto.fecha_inicio,
       fecha_limite: createPensionDto.fecha_limite,
       mes: createPensionDto.mes,
@@ -58,9 +66,15 @@ export class PensionService {
     if(!estudiante){
       throw new BadRequestException('Estudiante no encontrado')
     }
+    const periodoId = new Types.ObjectId(updatePensionDto.periodo_id);
+    const periodo = await this.periodoModel.findById(periodoId);
+    if (!periodo) {
+      throw new BadRequestException('Periodo no encontrado');
+    }
     pension.monto = updatePensionDto.monto
     pension.metodo_pago = updatePensionDto.metodo_pago
     pension.n_operacion = updatePensionDto.n_operacion
+    pension.periodo = periodoId;
     pension.fecha_inicio = new Date(updatePensionDto.fecha_inicio)
     pension.fecha_limite = new Date(updatePensionDto.fecha_limite)
     pension.estado = updatePensionDto.estado
@@ -73,6 +87,7 @@ export class PensionService {
   }
 
   async payment(pension_id: string, pagarPensionDto: PagarPensionDto) {
+    const periodoId = new Types.ObjectId(pagarPensionDto.periodo_id);
     const pension = await this.pensionModel.findById(pension_id);
     if (!pension) {
       throw new BadRequestException('Pensión no encontrada');
@@ -80,6 +95,7 @@ export class PensionService {
 
     pension.metodo_pago = pagarPensionDto.metodo_pago;
     pension.n_operacion = pagarPensionDto.n_operacion;
+    pension.periodo = periodoId;
     pension.estado = EstadoPension.PAGADO;
     pension.tiempo_pago = new Date().toISOString();
 

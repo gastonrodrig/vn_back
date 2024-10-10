@@ -11,7 +11,12 @@ export class CreatePensionDto {
   @IsNumber()
   @IsNotEmpty()
   monto: number;
-   
+
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  periodo_id: string;
+  
   @ApiProperty({ example: '2024-12-15' })
   @IsString()
   @IsNotEmpty()
