@@ -23,6 +23,11 @@ export class updatePensionDto {
   @IsString()
   @IsNotEmpty()
   n_operacion: string;
+
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  periodo_id: string;
   
   @ApiProperty({ example: '2024-12-15' })
   @IsString()

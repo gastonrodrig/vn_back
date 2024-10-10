@@ -5,11 +5,13 @@ import { Estudiante, EstudianteSchema } from 'src/estudiante/schema/estudiante.s
 import { PensionService } from './pension.service';
 import { PensionController } from './pension.controller';
 import { ScheduleModule } from '@nestjs/schedule';
+import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 
 @Module({
   imports:[
     MongooseModule.forFeature([
       {name: Pension.name, schema: PensionSchema},
+      { name: PeriodoEscolar.name, schema: PeriodoEscolarSchema },
       {name: Estudiante.name, schema: EstudianteSchema},
     ]),
     ScheduleModule.forRoot()

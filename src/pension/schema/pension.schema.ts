@@ -18,6 +18,9 @@ export class Pension{
   @Prop()
   n_operacion: string;
 
+  @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar' })
+  periodo: Types.ObjectId;
+
   @Prop()
   fecha_inicio: Date;
 
