@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Asistencia } from './schema/asistencia.schema';
-import mongoose, { Model, Types } from 'mongoose';
+import mongoose, { Model, Types} from 'mongoose';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { Tutor } from 'src/tutor/schema/tutor.schema';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
@@ -56,7 +56,7 @@ export class AsistenciaService {
             seccion,
             grado,
             periodo,
-            fecha: new Date().toISOString()
+            fecha: createAsistenciaDto.fecha,
         });
         return await asistencia.save();
     }
@@ -181,5 +181,71 @@ export class AsistenciaService {
         return await this.asistenciaModel
         .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
         .populate(['estudiante','grado','periodo','seccion'])
+    }
+
+    async obtenerResumenAsistencia(fecha: string, seccionId: string) {
+        // Validar que se pase un valor de fecha
+        if (!fecha) {
+            throw new BadRequestException('La fecha es requerida');
+        }
+    
+        // Validar que se pase un ID de sección
+        let seccionObjectId: mongoose.Types.ObjectId;
+    
+        // Intentar convertir el ID de sección a ObjectId
+        try {
+            seccionObjectId = new mongoose.Types.ObjectId(seccionId);
+        } catch (error) {
+            throw new BadRequestException('El ID de sección no es válido');
+        }
+    
+        // Agregar resumen de asistencia según la fecha y el ID de sección
+        const resumenAsistencia = await this.asistenciaModel.aggregate([
+            {
+                $match: {
+                    fecha, // Filtrar por la fecha que se pasa como parámetro
+                    seccion: seccionObjectId, // Filtrar por la sección
+                },
+            },
+            {
+                $group: {
+                    _id: null, // Agrupar todos los resultados en un solo documento
+                    totalFaltas: {
+                        $sum: {
+                            $cond: [{ $eq: ['$estado', 'Falta'] }, 1, 0], // Contar Faltas
+                        },
+                    },
+                    totalJustificados: {
+                        $sum: {
+                            $cond: [{ $eq: ['$estado', 'Justificado'] }, 1, 0], // Contar Justificados
+                        },
+                    },
+                    totalPresentes: {
+                        $sum: {
+                            $cond: [{ $eq: ['$estado', 'Presente'] }, 1, 0], // Contar Presentes
+                        },
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0, // No mostrar el campo _id en la respuesta
+                    totalFaltas: 1,
+                    totalJustificados: 1,
+                    totalPresentes: 1,
+                    fecha: { $literal: fecha }, // Agregar la fecha a la respuesta
+                    seccion: { $toObjectId: seccionObjectId }, // Agregar la sección a la respuesta
+                },
+            },
+        ]);
+    
+        // Comprobar si se encontraron resultados
+        if (resumenAsistencia.length === 0) {
+            throw new BadRequestException('No se encontraron registros de asistencia para la fecha y sección especificadas');
+        }
+    
+        console.log('Resumen de asistencia:', resumenAsistencia); // Opcional: para depuración
+    
+        return resumenAsistencia[0]; // Devolver el primer (y único) elemento del array
     }
 }

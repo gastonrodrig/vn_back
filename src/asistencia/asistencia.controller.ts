@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AsistenciaService } from './asistencia.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
@@ -49,8 +49,16 @@ export class AsistenciaController {
         return this.asistenciaService.changeFalta(id);
     }
     
-    @Get('/:gradoId/:periodoId/:seccionId')
+    @Get('/:gradoId/:periodoId/:seccionId') 
     listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
         return this.asistenciaService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
+    }
+
+    @Get('resumen/asistencia')
+    async obtenerResumen(
+        @Query('fecha') fecha: string,
+        @Query('seccion_id') seccionId: string,
+    ) {
+        return this.asistenciaService.obtenerResumenAsistencia(fecha, seccionId);
     }
 }

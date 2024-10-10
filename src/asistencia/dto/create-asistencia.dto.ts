@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsMongoId, IsNotEmpty, IsOptional } from "class-validator";
+import { IsDateString, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateAsistenciaDto {
     @ApiProperty()
@@ -26,4 +26,10 @@ export class CreateAsistenciaDto {
     @IsMongoId()
     @IsNotEmpty()
     periodo_id: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    fecha: string;
+
 }

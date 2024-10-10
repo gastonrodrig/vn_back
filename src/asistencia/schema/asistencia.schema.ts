@@ -11,7 +11,7 @@ export class Asistencia {
   @Prop({ types: Types.ObjectId, ref: 'Tutor'})
   tutor: Types.ObjectId;
 
-  @Prop({enum: EstadoAsistencia, default: EstadoAsistencia.FALTA})
+  @Prop({enum: EstadoAsistencia})
   estado: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Seccion'})
