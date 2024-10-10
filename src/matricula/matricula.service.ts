@@ -9,6 +9,9 @@ import { UpdateMatriculaDto } from './dto/update-matricula.dto';
 import { MetodoPago } from './enums/metodo-pago.enum';
 import { EstadoVacante } from 'src/vacante/enum/estado-vacante.enum';
 import { Vacante } from 'src/vacante/schema/vacante.schema';
+import { Pago } from 'src/pago/schema/pago.schema';
+import { PagoStatus } from 'src/pago/enums/estado-pago.enum';
+import { Documento } from 'src/documento/schema/documento.schema'; // Importa tu esquema de Documento
 
 @Injectable()
 export class MatriculaService {
@@ -20,7 +23,11 @@ export class MatriculaService {
     @InjectModel(Estudiante.name)
     private readonly estudianteModel: Model<Estudiante>,
     @InjectModel(Vacante.name)
-    private readonly vacanteModel: Model<Vacante>
+    private readonly vacanteModel: Model<Vacante>,
+    @InjectModel(Pago.name)
+    private readonly pagoModel: Model<Pago>,
+    @InjectModel(Documento.name) // Asegúrate de tener esto
+    private readonly documentoModel: Model<Documento>
   ) {}
 
   async create(createMatriculaDto: CreateMatriculaDto) {
@@ -71,7 +78,32 @@ export class MatriculaService {
       tipoMa: createMatriculaDto.tipoMa,
     });
   
-    return await matricula.save();
+    await matricula.save();
+  
+    const documento = await this.documentoModel.findById(estudiante.documento);
+    const tipoDocumento = documento ? documento.type : 'Dni';
+
+    await this.pagoModel.create({
+      monto: matricula.monto,
+      divisa: 'PEN',
+      paymentMethodId: matricula.metodo_pago,
+      nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`,
+      transactionDetails: `Pago de matrícula del estudiante con ID ${estudiante._id}`,
+      status: PagoStatus.APROBADO,
+      stripeOperationId: matricula.n_operacion,
+      metadata: {
+        tipoDocumento: {
+          _id: documento ? documento._id : null,
+          type: tipoDocumento,
+          __v: documento ? documento.__v : null,
+        },
+        nroDocumento: estudiante.numero_documento,
+        estudiante_id: estudiante._id.toString(),
+      },
+      paymentDate: matricula.fecha.toISOString(),
+    });
+  
+    return matricula;
   }
   
 

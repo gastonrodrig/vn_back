@@ -6,6 +6,8 @@ import { PensionService } from './pension.service';
 import { PensionController } from './pension.controller';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema/periodo-escolar.schema';
+import { Pago, PagoSchema } from 'src/pago/schema/pago.schema';
+import { Documento, DocumentoSchema } from 'src/documento/schema/documento.schema';
 
 @Module({
   imports:[
@@ -13,6 +15,8 @@ import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema
       {name: Pension.name, schema: PensionSchema},
       { name: PeriodoEscolar.name, schema: PeriodoEscolarSchema },
       {name: Estudiante.name, schema: EstudianteSchema},
+      { name: Pago.name, schema: PagoSchema },
+      { name: Documento.name, schema: DocumentoSchema },
     ]),
     ScheduleModule.forRoot()
   ],

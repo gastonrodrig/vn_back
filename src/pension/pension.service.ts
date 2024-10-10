@@ -10,6 +10,9 @@ import { EstadoPension } from './enums/estado-pension.enum';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { formatInTimeZone, getTimezoneOffset } from 'date-fns-tz';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
+import { Pago } from 'src/pago/schema/pago.schema';
+import { PagoStatus } from 'src/pago/enums/estado-pago.enum';
+import { Documento } from 'src/documento/schema/documento.schema'; // Importa tu esquema de Documento
 
 @Injectable()
 export class PensionService {
@@ -19,7 +22,11 @@ export class PensionService {
     @InjectModel(PeriodoEscolar.name)
     private readonly periodoModel: Model<PeriodoEscolar>,
     @InjectModel(Estudiante.name)
-    private readonly estudianteModel: Model<Estudiante>
+    private readonly estudianteModel: Model<Estudiante>,
+    @InjectModel(Pago.name)
+    private readonly pagoModel: Model<Pago>,
+    @InjectModel(Documento.name) // Asegúrate de tener esto
+    private readonly documentoModel: Model<Documento>
   ){}
 
   async create(createPensionDto: CreatePensionDto){
@@ -88,21 +95,57 @@ export class PensionService {
 
   async payment(pension_id: string, pagarPensionDto: PagarPensionDto) {
     const periodoId = new Types.ObjectId(pagarPensionDto.periodo_id);
-    const pension = await this.pensionModel.findById(pension_id);
+    const pension = await this.pensionModel.findById(pension_id).populate('estudiante');
+    
     if (!pension) {
       throw new BadRequestException('Pensión no encontrada');
     }
-
+  
+    // Asegúrate de que la población se haya realizado correctamente
+    if (!pension.estudiante) {
+      throw new BadRequestException('Estudiante no encontrado en la pensión');
+    }
+  
+    // Actualiza la pensión
     pension.metodo_pago = pagarPensionDto.metodo_pago;
     pension.n_operacion = pagarPensionDto.n_operacion;
     pension.periodo = periodoId;
     pension.estado = EstadoPension.PAGADO;
     pension.tiempo_pago = pagarPensionDto.tiempo_pago;
-
+  
+    // Guarda los cambios en la pensión
     await pension.save();
+  
+    // Ahora accede a los campos del estudiante
+    const estudiante = pension.estudiante as unknown as Estudiante & { _id: Types.ObjectId };
 
-    return this.pensionModel.findById(pension._id)
-    .populate(['estudiante','periodo']);
+  
+    const documento = await this.documentoModel.findById(estudiante.documento);
+    const tipoDocumento = documento ? documento.type : 'Dni';
+  
+    // Crea el nuevo registro de pago
+    await this.pagoModel.create({
+      monto: pension.monto,
+      divisa: 'PEN',
+      paymentMethodId: pension.metodo_pago,
+      nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`, // Acceso seguro a los campos
+      transactionDetails: `Pago de pensión del estudiante con ID ${estudiante._id}`,
+      status: PagoStatus.APROBADO,
+      stripeOperationId: pension.n_operacion,
+      metadata: {
+        tipoDocumento: {
+          _id: documento ? documento._id : null,
+          type: tipoDocumento,
+          __v: documento ? documento.__v : null,
+        },
+        nroDocumento: estudiante.numero_documento,
+        estudiante_id: estudiante._id.toString(),
+      },
+      paymentDate: new Date(),
+    });
+  
+    // Devuelve la pensión actualizada
+    return this.pensionModel.findById(pension._id).populate(['estudiante', 'periodo']);
   }
 
   async findPendienteByEstudiante(estudiante_id: string) {

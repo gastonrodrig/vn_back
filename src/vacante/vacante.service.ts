@@ -68,6 +68,16 @@ export class VacanteService {
     if (vacanteExistente) {
       throw new BadRequestException('Ya existe una vacante para este estudiante en este grado y periodo');
     }
+
+    const vacanteConDiferenteGrado = await this.vacanteModel.findOne({
+      estudiante: estudiante._id,
+      periodo: periodo._id,
+      grado: { $ne: gradoNuevo._id }, // Busca una vacante con un grado diferente
+    });
+
+    if (vacanteConDiferenteGrado) {
+      throw new BadRequestException('El estudiante ya tiene una vacante en este periodo con un grado diferente');
+    }
   
     // Crea la nueva vacante
     const vacante = new this.vacanteModel({
