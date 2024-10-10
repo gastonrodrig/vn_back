@@ -52,6 +52,7 @@ import { Roles } from 'src/user/enum/rol.enum';
       rol: user.rol,
       usuario: user.usuario,
       perfil: user.perfil,
+      estado: user.estado
     };
   }
 }

@@ -57,14 +57,13 @@ export class MatriculaService {
     }
   
     vacanteReservada.estado = EstadoVacante.CONFIRMADO;
+
     await vacanteReservada.save();
-  
-    const n_operacion = createMatriculaDto.metodo_pago === MetodoPago.EFECTIVO ? null : createMatriculaDto.n_operacion;
   
     const matricula = new this.matriculaModel({
       monto: createMatriculaDto.monto,
       metodo_pago: createMatriculaDto.metodo_pago,
-      n_operacion,
+      n_operacion: createMatriculaDto.n_operacion,
       fecha: createMatriculaDto.fecha,
       periodo,
       estudiante,
@@ -104,11 +103,9 @@ export class MatriculaService {
       throw new BadRequestException('Estudiante no encontrado');
     }
   
-    const n_operacion = updateMatriculaDto.metodo_pago === MetodoPago.EFECTIVO ? null : updateMatriculaDto.n_operacion;
-  
     matricula.monto = updateMatriculaDto.monto;
     matricula.metodo_pago = updateMatriculaDto.metodo_pago;
-    matricula.n_operacion = n_operacion;
+    matricula.n_operacion = updateMatriculaDto.n_operacion;
     matricula.periodo = periodoId;
     matricula.estudiante = estudianteId;
   

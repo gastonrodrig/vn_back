@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { DocenteService } from './docente.service';
 import { CreateDocenteDto } from './dto/create-docente.dto';
@@ -70,6 +70,15 @@ export class DocenteController {
     @UploadedFile() imageFile: Express.Multer.File
   ) {
     return this.docenteService.updateProfilePicture(id, imageFile);
+  }
+
+  @Get('documento/:numero_documento')
+  getDocenteByNumeroDocumento(
+    @Param('numero_documento') numero_documento: string,
+    @Query('validarUsuarioAsignado') validarUsuarioAsignado: string
+  ) {
+    const validar = validarUsuarioAsignado === 'true'
+    return this.docenteService.findByNumeroDocumento(numero_documento, validar)
   }
 }
 

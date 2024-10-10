@@ -106,14 +106,12 @@ export class PensionService {
         
         const limaTime = new Date(hoy.getTime() + offset);
 
-        console.log(`Fecha y hora de hoy en Lima: ${limaTime.toISOString()}`);
 
         const pensionesVencidas = await this.pensionModel.find({
             fecha_limite: { $lt: limaTime },
             estado: { $ne: EstadoPension.PAGADO },
         });
 
-        console.log(`Pensiones vencidas encontradas: ${pensionesVencidas.length}`);
 
         for (const pension of pensionesVencidas) {
             pension.estado = EstadoPension.VENCIDO;

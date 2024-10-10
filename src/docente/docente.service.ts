@@ -157,4 +157,18 @@ export class DocenteService {
     docente.multimedia = multimedia
     return await docente.save()
   }
+
+  async findByNumeroDocumento(numero_documento: string, validarUsuarioAsignado: boolean) {
+    const docente = await this.docenteModel.findOne({ numero_documento })
+  
+    if (!docente) {
+      throw new BadRequestException('Docente no encontrado');
+    }
+  
+    if (validarUsuarioAsignado && docente.user) {
+      throw new BadRequestException('Este docente ya tiene un usuario asignado');
+    }
+  
+    return docente;
+  }
 }
