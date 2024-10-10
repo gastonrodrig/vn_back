@@ -97,7 +97,7 @@ export class PensionService {
     pension.n_operacion = pagarPensionDto.n_operacion;
     pension.periodo = periodoId;
     pension.estado = EstadoPension.PAGADO;
-    pension.tiempo_pago = new Date().toISOString();
+    pension.tiempo_pago = pagarPensionDto.tiempo_pago;
 
     await pension.save();
 
