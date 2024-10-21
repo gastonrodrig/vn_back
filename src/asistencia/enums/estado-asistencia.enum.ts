@@ -1,5 +1,5 @@
 export enum EstadoAsistencia {
-    PRESENTE = 'PRESENTE',
-    FALTA = 'FALTA',
-    JUSTIFICADO = 'JUSTIFICADO',
-  }
+  PRESENTE = 'Presente',
+  FALTA = 'Falta',
+  JUSTIFICADO = 'Justificado',
+}

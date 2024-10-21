@@ -1,4 +1,3 @@
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { EstadoAsistencia } from '../enums/estado-asistencia.enum';
@@ -23,8 +22,14 @@ export class Asistencia {
   @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar' })
   periodo: Types.ObjectId;
 
+  // @Prop({ type: Types.ObjectId, ref: 'Semanas' })
+  // semana: Types.ObjectId;
+
   @Prop()
   fecha: string;
+
+  // @Prop()
+  // mes: string;
 }
 
 export const AsistenciaSchema = SchemaFactory.createForClass(Asistencia);

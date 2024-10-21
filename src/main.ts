@@ -23,7 +23,10 @@ async function bootstrap() {
     ],
   });
 
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:8081', 'http://localhost:4200', 'https://vn-front-web.vercel.app'],
+    credentials: true
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
