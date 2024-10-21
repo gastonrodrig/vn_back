@@ -43,6 +43,22 @@ export class HorarioService {
     if (!docente) {
       throw new BadRequestException('Docente no encontrado');
     }
+
+    const seccionId = new Types.ObjectId(createHorarioDto.seccion_id);
+    const gradoId = new Types.ObjectId(createHorarioDto.grado_id);
+    const cursoId = new Types.ObjectId(createHorarioDto.curso_id);
+    const docenteId = new Types.ObjectId(createHorarioDto.docente_id);
+
+    const horarioExistente = await this.horarioModel.findOne({
+      seccion: seccionId,
+      grado: gradoId,
+      curso: cursoId,
+      docente: { $ne: docenteId }
+    });
+
+    if (horarioExistente) {
+      throw new BadRequestException(`No se puede asignar otro docente para el curso ${curso.nombre} en la sección ${seccion.nombre}.`);
+    }
   
     const conflictoHorario = await this.horarioModel.findOne({
       docente: docente._id,
