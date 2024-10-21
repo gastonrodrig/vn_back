@@ -34,4 +34,13 @@ export class SeccionCursoDocenteController {
     remove(@Param('id') id: string){
         return this.seccionCursoDocenteService.remove(id);
     }
+
+    @Get(':seccionId/:cursoId/:docenteId')
+    obtenerSeccionCursoDocente(
+      @Param('seccionId') seccionId: string,
+      @Param('cursoId') cursoId: string,
+      @Param('docenteId') docenteId: string
+    ) {
+        return this.seccionCursoDocenteService.obtenerSeccionCursoDocente(seccionId, cursoId, docenteId);
+    }
 }

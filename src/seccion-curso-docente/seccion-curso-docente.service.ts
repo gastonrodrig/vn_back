@@ -117,4 +117,37 @@ export class SeccionCursoDocenteService {
 
         return { success: true}
     }
+
+    async obtenerSeccionCursoDocente(seccion_id: string, curso_id: string, docente_id: string) {
+        const seccionId = new Types.ObjectId(seccion_id)
+        const cursoId = new Types.ObjectId(curso_id)
+        const docenteId = new Types.ObjectId(docente_id)
+
+        const seccion = await this.seccionModel.findById(seccionId);
+        if (!seccion) {
+            throw new BadRequestException('Sección no encontrada');
+        }
+    
+        const curso = await this.cursoModel.findById(cursoId);
+        if (!curso) {
+            throw new BadRequestException('Curso no encontrado');
+        }
+    
+        const docente = await this.docenteModel.findById(docenteId);
+        if (!docente) {
+            throw new BadRequestException('Docente no encontrado');
+        }
+    
+        const seccionCursoDocente = await this.seccionCursoDocenteModel.findOne({
+            seccion: seccionId,
+            curso: cursoId,
+            docente: docenteId
+        }).populate(['seccion', 'curso', 'docente']);
+    
+        if (!seccionCursoDocente) {
+            throw new BadRequestException('No se encontró un registro con la sección, curso y docente proporcionados');
+        }
+    
+        return seccionCursoDocente;
+    }
 }
