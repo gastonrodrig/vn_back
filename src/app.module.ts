@@ -34,6 +34,7 @@ import { TareasModule } from './tareas/tareas.module';
 import { NotasModule } from './notas/notas.module';
 import { SeccionCursoModule } from './seccion-curso/seccion-curso.module';
 import { SeccionCursoDocenteModule } from './seccion-curso-docente/seccion-curso-docente.module';
+import { ResumenAsistenciaModule } from './resumen-asistencia/resumen-asistencia.module';
 
 @Module({
   imports: [
@@ -75,7 +76,8 @@ import { SeccionCursoDocenteModule } from './seccion-curso-docente/seccion-curso
     AsistenciaModule,
     TareasModule,
     NotasModule,
-    SeccionCursoDocenteModule
+    SeccionCursoDocenteModule,
+    ResumenAsistenciaModule
   ],
   controllers: [AppController],
   providers: [AppService],
