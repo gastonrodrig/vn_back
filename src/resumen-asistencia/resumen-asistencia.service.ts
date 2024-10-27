@@ -30,13 +30,15 @@ export class ResumenAsistenciaService {
         }
 
         const seccionId = new Types.ObjectId(createResumenAsistenciaDto.seccion_id)
+        const semanaId = new Types.ObjectId(createResumenAsistenciaDto.semana_id)
 
-        const verificarSeccion = await this.resumenAsistenciaModel.findOne({
-            seccion: seccionId
+        const verificarSeccionSemana = await this.resumenAsistenciaModel.findOne({
+            seccion: seccionId,
+            semana: semanaId
         })
 
-        if(verificarSeccion){
-            throw new BadRequestException('Ya existe un resumen de asistencia para esta seccion')
+        if(verificarSeccionSemana){
+            throw new BadRequestException('Ya existe un resumen de asistencia para esta sección en esta semana')
         }
 
         const resumenAsistencia = new this.resumenAsistenciaModel({
