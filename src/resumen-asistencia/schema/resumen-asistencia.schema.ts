@@ -7,6 +7,9 @@ export class ResumenAsistencia {
   @Prop({ type: Types.ObjectId, ref: 'Semanas' })
   semana: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'Seccion'})
+  seccion: Types.ObjectId;
+
   @Prop({ enum: DiaResumenAsistencia})
   dia: string;
 

@@ -6,6 +6,11 @@ export class CreateResumenAsistenciaDto {
     @IsMongoId()
     @IsNotEmpty()
     semana_id: string;
+
+    @ApiProperty()
+    @IsMongoId()
+    @IsNotEmpty()
+    seccion_id: string;
     
     @ApiProperty()
     @IsString()

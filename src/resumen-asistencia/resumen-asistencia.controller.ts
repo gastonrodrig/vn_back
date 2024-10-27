@@ -33,4 +33,9 @@ export class ResumenAsistenciaController {
     remove(@Param('id') id: string){
         return this.resumenAsistenciaService.remove(id);
     }
+
+    @Get('seccion/:id')
+    listarResumenAsistenciaPorSeccion(@Param('id') id: string){
+        return this.resumenAsistenciaService.listarResumenAsistenciaPorSeccion(id);
+    }
 }
