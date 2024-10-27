@@ -45,7 +45,7 @@ export class ResumenAsistenciaService {
             semana,
             seccion,
             dia: createResumenAsistenciaDto.dia,
-            descripcion: createResumenAsistenciaDto.descripcion,
+            fecha: createResumenAsistenciaDto.fecha,
             presentes: createResumenAsistenciaDto.presentes,
             faltas: createResumenAsistenciaDto.faltas,
             justificadas: createResumenAsistenciaDto.justificadas
@@ -89,7 +89,7 @@ export class ResumenAsistenciaService {
         resumenAsistencia.semana = semanaId
         resumenAsistencia.seccion = seccionId
         resumenAsistencia.dia = updateResumenAsistenciaDto.dia
-        resumenAsistencia.descripcion = updateResumenAsistenciaDto.descripcion
+        resumenAsistencia.fecha = updateResumenAsistenciaDto.fecha
         resumenAsistencia.presentes = updateResumenAsistenciaDto.presentes
         resumenAsistencia.faltas = updateResumenAsistenciaDto.faltas
         resumenAsistencia.justificadas = updateResumenAsistenciaDto.justificadas

@@ -20,7 +20,7 @@ export class CreateResumenAsistenciaDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    descripcion: string;
+    fecha: string;
     
     @ApiProperty()
     @IsNumber()

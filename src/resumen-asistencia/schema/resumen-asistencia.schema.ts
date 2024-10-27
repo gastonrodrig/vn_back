@@ -14,7 +14,7 @@ export class ResumenAsistencia {
   dia: string;
 
   @Prop()
-  descripcion: string;
+  fecha: string;
 
   @Prop()
   presentes: number;
