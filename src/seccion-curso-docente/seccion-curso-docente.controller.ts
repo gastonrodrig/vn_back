@@ -43,4 +43,9 @@ export class SeccionCursoDocenteController {
     ) {
         return this.seccionCursoDocenteService.obtenerSeccionCursoDocente(seccionId, cursoId, docenteId);
     }
+    
+    @Get('docente/:docenteId')
+    obtenerSeccionesPorDocente(@Param('docenteId') docenteId: string) {
+        return this.seccionCursoDocenteService.obtenerSeccionesPorDocente(docenteId);
+    }
 }

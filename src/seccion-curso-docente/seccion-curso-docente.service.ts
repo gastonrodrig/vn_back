@@ -150,4 +150,23 @@ export class SeccionCursoDocenteService {
     
         return seccionCursoDocente;
     }
+
+    async obtenerSeccionesPorDocente(docente_id: string) {
+        const docenteId = new Types.ObjectId(docente_id);
+
+        const docente = await this.docenteModel.findById(docenteId);
+        if (!docente) {
+            throw new BadRequestException('Docente no encontrado');
+        }
+
+        const seccionesCursosDocente = await this.seccionCursoDocenteModel.find({
+            docente: docenteId
+        }).populate(['seccion', 'curso', 'docente']);
+
+        if (!seccionesCursosDocente.length) {
+            throw new BadRequestException('No se encontraron registros para el docente proporcionado');
+        }
+
+        return seccionesCursosDocente;
+    }
 }
