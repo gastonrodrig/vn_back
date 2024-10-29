@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PensionService } from './pension.service';
 import { CreatePensionDto } from './dto/create-pension.dto';
 import { updatePensionDto } from './dto/update-pension.dto';
 import { PagarPensionDto } from './dto/pagar-pension.dto';
+import { Response } from 'express';
 
 @Controller('pension')
 @ApiTags('Pension')
@@ -43,5 +44,28 @@ export class PensionController {
   @Get('verificar/vencidas')
   verificarPensionesVencidas() {
     return this.pensionService.verificarPensionesVencidas();
+  }
+
+  @Get('reporte/pensiones')
+  getPensionReport() {
+    return this.pensionService.getPensionReport();
+  }
+
+  @Get('reporte/pensiones/:mes')
+  async getPensionReportMes(@Param('mes') mes: string) {
+    const report = await this.pensionService.getPensionReportByMonth(mes);
+    return report;
+  }
+
+  @Get('reporte/excel')
+  async generatePensionExcelReport(@Res() response: Response) {
+    const filePath = await this.pensionService.generatePensionReportExcel();
+
+  // Puedes enviar el archivo como respuesta o simplemente devolver la ruta
+    response.download(filePath, (err) => {
+      if (err) {
+        response.status(500).send('Error al descargar el archivo');
+      }
+    });
   }
 }

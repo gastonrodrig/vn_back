@@ -12,7 +12,10 @@ import { formatInTimeZone, getTimezoneOffset } from 'date-fns-tz';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { Pago } from 'src/pago/schema/pago.schema';
 import { PagoStatus } from 'src/pago/enums/estado-pago.enum';
-import { Documento } from 'src/documento/schema/documento.schema'; // Importa tu esquema de Documento
+import { Documento } from 'src/documento/schema/documento.schema';
+import * as XLSX from 'xlsx';
+import * as fs from 'fs'; // Importa el módulo fs
+import * as path from 'path'; // Importa el módulo path
 
 @Injectable()
 export class PensionService {
@@ -25,16 +28,20 @@ export class PensionService {
     private readonly estudianteModel: Model<Estudiante>,
     @InjectModel(Pago.name)
     private readonly pagoModel: Model<Pago>,
-    @InjectModel(Documento.name) // Asegúrate de tener esto
-    private readonly documentoModel: Model<Documento>
-  ){}
+    @InjectModel(Documento.name)
+    private readonly documentoModel: Model<Documento>,
+  ) {}
 
-  async create(createPensionDto: CreatePensionDto){
-    const estudiante = await this.estudianteModel.findById(createPensionDto.estudiante_id)
-    if (!estudiante){
-      throw new BadRequestException('Estudiante no encontrado')
+  async create(createPensionDto: CreatePensionDto) {
+    const estudiante = await this.estudianteModel.findById(
+      createPensionDto.estudiante_id,
+    );
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
     }
-    const periodo = await this.periodoModel.findById(createPensionDto.periodo_id);
+    const periodo = await this.periodoModel.findById(
+      createPensionDto.periodo_id,
+    );
     if (!periodo) {
       throw new BadRequestException('Periodo no encontrado');
     }
@@ -48,87 +55,86 @@ export class PensionService {
       fecha_inicio: createPensionDto.fecha_inicio,
       fecha_limite: createPensionDto.fecha_limite,
       mes: createPensionDto.mes,
-      tiempo_pago: null
+      tiempo_pago: null,
     });
-    return await pension.save()
-  }
-  
-  async findAll(){
-    return await this.pensionModel.find()
-    .populate(['estudiante','periodo'])
+    return await pension.save();
   }
 
-  async findOne(pension_id: string){
-    return await this.pensionModel.findById(pension_id)
-    .populate(['estudiante','periodo'])
+  async findAll() {
+    return await this.pensionModel.find().populate(['estudiante', 'periodo']);
   }
-  
-  async update(pension_id: string,updatePensionDto: updatePensionDto){
-    const pension = await this.pensionModel.findById(pension_id)
-    if(!pension){
-      throw new BadRequestException('Pension no encontrada')
+
+  async findOne(pension_id: string) {
+    return await this.pensionModel
+      .findById(pension_id)
+      .populate(['estudiante', 'periodo']);
+  }
+
+  async update(pension_id: string, updatePensionDto: updatePensionDto) {
+    const pension = await this.pensionModel.findById(pension_id);
+    if (!pension) {
+      throw new BadRequestException('Pension no encontrada');
     }
-    const estudianteId= new Types.ObjectId(updatePensionDto.estudiante_id)
-    const estudiante = await this.estudianteModel.findById(estudianteId)
-    if(!estudiante){
-      throw new BadRequestException('Estudiante no encontrado')
+    const estudianteId = new Types.ObjectId(updatePensionDto.estudiante_id);
+    const estudiante = await this.estudianteModel.findById(estudianteId);
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
     }
     const periodoId = new Types.ObjectId(updatePensionDto.periodo_id);
     const periodo = await this.periodoModel.findById(periodoId);
     if (!periodo) {
       throw new BadRequestException('Periodo no encontrado');
     }
-    pension.monto = updatePensionDto.monto
-    pension.metodo_pago = updatePensionDto.metodo_pago
-    pension.n_operacion = updatePensionDto.n_operacion
+    pension.monto = updatePensionDto.monto;
+    pension.metodo_pago = updatePensionDto.metodo_pago;
+    pension.n_operacion = updatePensionDto.n_operacion;
     pension.periodo = periodoId;
-    pension.fecha_inicio = new Date(updatePensionDto.fecha_inicio)
-    pension.fecha_limite = new Date(updatePensionDto.fecha_limite)
-    pension.estado = updatePensionDto.estado
-    pension.mes = updatePensionDto.mes
+    pension.fecha_inicio = new Date(updatePensionDto.fecha_inicio);
+    pension.fecha_limite = new Date(updatePensionDto.fecha_limite);
+    pension.estado = updatePensionDto.estado;
+    pension.mes = updatePensionDto.mes;
 
-    await pension.save()
+    await pension.save();
 
-    return this.pensionModel.findById(pension._id)
-    .populate(['estudiante','periodo'])
+    return this.pensionModel
+      .findById(pension._id)
+      .populate(['estudiante', 'periodo']);
   }
 
   async payment(pension_id: string, pagarPensionDto: PagarPensionDto) {
     const periodoId = new Types.ObjectId(pagarPensionDto.periodo_id);
-    const pension = await this.pensionModel.findById(pension_id).populate('estudiante');
-    
+    const pension = await this.pensionModel
+      .findById(pension_id)
+      .populate('estudiante');
+
     if (!pension) {
       throw new BadRequestException('Pensión no encontrada');
     }
-  
-    // Asegúrate de que la población se haya realizado correctamente
+
     if (!pension.estudiante) {
       throw new BadRequestException('Estudiante no encontrado en la pensión');
     }
-  
-    // Actualiza la pensión
+
     pension.metodo_pago = pagarPensionDto.metodo_pago;
     pension.n_operacion = pagarPensionDto.n_operacion;
     pension.periodo = periodoId;
     pension.estado = EstadoPension.PAGADO;
     pension.tiempo_pago = pagarPensionDto.tiempo_pago;
-  
-    // Guarda los cambios en la pensión
-    await pension.save();
-  
-    // Ahora accede a los campos del estudiante
-    const estudiante = pension.estudiante as unknown as Estudiante & { _id: Types.ObjectId };
 
-  
+    await pension.save();
+
+    const estudiante = pension.estudiante as unknown as Estudiante & {
+      _id: Types.ObjectId;
+    };
+
     const documento = await this.documentoModel.findById(estudiante.documento);
     const tipoDocumento = documento ? documento.type : 'Dni';
-  
-    // Crea el nuevo registro de pago
+
     await this.pagoModel.create({
       monto: pension.monto,
       divisa: 'PEN',
       paymentMethodId: pension.metodo_pago,
-      nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`, // Acceso seguro a los campos
+      nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`,
       transactionDetails: `Pago de pensión del estudiante con ID ${estudiante._id}`,
       status: PagoStatus.APROBADO,
       stripeOperationId: pension.n_operacion,
@@ -143,38 +149,145 @@ export class PensionService {
       },
       paymentDate: new Date(),
     });
-  
-    // Devuelve la pensión actualizada
-    return this.pensionModel.findById(pension._id).populate(['estudiante', 'periodo']);
+
+    return this.pensionModel
+      .findById(pension._id)
+      .populate(['estudiante', 'periodo']);
   }
 
   async findPendienteByEstudiante(estudiante_id: string) {
-    const estudiante = new Types.ObjectId(estudiante_id)
-    return await this.pensionModel.find({
-      estudiante,
-      estado: EstadoPension.PENDIENTE
-    }).populate(['estudiante','periodo']);
+    const estudiante = new Types.ObjectId(estudiante_id);
+    return await this.pensionModel
+      .find({
+        estudiante,
+        estado: EstadoPension.PENDIENTE,
+      })
+      .populate(['estudiante', 'periodo']);
   }
 
   @Cron('* * * * *')
-    async verificarPensionesVencidas() {
-        const hoy = new Date();
-        const limaTimeZone = 'America/Lima';
+  async verificarPensionesVencidas() {
+    const hoy = new Date();
+    const limaTimeZone = 'America/Lima';
 
-        const offset = getTimezoneOffset(limaTimeZone, hoy);
-        
-        const limaTime = new Date(hoy.getTime() + offset);
+    const offset = getTimezoneOffset(limaTimeZone, hoy);
 
+    const limaTime = new Date(hoy.getTime() + offset);
 
-        const pensionesVencidas = await this.pensionModel.find({
-            fecha_limite: { $lt: limaTime },
-            estado: { $ne: EstadoPension.PAGADO },
-        });
+    const pensionesVencidas = await this.pensionModel.find({
+      fecha_limite: { $lt: limaTime },
+      estado: { $ne: EstadoPension.PAGADO },
+    });
 
-
-        for (const pension of pensionesVencidas) {
-            pension.estado = EstadoPension.VENCIDO;
-            await pension.save();
-        }
+    for (const pension of pensionesVencidas) {
+      pension.estado = EstadoPension.VENCIDO;
+      await pension.save();
     }
+  }
+
+  async getPensionReport() {
+    const pensiones = await this.findAll();
+
+    const reportesPorMes = {};
+
+    pensiones.forEach((p) => {
+      const mes = p.fecha_inicio.toISOString().slice(0, 7);
+
+      if (!reportesPorMes[mes]) {
+        reportesPorMes[mes] = {
+          pagadas: 0,
+          vencidas: 0,
+        };
+      }
+
+      if (p.estado === EstadoPension.PAGADO) {
+        reportesPorMes[mes].pagadas += 1;
+      } else if (p.estado === EstadoPension.VENCIDO) {
+        reportesPorMes[mes].vencidas += 1;
+      }
+    });
+
+    const resultado = {};
+    for (const mes in reportesPorMes) {
+      const totalPagadas = reportesPorMes[mes].pagadas;
+      const totalVencidas = reportesPorMes[mes].vencidas;
+      const total = totalPagadas + totalVencidas;
+
+      const porcentajeGanancias = total ? (totalPagadas / total) * 100 : 0;
+      const porcentajePerdidas = total ? (totalVencidas / total) * 100 : 0;
+
+      resultado[mes] = {
+        pagadas: totalPagadas,
+        vencidas: totalVencidas,
+        porcentajeGanancias: porcentajeGanancias.toFixed(2),
+        porcentajePerdidas: porcentajePerdidas.toFixed(2),
+      };
+    }
+
+    return resultado;
+  }
+
+  async getPensionReportByMonth(mes: string) {
+    const pensiones = await this.findAll();
+    const report = this.processReportsByMonth(pensiones, mes);
+    return report;
+  }
+
+  private processReportsByMonth(pensiones: any[], mes: string) {
+    const pagadas = pensiones.filter(
+      (p) =>
+        p.estado === EstadoPension.PAGADO &&
+        p.fecha_inicio.toISOString().slice(0, 7) === mes,
+    );
+    const vencidas = pensiones.filter(
+      (p) =>
+        p.estado === EstadoPension.VENCIDO &&
+        p.fecha_inicio.toISOString().slice(0, 7) === mes,
+    );
+
+    const totalPagadas = pagadas.length;
+    const totalVencidas = vencidas.length;
+    const total = totalPagadas + totalVencidas;
+
+    const porcentajeGanancias = total ? (totalPagadas / total) * 100 : 0;
+    const porcentajePerdidas = total ? (totalVencidas / total) * 100 : 0;
+
+    return {
+      pagadas: totalPagadas,
+      vencidas: totalVencidas,
+      porcentajeGanancias: porcentajeGanancias.toFixed(2),
+      porcentajePerdidas: porcentajePerdidas.toFixed(2),
+    };
+  }
+
+  async generatePensionReportExcel(): Promise<string> {
+    const reportDir = path.join(__dirname, '..', '..', 'reportes');
+    if (!fs.existsSync(reportDir)) {
+      fs.mkdirSync(reportDir);
+    }
+
+    const pensiones = await this.pensionModel.find().exec();
+
+    const totalGanancias = pensiones.reduce((acc, pension) => acc + pension.monto, 0);
+    const totalPendientes = pensiones.filter(pension => pension.estado === EstadoPension.PENDIENTE).length;
+    const totalPagadas = pensiones.filter(pension => pension.estado === EstadoPension.PAGADO).length;
+
+    const reportData = [
+      {
+        totalGanancias,
+        totalPendientes,
+        totalPagadas,
+      },
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(reportData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Reporte de Pensiones');
+
+    const filePath = path.join(reportDir, `reportePensionesVN_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, filePath);
+
+    return filePath;
+  }
 }
