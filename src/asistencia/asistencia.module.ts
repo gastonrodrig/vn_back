@@ -7,6 +7,7 @@ import { Estudiante, EstudianteSchema } from 'src/estudiante/schema/estudiante.s
 import { Seccion, SeccionSchema } from 'src/seccion/schema/seccion.schema';
 import { Grado, GradoSchema } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema/periodo-escolar.schema';
+import { Semanas, SemanasSchema } from 'src/semanas/schema/semanas.schema';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema
       {name: Estudiante.name, schema: EstudianteSchema},
       {name: Seccion.name, schema: SeccionSchema},
       {name: Grado.name, schema: GradoSchema},
-      {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema}
-     
+      {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema},
+      {name: Semanas.name, schema: SemanasSchema}
     ])
   ],
   controllers: [AsistenciaController],
