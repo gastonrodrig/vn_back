@@ -29,17 +29,17 @@ export class ResumenAsistenciaService {
             throw new BadRequestException('Seccion no encontrada');
         }
 
-        const seccionId = new Types.ObjectId(createResumenAsistenciaDto.seccion_id)
-        const semanaId = new Types.ObjectId(createResumenAsistenciaDto.semana_id)
+        // const seccionId = new Types.ObjectId(createResumenAsistenciaDto.seccion_id)
+        // const semanaId = new Types.ObjectId(createResumenAsistenciaDto.semana_id)
 
-        const verificarSeccionSemana = await this.resumenAsistenciaModel.findOne({
-            seccion: seccionId,
-            semana: semanaId
-        })
+        // const verificarSeccionSemana = await this.resumenAsistenciaModel.findOne({
+        //     seccion: seccionId,
+        //     semana: semanaId
+        // })
 
-        if(verificarSeccionSemana){
-            throw new BadRequestException('Ya existe un resumen de asistencia para esta sección en esta semana')
-        }
+        // if(verificarSeccionSemana){
+        //     throw new BadRequestException('Ya existe un resumen de asistencia para esta sección en esta semana')
+        // }
 
         const resumenAsistencia = new this.resumenAsistenciaModel({
             semana,

@@ -1,16 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { EstadoAsistencia } from "../enums/estado-asistencia.enum";
 
 export class CreateAsistenciaDto {
   @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
   estudiante_id: string;
-
-  @ApiProperty()
-  @IsMongoId()
-  @IsNotEmpty()
-  tutor_id: string;
 
   @ApiProperty()
   @IsMongoId()
@@ -27,13 +23,24 @@ export class CreateAsistenciaDto {
   @IsNotEmpty()
   periodo_id: string;
 
-  // @ApiProperty()
-  // @IsMongoId()
-  // @IsNotEmpty()
-  // semana_id: string;
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  semana_id: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   fecha: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  mes: string;
+
+  @ApiProperty()
+  @IsEnum(EstadoAsistencia)
+  @IsNotEmpty()
+  estado: EstadoAsistencia;
+
 }

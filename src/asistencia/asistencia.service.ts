@@ -10,6 +10,7 @@ import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 import { EstadoAsistencia } from './enums/estado-asistencia.enum';
 import { Grado } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
+import { Semanas } from 'src/semanas/schema/semanas.schema';
 
 @Injectable()
 export class AsistenciaService {
@@ -18,24 +19,20 @@ export class AsistenciaService {
     private readonly asistenciaModel: Model<Asistencia>,
     @InjectModel(Estudiante.name)
     private readonly estudianteModel: Model<Estudiante>,
-    @InjectModel(Tutor.name)
-    private readonly tutorModel: Model<Tutor>,
     @InjectModel(Seccion.name)
     private readonly seccionModel: Model<Seccion>,
     @InjectModel(Grado.name)
     private readonly gradoModel: Model<Grado>,
     @InjectModel(PeriodoEscolar.name)
     private readonly periodoModel: Model<PeriodoEscolar>,
+    @InjectModel(Semanas.name)
+    private readonly semanaModel: Model<Semanas>,
   ) {}
 
   async create(createAsistenciaDto: CreateAsistenciaDto) {
     const estudiante = await this.estudianteModel.findById(createAsistenciaDto.estudiante_id);
     if (!estudiante) {
       throw new BadRequestException('Estudiante no encontrado');
-    }
-    const tutor = await this.tutorModel.findById(createAsistenciaDto.tutor_id);
-    if (!tutor) {
-      throw new BadRequestException('Tutor no encontrado');
     }
     const seccion = await this.seccionModel.findById(createAsistenciaDto.seccion_id);
     if (!seccion) {
@@ -49,14 +46,20 @@ export class AsistenciaService {
     if (!periodo) {
       throw new BadRequestException('Periodo no encontrado');
     }
+    const semana = await this.semanaModel.findById(createAsistenciaDto.semana_id);
+    if (!semana) {
+      throw new BadRequestException('Semana no encontrada');
+    }
 
     const asistencia = new this.asistenciaModel({
       estudiante,
-      tutor,
       seccion,
       grado,
       periodo,
+      semana,
       fecha: createAsistenciaDto.fecha,
+      mes: createAsistenciaDto.mes,
+      estado: createAsistenciaDto.estado,
     });
 
     return await asistencia.save();
@@ -64,12 +67,12 @@ export class AsistenciaService {
 
   async findAll(){
     return await this.asistenciaModel.find()
-      .populate(['estudiante','tutor','seccion','grado','periodo'])
+      .populate(['estudiante','seccion','grado','periodo'])
   }
 
   async findOne(asistencia_id: string){
     return await this.asistenciaModel.findById(asistencia_id)
-      .populate(['estudiante','tutor','seccion','grado','periodo'])
+      .populate(['estudiante','seccion','grado','periodo'])
   }
 
   async update(asistencia_id: string, updateAsistenciaDto: UpdateAsistenciaDto){
@@ -79,19 +82,14 @@ export class AsistenciaService {
     }
 
     const estudianteId = new Types.ObjectId(updateAsistenciaDto.estudiante_id)
-    const tutorId = new Types.ObjectId(updateAsistenciaDto.tutor_id)
     const seccionId = new Types.ObjectId(updateAsistenciaDto.seccion_id)
     const gradoId = new Types.ObjectId(updateAsistenciaDto.grado_id)
     const periodoId = new Types.ObjectId(updateAsistenciaDto.periodo_id)
+    const semanaId = new Types.ObjectId(updateAsistenciaDto.semana_id)
 
     const estudiante = await this.estudianteModel.findById(estudianteId)
     if(!estudiante){
         throw new BadRequestException('Estudiante no encontrado')
-    }
-
-    const tutor = await this.tutorModel.findById(tutorId)
-    if(!tutor){
-        throw new BadRequestException('Tutor no encontrado')
     }
 
     const seccion = await this.seccionModel.findById(seccionId)
@@ -109,11 +107,17 @@ export class AsistenciaService {
         throw new BadRequestException('Periodo no encontrado')
     }
 
+    const semana = await this.semanaModel.findById(semanaId)
+    if(!semana){
+        throw new BadRequestException('Semana no encontrada')
+    }
+
     asistencia.estudiante = estudianteId
-    asistencia.tutor = tutorId
     asistencia.seccion = seccionId
     asistencia.grado = gradoId
     asistencia.periodo = periodoId
+    asistencia.semana = semanaId
+    asistencia.estado = updateAsistenciaDto.estado
 
     await asistencia.save()
 
@@ -164,7 +168,6 @@ export class AsistenciaService {
 
     return await asistencia.save()
   }
-
 
   async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
     const gradoObjectId = new mongoose.Types.ObjectId(gradoId);

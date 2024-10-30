@@ -7,9 +7,6 @@ export class Asistencia {
   @Prop({ types: Types.ObjectId, ref: 'Estudiante'})
   estudiante: Types.ObjectId;
 
-  @Prop({ types: Types.ObjectId, ref: 'Tutor'})
-  tutor: Types.ObjectId;
-
   @Prop({enum: EstadoAsistencia})
   estado: string;
 
@@ -22,14 +19,14 @@ export class Asistencia {
   @Prop({ type: Types.ObjectId, ref: 'PeriodoEscolar' })
   periodo: Types.ObjectId;
 
-  // @Prop({ type: Types.ObjectId, ref: 'Semanas' })
-  // semana: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Semanas' })
+  semana: Types.ObjectId;
 
   @Prop()
   fecha: string;
 
-  // @Prop()
-  // mes: string;
+  @Prop()
+  mes: string;
 }
 
 export const AsistenciaSchema = SchemaFactory.createForClass(Asistencia);

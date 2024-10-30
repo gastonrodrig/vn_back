@@ -8,16 +8,17 @@ import { Tutor, TutorSchema } from 'src/tutor/schema/tutor.schema';
 import { Seccion, SeccionSchema } from 'src/seccion/schema/seccion.schema';
 import { Grado, GradoSchema } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema/periodo-escolar.schema';
+import { Semanas, SemanasSchema } from 'src/semanas/schema/semanas.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {name: Asistencia.name, schema: AsistenciaSchema},
       {name: Estudiante.name, schema: EstudianteSchema},
-      {name: Tutor.name, schema: TutorSchema},
       {name: Seccion.name, schema: SeccionSchema},
       {name: Grado.name, schema: GradoSchema},
-      {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema}
+      {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema},
+      {name: Semanas.name, schema: SemanasSchema}
     ])
   ],
   controllers: [AsistenciaController],
