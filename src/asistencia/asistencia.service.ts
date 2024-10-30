@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Asistencia } from './schema/asistencia.schema';
 import mongoose, { Model, Types} from 'mongoose';
 import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
-import { Tutor } from 'src/tutor/schema/tutor.schema';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
