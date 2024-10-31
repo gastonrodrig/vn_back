@@ -256,4 +256,29 @@ export class AsistenciaService {
     const fechas = await this.asistenciaModel.distinct('fecha');
     return fechas;
   }
+
+  async removeAsistenciasByFechaYSeccion(fecha: string, seccionId: string) {
+    if (!fecha) {
+        throw new BadRequestException('La fecha es requerida');
+    }
+
+    let seccionObjectId: mongoose.Types.ObjectId;
+
+    try {
+        seccionObjectId = new mongoose.Types.ObjectId(seccionId);
+    } catch (error) {
+        throw new BadRequestException('El ID de sección no es válido');
+    }
+
+    const asistencias = await this.asistenciaModel.deleteMany({
+        fecha: fecha,
+        seccion: seccionObjectId
+    });
+
+    if (asistencias.deletedCount === 0) {
+        throw new BadRequestException('No se encontraron registros de asistencia para la fecha y sección especificadas');
+    }
+
+    return { success: true, deletedCount: asistencias.deletedCount };
+}
 }
