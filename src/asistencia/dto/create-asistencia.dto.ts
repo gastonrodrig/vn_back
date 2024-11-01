@@ -37,7 +37,7 @@ export class CreateAsistenciaDto {
   @IsString()
   @IsNotEmpty()
   mes: string;
-
+  
   @ApiProperty()
   @IsEnum(EstadoAsistencia)
   @IsNotEmpty()

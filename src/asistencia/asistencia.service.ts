@@ -116,6 +116,8 @@ export class AsistenciaService {
     asistencia.grado = gradoId
     asistencia.periodo = periodoId
     asistencia.semana = semanaId
+    asistencia.fecha = updateAsistenciaDto.fecha
+    asistencia.mes = updateAsistenciaDto.mes
     asistencia.estado = updateAsistenciaDto.estado
 
     await asistencia.save()
@@ -135,60 +137,40 @@ export class AsistenciaService {
     return { sucess: true }
   }
 
-  async changePresente(asistencia_id: string){
-    const asistencia = await this.asistenciaModel.findById(asistencia_id);
-    if(!asistencia){
-        throw new BadRequestException('Asistencia no encontrada')
-    }
+  // async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
+  //   const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
+  //   const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
+  //   const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
 
-    asistencia.estado = EstadoAsistencia.PRESENTE
+  //   const grado = await this.gradoModel.findById(gradoObjectId);
+  //   if(!grado){
+  //     throw new BadRequestException('Grado no encontrado')
+  //   }
+  //   const periodo = await this.periodoModel.findById(periodoObjectId);
+  //   if(!periodo){
+  //     throw new BadRequestException('Periodo no encontrado')
+  //   }
+  //   const seccion = await this.seccionModel.findById(seccionObjectId);
+  //   if(!seccion){
+  //     throw new BadRequestException('Seccion no encontrado')
+  //   }
 
-    return await asistencia.save()
-  }
+  //   return await this.asistenciaModel
+  //     .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
+  //       .populate(['estudiante','grado','periodo','seccion'])
+  // }
 
-  async changeJustificado(asistencia_id: string){
-    const asistencia = await this.asistenciaModel.findById(asistencia_id);
-    if(!asistencia){
-      throw new BadRequestException('Asistencia no encontrado')
-    }
-    
-    asistencia.estado = EstadoAsistencia.JUSTIFICADO
-
-    return await asistencia.save()
-  }
-
-  async changeFalta(asistencia_id: string){
-    const asistencia = await this.asistenciaModel.findById(asistencia_id);
-    if(!asistencia){
-      throw new BadRequestException('Asistencia no encontrado')
-    }
-
-    asistencia.estado = EstadoAsistencia.FALTA
-
-    return await asistencia.save()
-  }
-
-  async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
-    const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
-    const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
-    const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
-
-    const grado = await this.gradoModel.findById(gradoObjectId);
-    if(!grado){
-      throw new BadRequestException('Grado no encontrado')
-    }
-    const periodo = await this.periodoModel.findById(periodoObjectId);
-    if(!periodo){
-      throw new BadRequestException('Periodo no encontrado')
-    }
-    const seccion = await this.seccionModel.findById(seccionObjectId);
-    if(!seccion){
-      throw new BadRequestException('Seccion no encontrado')
+  async listarAsistenciasPorFechaYSeccion(seccion_id: string, fecha: string) {
+    const seccionId = new Types.ObjectId(seccion_id);
+  
+    const seccion = await this.seccionModel.findById(seccionId);
+    if (!seccion) {
+      throw new BadRequestException('Sección no encontrada');
     }
 
     return await this.asistenciaModel
-      .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
-      .populate(['estudiante','grado','periodo','seccion'])
+      .find({ seccion: seccionId, fecha })
+        .populate(['estudiante','grado','periodo','seccion'])
   }
 
   async obtenerResumenAsistencia(fecha: string, seccionId: string) {
@@ -238,7 +220,7 @@ export class AsistenciaService {
           totalJustificados: 1,
           totalPresentes: 1,
           fecha: { $literal: fecha }, // Agregar la fecha a la respuesta
-          seccion: { $toObjectId: seccionObjectId }, // Agregar la sección a la respuesta
+          seccion: { $literal: seccionObjectId }, // Agregar la sección a la respuesta
         },
       },
     ]);
@@ -247,13 +229,6 @@ export class AsistenciaService {
       throw new BadRequestException('No se encontraron registros de asistencia para la fecha y sección especificadas');
     }
 
-    console.log('Resumen de asistencia:', resumenAsistencia); 
-
     return resumenAsistencia[0];
-  }
-
-  async obtenerFechasUnicas() {
-    const fechas = await this.asistenciaModel.distinct('fecha');
-    return fechas;
   }
 }

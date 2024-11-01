@@ -15,11 +15,6 @@ export class CreateResumenAsistenciaDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    dia: string;
-    
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
     fecha: string;
     
     @ApiProperty()

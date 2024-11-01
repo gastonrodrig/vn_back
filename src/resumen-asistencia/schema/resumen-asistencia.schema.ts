@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import { DiaResumenAsistencia } from '../enums/dia-resumen-asistencia.enum';
 
 @Schema({ collection: 'ResumenAsistencia' })
 export class ResumenAsistencia {
@@ -9,9 +8,6 @@ export class ResumenAsistencia {
 
   @Prop({ type: Types.ObjectId, ref: 'Seccion'})
   seccion: Types.ObjectId;
-
-  @Prop({ enum: DiaResumenAsistencia})
-  dia: string;
 
   @Prop()
   fecha: string;

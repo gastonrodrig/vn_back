@@ -28,25 +28,18 @@ export class AsistenciaController {
   remove(@Param('id') id: string){
     return this.asistenciaService.remove(id)
   }
-
-  @Patch(':id/Presente')
-  presente(@Param('id') id: string){
-    return this.asistenciaService.changePresente(id);
-  }
-
-  @Patch(':id/Justificado')
-  justificado(@Param('id') id: string){
-    return this.asistenciaService.changeJustificado(id);
-  }
-
-  @Patch(':id/Falta')
-  falta(@Param('id') id: string){
-    return this.asistenciaService.changeFalta(id);
-  }
   
-  @Get('/:gradoId/:periodoId/:seccionId') 
-  listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
-    return this.asistenciaService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
+  // @Get('/:gradoId/:periodoId/:seccionId') 
+  // listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
+  //   return this.asistenciaService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
+  // }
+
+  @Get('/seccion/:seccionId')
+  async listarAsistenciasPorFechaYSeccion(
+    @Param('seccionId') seccionId: string,
+    @Query('fecha') fecha: string
+  ) {
+    return await this.asistenciaService.listarAsistenciasPorFechaYSeccion(seccionId, fecha);
   }
 
   @Get('resumen/asistencia')
@@ -55,11 +48,6 @@ export class AsistenciaController {
     @Query('seccion_id') seccionId: string,
   ) {
     return this.asistenciaService.obtenerResumenAsistencia(fecha, seccionId);
-  }
- 
-  @Get('fechas')
-  getFechasUnicas() {
-    return this.asistenciaService.obtenerFechasUnicas();
   }
 
   @Get(':id')

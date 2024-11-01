@@ -44,7 +44,6 @@ export class ResumenAsistenciaService {
         const resumenAsistencia = new this.resumenAsistenciaModel({
             semana,
             seccion,
-            dia: createResumenAsistenciaDto.dia,
             fecha: createResumenAsistenciaDto.fecha,
             presentes: createResumenAsistenciaDto.presentes,
             faltas: createResumenAsistenciaDto.faltas,
@@ -88,7 +87,6 @@ export class ResumenAsistenciaService {
 
         resumenAsistencia.semana = semanaId
         resumenAsistencia.seccion = seccionId
-        resumenAsistencia.dia = updateResumenAsistenciaDto.dia
         resumenAsistencia.fecha = updateResumenAsistenciaDto.fecha
         resumenAsistencia.presentes = updateResumenAsistenciaDto.presentes
         resumenAsistencia.faltas = updateResumenAsistenciaDto.faltas
