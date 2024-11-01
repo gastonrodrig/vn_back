@@ -54,4 +54,12 @@ export class AsistenciaController {
   findOne(@Param('id') id: string){
     return this.asistenciaService.findOne(id);
   }
+
+  @Delete('eliminar/:fecha/:seccionId')
+  async removeAsistenciasByFechaYSeccion(
+    @Query('fecha') fecha: string,
+    @Query('seccionId') seccionId: string,
+  ) {
+    return this.asistenciaService.removeAsistenciasByFechaYSeccion(fecha, seccionId);
+  }
 }
