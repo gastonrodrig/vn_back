@@ -262,8 +262,13 @@ export class AsistenciaService {
     return { success: true, deletedCount: asistencias.deletedCount };
   }
 
-  async obtenerMesesUnicos() {
-    const registros = await this.asistenciaModel.distinct('mes').exec();
+  async obtenerMesesUnicos(estudianteId: string, periodoId: string) {
+    const registros = await this.asistenciaModel
+      .distinct('mes', { 
+        estudiante: new Types.ObjectId(estudianteId), 
+        periodo: new Types.ObjectId(periodoId) 
+      })
+      .exec();
     return registros;
   }
 }
