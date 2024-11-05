@@ -14,6 +14,11 @@ export class AsistenciaController {
     return this.asistenciaService.create(createAsistenciaDto);
   }
 
+  @Get('resumen/mensual')
+  obtenerResumenMensual() {
+    return this.asistenciaService.obtenerMesesUnicos();
+  }
+
   @Get()
   findAll(){
     return this.asistenciaService.findAll();
@@ -28,11 +33,6 @@ export class AsistenciaController {
   remove(@Param('id') id: string){
     return this.asistenciaService.remove(id)
   }
-  
-  // @Get('/:gradoId/:periodoId/:seccionId') 
-  // listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
-  //   return this.asistenciaService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
-  // }
 
   @Get('/seccion/:seccionId')
   async listarAsistenciasPorFechaYSeccion(

@@ -261,4 +261,9 @@ export class AsistenciaService {
 
     return { success: true, deletedCount: asistencias.deletedCount };
   }
+
+  async obtenerMesesUnicos() {
+    const registros = await this.asistenciaModel.distinct('mes').exec();
+    return registros;
+  }
 }
