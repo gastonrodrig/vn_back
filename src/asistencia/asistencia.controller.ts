@@ -14,9 +14,12 @@ export class AsistenciaController {
     return this.asistenciaService.create(createAsistenciaDto);
   }
 
-  @Get('resumen/mensual')
-  obtenerResumenMensual() {
-    return this.asistenciaService.obtenerMesesUnicos();
+  @Get('meses-unicos')
+  async obtenerMesesUnicos(
+    @Query('estudianteId') estudianteId: string,
+    @Query('periodoId') periodoId: string,
+  ) {
+    return await this.asistenciaService.obtenerMesesUnicos(estudianteId, periodoId);
   }
 
   @Get()

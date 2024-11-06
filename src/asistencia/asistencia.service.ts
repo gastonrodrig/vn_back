@@ -6,7 +6,6 @@ import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
-import { EstadoAsistencia } from './enums/estado-asistencia.enum';
 import { Grado } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { Semanas } from 'src/semanas/schema/semanas.schema';
@@ -262,8 +261,14 @@ export class AsistenciaService {
     return { success: true, deletedCount: asistencias.deletedCount };
   }
 
-  async obtenerMesesUnicos() {
-    const registros = await this.asistenciaModel.distinct('mes').exec();
+  async obtenerMesesUnicos(estudianteId: string, periodoId: string) {
+    const registros = await this.asistenciaModel
+      .distinct('mes', { 
+        estudiante: new Types.ObjectId(estudianteId), 
+        periodo: new Types.ObjectId(periodoId) 
+      })
+      .exec();
     return registros;
   }
+
 }
