@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NotasService } from './notas.service';
 import { CreateNotasDto } from './dto/create-notas.dto';
@@ -24,7 +24,7 @@ export class NotasController {
     return this.notasService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateNotasDto: UpdateNotasDto){
     return this.notasService.update(id, updateNotasDto)
   }

@@ -122,7 +122,7 @@ export class AsistenciaService {
     await asistencia.save()
 
     return this.asistenciaModel.findById(asistencia._id)
-      .populate(['estudiante','tutor','seccion','grado','periodo'])
+      .populate(['estudiante','seccion','grado','periodo'])
   }
 
   async remove(asistencia_id: string){
