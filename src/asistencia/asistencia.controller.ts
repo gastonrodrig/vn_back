@@ -59,9 +59,9 @@ export class AsistenciaController {
   }
 
   @Delete('eliminar/:fecha/:seccionId')
-  async removeAsistenciasByFechaYSeccion(
-    @Query('fecha') fecha: string,
-    @Query('seccionId') seccionId: string,
+  removeAsistenciasByFechaYSeccion(
+    @Param('fecha') fecha: string,
+    @Param('seccionId') seccionId: string,
   ) {
     return this.asistenciaService.removeAsistenciasByFechaYSeccion(fecha, seccionId);
   }
