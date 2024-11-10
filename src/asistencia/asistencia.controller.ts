@@ -65,4 +65,13 @@ export class AsistenciaController {
   ) {
     return this.asistenciaService.removeAsistenciasByFechaYSeccion(fecha, seccionId);
   }
+
+  @Get('/periodo/:periodoId/:mes/estudiante/:estudianteId')
+  listarAsistencias(
+    @Param('periodoId') periodoId: string,
+    @Param('mes') mes: string,
+    @Param('estudianteId') estudianteId: string,
+  ) {
+    return this.asistenciaService.listarAsistenciasPorPeriodoMesYEstudiante(periodoId, mes, estudianteId);
+  }
 }

@@ -271,4 +271,21 @@ export class AsistenciaService {
       .exec();
     return registros;
   }
+
+  async listarAsistenciasPorPeriodoMesYEstudiante(periodoId: string, mes: string, estudianteId: string) {
+    const periodoObjectId = new Types.ObjectId(periodoId);
+    const estudianteObjectId = new Types.ObjectId(estudianteId);
+  
+    const asistencias = await this.asistenciaModel.find({
+      periodo: periodoObjectId,
+      mes,
+      estudiante: estudianteObjectId
+    }).populate(['estudiante', 'grado', 'periodo', 'seccion']);
+  
+    if (asistencias.length === 0) {
+      throw new BadRequestException('No se encontraron registros de asistencia para el estudiante en el periodo y mes especificados');
+    }
+    return asistencias;
+  }
+  
 }
