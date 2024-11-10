@@ -6,7 +6,6 @@ import { Estudiante } from 'src/estudiante/schema/estudiante.schema';
 import { Seccion } from 'src/seccion/schema/seccion.schema';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
-import { EstadoAsistencia } from './enums/estado-asistencia.enum';
 import { Grado } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { Semanas } from 'src/semanas/schema/semanas.schema';
@@ -123,7 +122,7 @@ export class AsistenciaService {
     await asistencia.save()
 
     return this.asistenciaModel.findById(asistencia._id)
-      .populate(['estudiante','tutor','seccion','grado','periodo'])
+      .populate(['estudiante','seccion','grado','periodo'])
   }
 
   async remove(asistencia_id: string){
@@ -136,29 +135,6 @@ export class AsistenciaService {
 
     return { sucess: true }
   }
-
-  // async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
-  //   const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
-  //   const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
-  //   const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
-
-  //   const grado = await this.gradoModel.findById(gradoObjectId);
-  //   if(!grado){
-  //     throw new BadRequestException('Grado no encontrado')
-  //   }
-  //   const periodo = await this.periodoModel.findById(periodoObjectId);
-  //   if(!periodo){
-  //     throw new BadRequestException('Periodo no encontrado')
-  //   }
-  //   const seccion = await this.seccionModel.findById(seccionObjectId);
-  //   if(!seccion){
-  //     throw new BadRequestException('Seccion no encontrado')
-  //   }
-
-  //   return await this.asistenciaModel
-  //     .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
-  //       .populate(['estudiante','grado','periodo','seccion'])
-  // }
 
   async listarAsistenciasPorFechaYSeccion(seccion_id: string, fecha: string) {
     const seccionId = new Types.ObjectId(seccion_id);
@@ -287,5 +263,5 @@ export class AsistenciaService {
     }
     return asistencias;
   }
-  
+
 }

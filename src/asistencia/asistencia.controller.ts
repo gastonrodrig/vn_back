@@ -13,7 +13,7 @@ export class AsistenciaController {
   create(@Body() createAsistenciaDto: CreateAsistenciaDto){
     return this.asistenciaService.create(createAsistenciaDto);
   }
-  
+
   @Get('meses-unicos')
   async obtenerMesesUnicos(
     @Query('estudianteId') estudianteId: string,
@@ -59,9 +59,9 @@ export class AsistenciaController {
   }
 
   @Delete('eliminar/:fecha/:seccionId')
-  async removeAsistenciasByFechaYSeccion(
-    @Query('fecha') fecha: string,
-    @Query('seccionId') seccionId: string,
+  removeAsistenciasByFechaYSeccion(
+    @Param('fecha') fecha: string,
+    @Param('seccionId') seccionId: string,
   ) {
     return this.asistenciaService.removeAsistenciasByFechaYSeccion(fecha, seccionId);
   }

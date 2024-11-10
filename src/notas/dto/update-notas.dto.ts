@@ -1,4 +1,25 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateNotasDto } from './create-notas.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { TipoNota } from '../enums/tipo-nota.enum';
 
-export class UpdateNotasDto extends PartialType(CreateNotasDto) {}
+export class UpdateNotasDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  nota: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  notaLetra: string;
+
+  @ApiProperty()
+  @IsEnum(TipoNota)
+  @IsNotEmpty()
+  tipoNota: TipoNota;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  motivoCambio: string;
+}
