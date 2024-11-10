@@ -136,29 +136,6 @@ export class AsistenciaService {
     return { sucess: true }
   }
 
-  // async listarEstudiantesPorGradoPeriodoYSeccion(gradoId: string, periodoId: string, seccionId: string){
-  //   const gradoObjectId = new mongoose.Types.ObjectId(gradoId);
-  //   const periodoObjectId = new mongoose.Types.ObjectId(periodoId);
-  //   const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
-
-  //   const grado = await this.gradoModel.findById(gradoObjectId);
-  //   if(!grado){
-  //     throw new BadRequestException('Grado no encontrado')
-  //   }
-  //   const periodo = await this.periodoModel.findById(periodoObjectId);
-  //   if(!periodo){
-  //     throw new BadRequestException('Periodo no encontrado')
-  //   }
-  //   const seccion = await this.seccionModel.findById(seccionObjectId);
-  //   if(!seccion){
-  //     throw new BadRequestException('Seccion no encontrado')
-  //   }
-
-  //   return await this.asistenciaModel
-  //     .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
-  //       .populate(['estudiante','grado','periodo','seccion'])
-  // }
-
   async listarAsistenciasPorFechaYSeccion(seccion_id: string, fecha: string) {
     const seccionId = new Types.ObjectId(seccion_id);
   
@@ -269,6 +246,22 @@ export class AsistenciaService {
       })
       .exec();
     return registros;
+  }
+
+  async listarAsistenciasPorPeriodoMesYEstudiante(periodoId: string, mes: string, estudianteId: string) {
+    const periodoObjectId = new Types.ObjectId(periodoId);
+    const estudianteObjectId = new Types.ObjectId(estudianteId);
+  
+    const asistencias = await this.asistenciaModel.find({
+      periodo: periodoObjectId,
+      mes,
+      estudiante: estudianteObjectId
+    }).populate(['estudiante', 'grado', 'periodo', 'seccion']);
+  
+    if (asistencias.length === 0) {
+      throw new BadRequestException('No se encontraron registros de asistencia para el estudiante en el periodo y mes especificados');
+    }
+    return asistencias;
   }
 
 }
