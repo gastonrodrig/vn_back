@@ -32,6 +32,7 @@ export class DocenteService {
     const docente = new this.docenteModel({
       nombre: createDocenteDto.nombre,
       apellido: createDocenteDto.apellido,
+      correo: createDocenteDto.correo,
       direccion: createDocenteDto.direccion,
       telefono: createDocenteDto.telefono,
       numero_documento: createDocenteDto.numero_documento,
@@ -70,6 +71,7 @@ export class DocenteService {
 
     docente.nombre = updateDocenteDto.nombre
     docente.apellido = updateDocenteDto.apellido
+    docente.correo = updateDocenteDto.correo
     docente.direccion = updateDocenteDto.direccion
     docente.telefono = updateDocenteDto.telefono
     docente.numero_documento = updateDocenteDto.numero_documento

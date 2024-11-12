@@ -15,6 +15,11 @@ export class CreateDocenteDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  correo: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   direccion: string;
 
   @ApiProperty()

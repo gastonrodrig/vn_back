@@ -11,6 +11,8 @@ export class Docente {
   apellido: string;
 
   @Prop()
+  correo: string;
+  
   direccion: string;
 
   @Prop()
