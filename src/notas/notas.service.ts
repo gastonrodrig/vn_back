@@ -72,7 +72,8 @@ export class NotasService {
       curso,
       nota: createNotasDto.nota,
       notaLetra: createNotasDto.notaLetra,
-      bimestre: createNotasDto.bimestre_id
+      bimestre: createNotasDto.bimestre_id,
+      tipoNota: createNotasDto.tipoNota
     })
 
     await notas.save()
@@ -138,5 +139,39 @@ export class NotasService {
     return await this.notasModel
     .find({ grado: gradoObjectId, periodo: periodoObjectId, seccion: seccionObjectId})
       .populate(['estudiante','docente','seccion','grado','periodo','curso','bimestre'])
+  }
+
+  async obtenerNota(estudiante_id: string, curso_id: string, bimestre_id: string, tipoNota: string) {
+    const estudianteObjectId = new mongoose.Types.ObjectId(estudiante_id);
+    const cursoObjectId = new mongoose.Types.ObjectId(curso_id);
+    const bimestreObjectId = new mongoose.Types.ObjectId(bimestre_id);
+
+    const estudiante = await this.estudianteModel.findById(estudianteObjectId);
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+
+    const curso = await this.cursoModel.findById(cursoObjectId);
+    if (!curso) {
+      throw new BadRequestException('Curso no encontrado');
+    }
+
+    const bimestre = await this.bimestreModel.findById(bimestreObjectId);
+    if (!bimestre) {
+      throw new BadRequestException('Bimestre no encontrado');
+    }
+
+    const nota = await this.notasModel.findOne({
+      estudiante: estudianteObjectId,
+      curso: cursoObjectId,
+      bimestre: bimestreObjectId,
+      tipoNota: tipoNota,
+    }).populate(['estudiante', 'docente', 'seccion', 'grado', 'periodo', 'curso', 'bimestre']);
+  
+    if (!nota) {
+      throw new BadRequestException('Nota no encontrada');
+    }
+
+    return nota;
   }
 }

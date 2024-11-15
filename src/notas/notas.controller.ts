@@ -30,7 +30,26 @@ export class NotasController {
   }
   
   @Get('/:gradoId/:periodoId/:seccionId')
-  listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
+  listarEstudiantesPorGradoPeriodoYSeccion(
+    @Param('gradoId') gradoId: string,
+    @Param('periodoId') periodoId: string, 
+    @Param('seccionId') seccionId: string
+  ) {
     return this.notasService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
+  }
+
+  @Get(':estudianteId/:cursoId/:bimestreId/:tipoNota')
+  obtenerNota(
+    @Param('estudianteId') estudianteId: string,
+    @Param('cursoId') cursoId: string,
+    @Param('bimestreId') bimestreId: string,
+    @Param('tipoNota') tipoNota: string,
+  ) {
+    return this.notasService.obtenerNota(
+      estudianteId,
+      cursoId,
+      bimestreId,
+      tipoNota,
+    );
   }
 }
