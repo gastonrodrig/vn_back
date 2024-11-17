@@ -11,6 +11,7 @@ import { CreateNotasDto } from './dto/create-notas.dto';
 import { UpdateNotasDto } from './dto/update-notas.dto';
 import { Docente } from 'src/docente/schema/docente.schema';
 import { Bimestre } from 'src/bimestre/schema/bimestre.schema';
+import { TipoNota } from './enums/tipo-nota.enum';
 
 @Injectable()
 export class NotasService {
@@ -173,5 +174,58 @@ export class NotasService {
     }
 
     return nota;
+  }
+
+  async listarNotasPorParametros(
+    estudianteId: string,
+    cursoId: string,
+    bimestreId: string,
+    seccionId: string,
+    tipoNota: string,
+  ) {
+    console.log('Parámetros:', { estudianteId, cursoId, bimestreId, seccionId, tipoNota });
+  
+    const estudianteObjectId = new mongoose.Types.ObjectId(estudianteId);
+    const cursoObjectId = new mongoose.Types.ObjectId(cursoId);
+    const bimestreObjectId = bimestreId;  // bimestreId parece ser un string, no un ObjectId
+    const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
+  
+    // Verificar que los datos existen en la base de datos
+    const estudiante = await this.estudianteModel.findById(estudianteObjectId);
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+  
+    const curso = await this.cursoModel.findById(cursoObjectId);
+    if (!curso) {
+      throw new BadRequestException('Curso no encontrado');
+    }
+  
+    const bimestre = await this.bimestreModel.findById(bimestreObjectId);
+    if (!bimestre) {
+      throw new BadRequestException('Bimestre no encontrado');
+    }
+  
+    const seccion = await this.seccionModel.findById(seccionObjectId);
+    if (!seccion) {
+      throw new BadRequestException('Sección no encontrada');
+    }
+  
+    // Realizar la consulta para obtener las notas
+    const notas = await this.notasModel.find({
+      estudiante: estudianteObjectId,
+      curso: cursoObjectId,
+      bimestre: bimestreObjectId,
+      seccion: seccionObjectId,
+      tipoNota: tipoNota, // Usar directamente tipoNota
+    }).populate([
+      'estudiante', 'docente', 'seccion', 'grado', 'periodo', 'curso', 'bimestre',
+    ]);
+  
+    if (notas.length === 0) {
+      throw new BadRequestException('No se encontraron notas con los parámetros proporcionados');
+    }
+  
+    return notas;
   }
 }

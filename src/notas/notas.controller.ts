@@ -52,4 +52,28 @@ export class NotasController {
       tipoNota,
     );
   }
+
+  @Get('/:estudianteId/:cursoId/:bimestreId/:seccionId/:tipoNota')
+ filtrarNotasPorParametros(
+  @Param('estudianteId') estudianteId: string,
+  @Param('cursoId') cursoId: string,
+  @Param('bimestreId') bimestreId: string,
+  @Param('seccionId') seccionId: string,
+  @Param('tipoNota') tipoNota: string,
+) {
+  console.log('Parámetros recibidos:', {
+    estudianteId,
+    cursoId,
+    bimestreId,
+    seccionId,
+    tipoNota,
+  });
+  return this.notasService.listarNotasPorParametros(
+    estudianteId,
+    cursoId,
+    bimestreId,
+    seccionId,
+    tipoNota,
+  );
+}
 }
