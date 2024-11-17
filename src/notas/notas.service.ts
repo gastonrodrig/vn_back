@@ -73,7 +73,7 @@ export class NotasService {
       curso,
       nota: createNotasDto.nota,
       notaLetra: createNotasDto.notaLetra,
-      bimestre: createNotasDto.bimestre_id,
+      bimestre,
       tipoNota: createNotasDto.tipoNota
     })
 
