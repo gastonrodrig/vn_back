@@ -187,7 +187,7 @@ export class NotasService {
   
     const estudianteObjectId = new mongoose.Types.ObjectId(estudianteId);
     const cursoObjectId = new mongoose.Types.ObjectId(cursoId);
-    const bimestreObjectId = bimestreId;  // bimestreId parece ser un string, no un ObjectId
+    const bimestreObjectId = new mongoose.Types.ObjectId(bimestreId);
     const seccionObjectId = new mongoose.Types.ObjectId(seccionId);
   
     // Verificar que los datos existen en la base de datos
