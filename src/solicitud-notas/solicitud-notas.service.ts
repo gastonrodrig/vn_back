@@ -158,7 +158,7 @@ export class SolicitudNotasService {
         await solicitudn.deleteOne();
         return { message: 'La solicitud ha sido eliminada correctamente' };
     }
-    
+
     async listarSolicitudNotasPorParametros(
         docenteId: string,
         estudianteId: string,
@@ -167,22 +167,20 @@ export class SolicitudNotasService {
         bimestreId: string,
         tipoNota: string,
       ) {
-        // Convertir los IDs a ObjectId
         const docenteObjectId = new Types.ObjectId(docenteId);
         const estudianteObjectId = new Types.ObjectId(estudianteId);
         const cursoObjectId = new Types.ObjectId(cursoId);
         const seccionObjectId = new Types.ObjectId(seccionId);
         const bimestreObjectId = new Types.ObjectId(bimestreId);
       
-        // Buscar la solicitud de notas con los parámetros proporcionados
         const solicitudNotas = await this.solicitudNotasModel.findOne({
           docente: docenteObjectId,
           estudiante: estudianteObjectId,
           curso: cursoObjectId,
           seccion: seccionObjectId,
           bimestre: bimestreObjectId,
-          tipoNota: tipoNota, // Aseguramos que también coincida el tipo de nota
-        }).populate(['docente', 'estudiante', 'curso', 'seccion', 'bimestre']); // Usamos populate para obtener los datos relacionados
+          tipoNota: tipoNota,
+        }).populate(['docente', 'estudiante', 'curso', 'seccion', 'bimestre']); 
       
         if (!solicitudNotas) {
           throw new BadRequestException(
@@ -190,7 +188,6 @@ export class SolicitudNotasService {
           );
         }
       
-        // Devuelve todo el objeto de solicitudNotas
         return solicitudNotas;
       }
 }

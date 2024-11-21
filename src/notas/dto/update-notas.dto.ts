@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { TipoNota } from '../enums/tipo-nota.enum';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class UpdateNotasDto {
   @ApiProperty()

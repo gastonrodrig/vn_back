@@ -103,6 +103,7 @@ export class NotasService {
 
     notas.nota = updateNotasDto.nota;
     notas.notaLetra = updateNotasDto.notaLetra;
+    notas.estado = null;
 
     await notas.save();
 
