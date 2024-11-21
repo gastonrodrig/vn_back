@@ -140,14 +140,12 @@ export class SolicitudNotasService {
         return await solicitudn.save()
     }
 
-    async rechazarSolicitud(solicitudn_id: string){
-        const solicitudn = await this.solicitudNotasModel.findById(solicitudn_id)
-        if(!solicitudn){
-            throw new BadRequestException('Solicitud no encontrada')
+    async rechazarSolicitud(solicitudn_id: string) {
+        const solicitudn = await this.solicitudNotasModel.findByIdAndDelete(solicitudn_id);
+        if (!solicitudn) {
+            throw new BadRequestException('Solicitud no encontrada');
         }
 
-        solicitudn.estado = EstadoSolicitudNotas.RECHAZADO
-
-        return await solicitudn.save()
+        return { message: 'La solicitud ha sido eliminada correctamente' };
     }
 }

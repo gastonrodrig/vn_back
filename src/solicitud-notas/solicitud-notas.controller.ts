@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Put, Delete } from '@nestjs/common';
 import { SolicitudNotasService } from './solicitud-notas.service';
 import { CreateSolicitudNotasDto } from './dto/create-solicitud-notas.dto';
 import { UpdateSolicitudNotasDto } from './dto/update-solicitud-notas.dto';
@@ -34,7 +34,7 @@ export class SolicitudNotasController {
     return this.solicitudNotasService.aprobarSolicitudNotas(id);
   }
 
-  @Patch('reject/:id')
+  @Delete('reject/:id')
   reject(@Param('id') id: string) {
     return this.solicitudNotasService.rechazarSolicitud(id);
   }
