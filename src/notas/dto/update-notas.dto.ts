@@ -12,14 +12,4 @@ export class UpdateNotasDto {
   @IsString()
   @IsNotEmpty()
   notaLetra: string;
-
-  @ApiProperty()
-  @IsEnum(TipoNota)
-  @IsNotEmpty()
-  tipoNota: TipoNota;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  motivoCambio: string;
 }

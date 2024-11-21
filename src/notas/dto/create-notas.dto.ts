@@ -52,5 +52,4 @@ export class CreateNotasDto {
   @IsEnum(TipoNota)
   @IsNotEmpty()
   tipoNota: TipoNota;
-
 }

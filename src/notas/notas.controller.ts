@@ -54,26 +54,39 @@ export class NotasController {
   }
 
   @Get('/:estudianteId/:cursoId/:bimestreId/:seccionId/:tipoNota')
- filtrarNotasPorParametros(
-  @Param('estudianteId') estudianteId: string,
-  @Param('cursoId') cursoId: string,
-  @Param('bimestreId') bimestreId: string,
-  @Param('seccionId') seccionId: string,
-  @Param('tipoNota') tipoNota: string,
-) {
-  console.log('Parámetros recibidos:', {
-    estudianteId,
-    cursoId,
-    bimestreId,
-    seccionId,
-    tipoNota,
-  });
-  return this.notasService.listarNotasPorParametros(
-    estudianteId,
-    cursoId,
-    bimestreId,
-    seccionId,
-    tipoNota,
-  );
-}
+  filtrarNotasPorParametros(
+    @Param('estudianteId') estudianteId: string,
+    @Param('cursoId') cursoId: string,
+    @Param('bimestreId') bimestreId: string,
+    @Param('seccionId') seccionId: string,
+    @Param('tipoNota') tipoNota: string,
+  ) {
+    return this.notasService.listarNotasPorParametros(
+      estudianteId,
+      cursoId,
+      bimestreId,
+      seccionId,
+      tipoNota,
+    );
+  }
+
+  @Patch('processed/:id')
+  procesarSolicitud(@Param('id') id: string) {
+    return this.notasService.cambiarProcesado(id)
+  }
+
+  @Patch('approve/:id')
+  aprobarEstado(@Param('id') id: string) {
+    return this.notasService.cambiarAprobado(id)
+  }
+
+  @Patch('cancel/:id')
+  cancelarEstado(@Param('id') id: string){
+    return this.notasService.cambiarRechazado(id)
+  }
+
+  @Patch('remove/:id')
+  removerEstado(@Param('id') id: string){
+    return this.notasService.removerEstado(id)
+  }
 }

@@ -35,7 +35,7 @@ export class Notas {
   tipoNota: string;
 
   @Prop()
-  motivoCambio: string;
+  estado: string;
 }
 
 export const NotasSchema = SchemaFactory.createForClass(Notas)

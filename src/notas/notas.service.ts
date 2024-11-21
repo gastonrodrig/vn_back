@@ -12,6 +12,7 @@ import { UpdateNotasDto } from './dto/update-notas.dto';
 import { Docente } from 'src/docente/schema/docente.schema';
 import { Bimestre } from 'src/bimestre/schema/bimestre.schema';
 import { TipoNota } from './enums/tipo-nota.enum';
+import { EstadoSolicituNota } from './enums/estado-nota.enum';
 
 @Injectable()
 export class NotasService {
@@ -74,7 +75,8 @@ export class NotasService {
       nota: createNotasDto.nota,
       notaLetra: createNotasDto.notaLetra,
       bimestre,
-      tipoNota: createNotasDto.tipoNota
+      tipoNota: createNotasDto.tipoNota,
+      estado: null
     })
 
     await notas.save()
@@ -101,8 +103,6 @@ export class NotasService {
 
     notas.nota = updateNotasDto.nota;
     notas.notaLetra = updateNotasDto.notaLetra;
-    notas.tipoNota = updateNotasDto.tipoNota;
-    notas.motivoCambio = updateNotasDto.motivoCambio;
 
     await notas.save();
 
@@ -183,7 +183,6 @@ export class NotasService {
     seccionId: string,
     tipoNota: string,
   ) {
-    console.log('Parámetros:', { estudianteId, cursoId, bimestreId, seccionId, tipoNota });
   
     const estudianteObjectId = new mongoose.Types.ObjectId(estudianteId);
     const cursoObjectId = new mongoose.Types.ObjectId(cursoId);
@@ -227,5 +226,49 @@ export class NotasService {
     }
   
     return notas;
+  }
+
+  async cambiarProcesado(nota_id: string) {
+    const nota = await this.notasModel.findById(nota_id)
+    if (!nota) {
+      throw new BadRequestException('Nota no encontrada');
+    }
+
+    nota.estado = EstadoSolicituNota.PROCESADO
+
+    return await nota.save();
+  }
+
+  async cambiarAprobado(nota_id: string) {
+    const nota = await this.notasModel.findById(nota_id)
+    if (!nota) {
+      throw new BadRequestException('Nota no encontrada');
+    }
+
+    nota.estado = EstadoSolicituNota.APROBADO
+
+    return await nota.save();
+  }
+
+  async cambiarRechazado(nota_id: string) {
+    const nota = await this.notasModel.findById(nota_id)
+    if (!nota) {
+      throw new BadRequestException('Nota no encontrada');
+    }
+
+    nota.estado = EstadoSolicituNota.RECHAZADO
+
+    return await nota.save();
+  }
+
+  async removerEstado(nota_id: string) {
+    const nota = await this.notasModel.findById(nota_id)
+    if (!nota) {
+      throw new BadRequestException('Nota no encontrada');
+    }
+
+    nota.estado = null
+
+    return await nota.save();
   }
 }

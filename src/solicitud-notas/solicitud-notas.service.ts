@@ -50,6 +50,19 @@ export class SolicitudNotasService {
           throw new BadRequestException('Bimestre no encontrado');
         }
 
+        const solicitudExistente = await this.solicitudNotasModel.findOne({
+            docente: docente._id,
+            estudiante: estudiante._id,
+            curso: curso._id,
+            seccion: seccion._id,
+            bimestre: bimestre._id,
+            tipoNota: createSolicitudNotasDto.tipoNota
+        });
+    
+        if (solicitudExistente) {
+            throw new BadRequestException('Ya existe una solicitud de notas con los mismos datos.');
+        }
+
         const solicitudNotas = new this.solicitudNotasModel({
             docente,
             descripcion: createSolicitudNotasDto.descripcion,
