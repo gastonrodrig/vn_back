@@ -148,4 +148,14 @@ export class SolicitudNotasService {
 
         return { message: 'La solicitud ha sido eliminada correctamente' };
     }
+
+    async eliminarSolicitud(solicitudn_id: string) {
+        const solicitudn = await this.solicitudNotasModel.findById(solicitudn_id);
+        if (!solicitudn) {
+            throw new BadRequestException('Solicitud no encontrada');
+        }
+    
+        await solicitudn.deleteOne();
+        return { message: 'La solicitud ha sido eliminada correctamente' };
+    }
 }

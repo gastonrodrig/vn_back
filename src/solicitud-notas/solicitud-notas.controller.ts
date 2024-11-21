@@ -38,4 +38,9 @@ export class SolicitudNotasController {
   reject(@Param('id') id: string) {
     return this.solicitudNotasService.rechazarSolicitud(id);
   }
+
+  @Delete(':id')
+  eliminar(@Param('id') id: string) {
+      return this.solicitudNotasService.eliminarSolicitud(id);
+  }
 }
