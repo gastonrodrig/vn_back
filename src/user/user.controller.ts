@@ -63,4 +63,9 @@ export class UserController {
       data: userData,
     };
   }
+
+  @Get('usuarios/count/habilitados')
+  async contarUsuariosHabilitados(): Promise<number> {
+    return await this.userService.contarUsuariosHabilitados();
+  }
 } 
