@@ -165,25 +165,25 @@ export class PensionService {
       .populate(['estudiante', 'periodo']);
   }
 
-  @Cron('* * * * *')
-  async verificarPensionesVencidas() {
-    const hoy = new Date();
-    const limaTimeZone = 'America/Lima';
+  // @Cron('* * * * *')
+  // async verificarPensionesVencidas() {
+  //   const hoy = new Date();
+  //   const limaTimeZone = 'America/Lima';
 
-    const offset = getTimezoneOffset(limaTimeZone, hoy);
+  //   const offset = getTimezoneOffset(limaTimeZone, hoy);
 
-    const limaTime = new Date(hoy.getTime() + offset);
+  //   const limaTime = new Date(hoy.getTime() + offset);
 
-    const pensionesVencidas = await this.pensionModel.find({
-      fecha_limite: { $lt: limaTime },
-      estado: { $ne: EstadoPension.PAGADO },
-    });
+  //   const pensionesVencidas = await this.pensionModel.find({
+  //     fecha_limite: { $lt: limaTime },
+  //     estado: { $ne: EstadoPension.PAGADO },
+  //   });
 
-    for (const pension of pensionesVencidas) {
-      pension.estado = EstadoPension.VENCIDO;
-      await pension.save();
-    }
-  }
+  //   for (const pension of pensionesVencidas) {
+  //     pension.estado = EstadoPension.VENCIDO;
+  //     await pension.save();
+  //   }
+  // }
 
   async getPensionReport() {
     const pensiones = await this.findAll();

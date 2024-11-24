@@ -41,10 +41,10 @@ export class PensionController {
   return this.pensionService.findPendienteByEstudiante(estudiante_id);
   }
 
-  @Get('verificar/vencidas')
-  verificarPensionesVencidas() {
-    return this.pensionService.verificarPensionesVencidas();
-  }
+  // @Get('verificar/vencidas')
+  // verificarPensionesVencidas() {
+  //   return this.pensionService.verificarPensionesVencidas();
+  // }
 
   @Get('reporte/pensiones')
   getPensionReport() {

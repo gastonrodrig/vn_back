@@ -2,7 +2,6 @@
 import { Controller, Post, Body, Param, Get } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import { CreatePagoDto } from '../pago/dto/create-pago.dto';
-import { ApiTags } from '@nestjs/swagger';
 
 @Controller('stripe')
 export class StripeController {
@@ -10,11 +9,18 @@ export class StripeController {
 
   @Post()
   processPayment(@Body() createPagoDto: CreatePagoDto) {
-    return this.stripeService.processPayment(createPagoDto);
+    return this.stripeService.processPaymentAngular(createPagoDto);
+  }
+
+  @Post('react-native')
+  async processPaymentReactNative(@Body() createPagoDto: CreatePagoDto) {
+    return this.stripeService.processPaymentForReactNative(createPagoDto);
   }
   
   @Get(':stripeOperationId')
   getPaymentDetails(@Param('stripeOperationId') stripeOperationId: string){
     return this.stripeService.getPaymentDetails(stripeOperationId)
   }
+
+
 }

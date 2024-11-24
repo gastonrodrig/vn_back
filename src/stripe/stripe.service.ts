@@ -19,7 +19,7 @@ export class StripeService {
     });
   }
 
-  async processPayment(createPagoDto: CreatePagoDto) {
+  async processPaymentAngular(createPagoDto: CreatePagoDto) {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: createPagoDto.monto * 30,
       currency: createPagoDto.divisa,
@@ -60,6 +60,22 @@ export class StripeService {
       };
     } catch (error) {
       throw new Error(`Error al recuperar los detalles del pago: ${error.message}`);
+    }
+  }
+
+  async processPaymentForReactNative(createPagoDto: CreatePagoDto) {
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount: createPagoDto.monto * 100,
+        currency: createPagoDto.divisa,
+        metadata: createPagoDto.metadata,
+      });
+
+      return {
+        client_secret: paymentIntent.client_secret,
+      };
+    } catch (error) {
+      throw new Error(`Error al crear el PaymentIntent: ${error.message}`);
     }
   }
 }
