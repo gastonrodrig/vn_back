@@ -121,4 +121,35 @@ export class SolicitudService {
 
     return solicitud;
   }
+
+  async getSolicitudesPorMes(year: number, month: number): Promise<number>{
+    if (month < 1 || month > 12) {
+      throw new BadRequestException('El mes debe estar entre 1 y 12');
+    }
+
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+
+
+    const result = await this.solicitudModel.aggregate([
+      {
+        $match: {
+          fecha_solicitud: {
+            $gte: startDate,
+            $lt: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSolicitudes: { $sum: 1 },
+        },
+      },
+    ]);
+
+
+    return result.length > 0 ? result[0].totalSolicitudes : 0;
+  }
 }
