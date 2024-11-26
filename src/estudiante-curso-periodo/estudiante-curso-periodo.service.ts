@@ -85,4 +85,17 @@ export class EstudianteCursoPeriodoService {
     return this.estudianteCursoPeriodoModel.find({ estudiante: estudiante._id, periodo: periodo._id})
       .populate(['estudiante', 'curso', 'periodo'])
   }
+
+  async listarPeriodosPorEstudiante(estudiante_id: string) {
+    const estudiante = await this.estudianteModel.findById(estudiante_id);
+    if (!estudiante) {
+      throw new BadRequestException('Estudiante no encontrado');
+    }
+ 
+    const registros = await this.estudianteCursoPeriodoModel
+      .find({ estudiante: estudiante._id }).select('periodo').populate('periodo', '_id anio'); 
+
+    const periodosUnicos = [...new Set(registros.map((registro) => registro.periodo._id.toString()))];
+    return periodosUnicos;
+  }
 }

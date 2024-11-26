@@ -28,6 +28,11 @@ export class EstudianteCursoPeriodoController {
     return this.estudianteCursoPeriodoService.remove(id);
   }
 
+  @Get('periodos/:estudianteId')
+  listarPeriodos(@Param('estudianteId') estudiante_id: string) {
+    return this.estudianteCursoPeriodoService.listarPeriodosPorEstudiante(estudiante_id);
+  }
+
   @Get(':estudianteId/:periodoId')
   listarCursosPorEstudiantePeriodo(
     @Param('estudianteId') estudiante_id: string,
