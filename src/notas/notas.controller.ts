@@ -28,28 +28,19 @@ export class NotasController {
   update(@Param('id') id: string, @Body() updateNotasDto: UpdateNotasDto){
     return this.notasService.update(id, updateNotasDto)
   }
-  
-  @Get('/:gradoId/:periodoId/:seccionId')
-  listarEstudiantesPorGradoPeriodoYSeccion(
-    @Param('gradoId') gradoId: string,
-    @Param('periodoId') periodoId: string, 
-    @Param('seccionId') seccionId: string
-  ) {
-    return this.notasService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
-  }
 
-  @Get(':estudianteId/:cursoId/:bimestreId/:tipoNota')
-  obtenerNota(
+  @Get(':estudianteId/:cursoId/:bimestreId/:periodoId')
+  listarNotas(
     @Param('estudianteId') estudianteId: string,
     @Param('cursoId') cursoId: string,
     @Param('bimestreId') bimestreId: string,
-    @Param('tipoNota') tipoNota: string,
+    @Param('periodoId') periodoId: string,
   ) {
-    return this.notasService.obtenerNota(
+    return this.notasService.listarNotasPorEstudianteCursoBimestreYPeriodo(
       estudianteId,
       cursoId,
       bimestreId,
-      tipoNota,
+      periodoId,
     );
   }
 
