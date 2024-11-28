@@ -32,4 +32,27 @@ export class PagoService {
         ]
       })
   }
+
+  async getGananciasPorMes() {
+    const pagos = await this.pagoModel.find();
+
+    const gananciasPorMes = pagos.reduce((acc, pago) => {
+      const mes = pago.paymentDate.substring(0, 7);
+
+      if (acc[mes]) {
+        acc[mes] += pago.monto;
+      } else {
+        acc[mes] = pago.monto;
+      }
+
+      return acc;
+    }, {});
+
+    const resultados = Object.keys(gananciasPorMes).map(mes => ({
+      _id: mes,
+      totalGanancias: gananciasPorMes[mes],
+    }));
+
+    return resultados.sort((a, b) => (a._id > b._id ? 1 : -1));
+  }
 }

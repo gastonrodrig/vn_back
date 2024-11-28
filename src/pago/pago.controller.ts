@@ -17,4 +17,10 @@ export class PagoController {
   findAll() {
     return this.pagoService.findAll()
   }
+
+  @Get('ganancias-mensuales')
+  async getGananciasMensuales() {
+    const ganancias = await this.pagoService.getGananciasPorMes();
+    return ganancias;
+  }
 }
