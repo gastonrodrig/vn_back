@@ -41,10 +41,10 @@ export class PensionController {
   return this.pensionService.findPendienteByEstudiante(estudiante_id);
   }
 
-  @Get('verificar/vencidas')
-  verificarPensionesVencidas() {
-    return this.pensionService.verificarPensionesVencidas();
-  }
+  // @Get('verificar/vencidas')
+  // verificarPensionesVencidas() {
+  //   return this.pensionService.verificarPensionesVencidas();
+  // }
 
   @Get('reporte/pensiones')
   getPensionReport() {
@@ -67,7 +67,8 @@ export class PensionController {
       }
     });
   }
-  @Get('pensiones/:periodo_id/:estudiante_id')
+
+  @Get(':periodo_id/:estudiante_id')
   async findByPeriodoYEstudiante(
     @Param('periodo_id') periodo_id: string,
     @Param('estudiante_id') estudiante_id: string,
