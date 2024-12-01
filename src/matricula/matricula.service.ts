@@ -102,11 +102,10 @@ export class MatriculaService {
       },
       paymentDate: matricula.fecha.toISOString(),
     });
-  
+
     return matricula;
   }
   
-
   async findAll() {
     return await this.matriculaModel.find()
       .populate(['periodo', 'estudiante'])
@@ -142,11 +141,11 @@ export class MatriculaService {
     matricula.estudiante = estudianteId;
   
     await matricula.save();
-  
+    
     return this.matriculaModel.findById(matricula._id)
       .populate(['estudiante', 'periodo']);
   }
-
+  
   async listerMatriculasPorEstudiante(estudiante_id: string){
     const estudianteId = new Types.ObjectId(estudiante_id);
     const estudiante = await this.estudianteModel.findById(estudianteId)
