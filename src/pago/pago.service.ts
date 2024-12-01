@@ -13,23 +13,11 @@ export class PagoService {
 
     await createdPago.save()
 
-    return await createdPago.populate({
-      path: 'metadata',
-      populate: [
-        { path: 'tipoDocumento', model: 'Documento' },
-        { path: 'estudiante', model: 'Estudiante' }
-      ]
-    })
+    return createdPago
   }
 
   async findAll() {
     return this.pagoModel.find()
-      .populate({
-        path: 'metadata',
-        populate: [
-          { path: 'tipoDocumento', model: 'Documento' },
-          { path: 'estudiante', model: 'Estudiante' }
-        ]
-      })
+      
   }
 }

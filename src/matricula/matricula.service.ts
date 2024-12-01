@@ -83,25 +83,25 @@ export class MatriculaService {
     const documento = await this.documentoModel.findById(estudiante.documento);
     const tipoDocumento = documento ? documento.type : 'Dni';
 
-    await this.pagoModel.create({
-      monto: matricula.monto,
-      divisa: 'PEN',
-      paymentMethodId: matricula.metodo_pago,
-      nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`,
-      transactionDetails: `Pago de matrícula del estudiante con ID ${estudiante._id}`,
-      status: PagoStatus.APROBADO,
-      stripeOperationId: matricula.n_operacion,
-      metadata: {
-        tipoDocumento: {
-          _id: documento ? documento._id : null,
-          type: tipoDocumento,
-          __v: documento ? documento.__v : null,
-        },
-        nroDocumento: estudiante.numero_documento,
-        estudiante_id: estudiante._id.toString(),
-      },
-      paymentDate: matricula.fecha.toISOString(),
-    });
+    // await this.pagoModel.create({
+    //   monto: matricula.monto,
+    //   divisa: 'PEN',
+    //   paymentMethodId: matricula.metodo_pago,
+    //   nombre_completo: `${estudiante.nombre} ${estudiante.apellido}`,
+    //   transactionDetails: `Pago de matrícula del estudiante con ID ${estudiante._id}`,
+    //   status: PagoStatus.APROBADO,
+    //   stripeOperationId: matricula.n_operacion,
+    //   metadata: {
+    //     tipoDocumento: {
+    //       _id: documento ? documento._id : null,
+    //       type: tipoDocumento,
+    //       __v: documento ? documento.__v : null,
+    //     },
+    //     nroDocumento: estudiante.numero_documento,
+    //     estudiante_id: estudiante._id.toString(),
+    //   },
+    //   paymentDate: matricula.fecha.toISOString(),
+    // });
   
     return matricula;
   }

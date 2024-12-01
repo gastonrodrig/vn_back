@@ -42,10 +42,9 @@ export class CreatePagoDto {
   @IsObject()
   @IsOptional()
   metadata?: {
-    tipoDocumento: string;
-    nroDocumento: string;
-    estudiante: string;
-  };
+     nroDocumento: string;
+   
+    };
 
   @ApiProperty()
   @IsOptional()

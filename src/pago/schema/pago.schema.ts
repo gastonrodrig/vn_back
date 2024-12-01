@@ -27,9 +27,8 @@ export class Pago extends Document {
 
   @Prop({ type: Object })
   metadata: {
-    tipoDocumento: string;
+    
     nroDocumento: string;
-    estudiante: { type: Types.ObjectId, ref: 'Estudiante' },
   };
 
   @Prop()

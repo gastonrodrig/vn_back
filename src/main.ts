@@ -24,7 +24,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: ['http://localhost:8081', 'http://localhost:4200', 'https://vn-front-web.vercel.app'],
+    origin: ['http://localhost:8081', 'http://localhost:4200', 'https://vn-front-web.vercel.app','https://effective-disco-jjqvq5x447wc7gv.github.dev'],
     credentials: true
   });
 

@@ -189,9 +189,7 @@ export class UserService {
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
     }
-
     user.estado = EstadoUsuario.HABILITADO;
-
     return await user.save();
   }
 
@@ -200,9 +198,7 @@ export class UserService {
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
     }
-
     user.estado = EstadoUsuario.DESHABILITADO;
-
     return await user.save();
   }
 
