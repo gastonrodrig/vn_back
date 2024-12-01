@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { TipoNota } from '../enums/tipo-nota.enum';
 
 @Schema({ collection: 'Notas' })
 export class Notas {
@@ -21,8 +22,20 @@ export class Notas {
   @Prop({ type: Types.ObjectId, ref: 'Curso' })
   curso: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'Bimestre'})
+  bimestre: Types.ObjectId;
+
   @Prop()
   nota: number;
+
+  @Prop()
+  notaLetra: string;
+
+  @Prop(({enum: TipoNota}))
+  tipoNota: string;
+
+  @Prop()
+  estado: string;
 }
 
 export const NotasSchema = SchemaFactory.createForClass(Notas)

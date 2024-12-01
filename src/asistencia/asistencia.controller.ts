@@ -14,6 +14,14 @@ export class AsistenciaController {
     return this.asistenciaService.create(createAsistenciaDto);
   }
 
+  @Get('meses-unicos')
+  async obtenerMesesUnicos(
+    @Query('estudianteId') estudianteId: string,
+    @Query('periodoId') periodoId: string,
+  ) {
+    return await this.asistenciaService.obtenerMesesUnicos(estudianteId, periodoId);
+  }
+
   @Get()
   findAll(){
     return this.asistenciaService.findAll();
@@ -28,11 +36,6 @@ export class AsistenciaController {
   remove(@Param('id') id: string){
     return this.asistenciaService.remove(id)
   }
-  
-  // @Get('/:gradoId/:periodoId/:seccionId') 
-  // listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
-  //   return this.asistenciaService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
-  // }
 
   @Get('/seccion/:seccionId')
   async listarAsistenciasPorFechaYSeccion(
@@ -56,10 +59,19 @@ export class AsistenciaController {
   }
 
   @Delete('eliminar/:fecha/:seccionId')
-  async removeAsistenciasByFechaYSeccion(
-    @Query('fecha') fecha: string,
-    @Query('seccionId') seccionId: string,
+  removeAsistenciasByFechaYSeccion(
+    @Param('fecha') fecha: string,
+    @Param('seccionId') seccionId: string,
   ) {
     return this.asistenciaService.removeAsistenciasByFechaYSeccion(fecha, seccionId);
+  }
+
+  @Get('/periodo/:periodoId/:mes/estudiante/:estudianteId')
+  listarAsistencias(
+    @Param('periodoId') periodoId: string,
+    @Param('mes') mes: string,
+    @Param('estudianteId') estudianteId: string,
+  ) {
+    return this.asistenciaService.listarAsistenciasPorPeriodoMesYEstudiante(periodoId, mes, estudianteId);
   }
 }

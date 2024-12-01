@@ -43,4 +43,13 @@ export class SolicitudController {
   getSolicitudByNumeroDocumento(@Param('dni_hijo') dni_hijo: string){
     return this.solicitudService.findByNumeroDocumentoSolicitud(dni_hijo);
   }
+  @Get('solicitudes/por-mes')
+  getSolicitudesPorMes() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
+
+    return this.solicitudService.getSolicitudesPorMes(currentYear, currentMonth);
+  }
 }

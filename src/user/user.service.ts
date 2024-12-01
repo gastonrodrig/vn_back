@@ -243,4 +243,8 @@ export class UserService {
   generateRandomString(length: number) {
     return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length)
   }
+
+  async contarUsuariosHabilitados(): Promise<number> {
+  return await this.userModel.countDocuments({ estado: EstadoUsuario.HABILITADO });
+}
 }

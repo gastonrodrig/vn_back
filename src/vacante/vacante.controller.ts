@@ -43,4 +43,9 @@ export class VacanteController {
   async cancelarVacante(@Param('id') vacante_id: string) {
     return await this.vacanteService.cancelarVacante(vacante_id);
   }
+
+  @Get('dashboard/conteo-actual')
+  async contarVacantes(): Promise<number> {
+    return await this.vacanteService.contarVacantesPorAñoActual();
+  }
 }

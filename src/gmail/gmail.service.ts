@@ -97,11 +97,11 @@ export class GmailService {
             <p>Correo: virgen-natividad@gmail.com</p>
         </section>
         <section class="tituloCliente">
-            <h2>Detalle Cliente:</h2>
+            <h2>Detalles del Cliente:</h2>
         </section>
         <section class="detalleCliente">
             <p>Nombre del cliente: ${pago.nombre_completo}</p>
-            <p>DNI del cliente: ${pago.metadata?.nroDocumento}</p>
+            <p>DNI/RUC: ${pago.metadata?.nroDocumento}</p>
         </section>
         <section class="tituloPedido">
             <h2>Detalle del Servicio</h2>

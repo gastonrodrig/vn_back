@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateNotasDto } from './create-notas.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class UpdateNotasDto extends PartialType(CreateNotasDto) {}
+export class UpdateNotasDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  nota: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  notaLetra: string;
+}

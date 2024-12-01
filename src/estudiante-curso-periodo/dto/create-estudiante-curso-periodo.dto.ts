@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { IsMongoId, IsNotEmpty } from "class-validator";
 
-export class CreateEstudianteCursoDto {
+export class CreateEstudianteCursoPeriodoDto {
   @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
@@ -11,4 +11,9 @@ export class CreateEstudianteCursoDto {
   @IsMongoId()
   @IsNotEmpty()
   curso_id: string;
+
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  periodo_id: string;
 }

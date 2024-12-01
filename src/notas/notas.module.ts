@@ -9,6 +9,7 @@ import { Grado, GradoSchema } from 'src/grado/schema/grado.schema';
 import { PeriodoEscolar, PeriodoEscolarSchema } from 'src/periodo-escolar/schema/periodo-escolar.schema';
 import { Curso, CursoSchema } from 'src/curso/schema/curso.schema';
 import { Docente, DocenteSchema } from 'src/docente/schema/docente.schema';
+import { Bimestre, BimestreSchema } from 'src/bimestre/schema/bimestre.schema';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Docente, DocenteSchema } from 'src/docente/schema/docente.schema';
       {name: Grado.name, schema: GradoSchema},
       {name: PeriodoEscolar.name, schema: PeriodoEscolarSchema},
       {name: Curso.name, schema: CursoSchema},
+      {name: Bimestre.name, schema: BimestreSchema}
     ])
   ],
   controllers: [NotasController],

@@ -73,14 +73,13 @@ export class ResumenAsistenciaService {
         }
 
         const semanaId = new Types.ObjectId(updateResumenAsistenciaDto.semana_id)
-        const seccionId = new Types.ObjectId(updateResumenAsistenciaDto.seccion_id)
-
-        const semana = await this.resumenAsistenciaModel.findById(semanaId)
+        const semana = await this.semanasModel.findById(semanaId)
         if(!semana){
             throw new BadRequestException('Semana no encontrada')
         }
 
-        const seccion = await this.resumenAsistenciaModel.findById(seccionId)
+        const seccionId = new Types.ObjectId(updateResumenAsistenciaDto.seccion_id)
+        const seccion = await this.seccionModel.findById(seccionId)
         if(!seccion){
             throw new BadRequestException('Seccion no encontrada')
         }

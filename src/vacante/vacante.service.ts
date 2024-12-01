@@ -165,4 +165,17 @@ export class VacanteService {
       .populate(['estudiante', 'grado', 'periodo']);
   }
 
+  async contarVacantesPorAñoActual(): Promise<number> {
+    const añoActual = new Date().getFullYear().toString();
+
+    const periodo = await this.periodoModel.findOne({ anio: añoActual });
+
+    if (!periodo) {
+      throw new BadRequestException(`No se encontró un periodo para el año ${añoActual}`);
+    }
+
+    const vacantes = await this.vacanteModel.countDocuments({ periodo: periodo._id });
+
+    return vacantes;
+  }
 }

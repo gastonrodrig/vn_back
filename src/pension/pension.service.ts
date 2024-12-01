@@ -290,4 +290,22 @@ export class PensionService {
 
     return filePath;
   }
+
+  async findByPeriodoYEstudiante(periodo_id: string, estudiante_id: string) {
+    const periodo = new Types.ObjectId(periodo_id);
+    const estudiante = new Types.ObjectId(estudiante_id);
+  
+    const pensiones = await this.pensionModel
+      .find({
+        periodo,
+        estudiante,
+      })
+      .populate(['estudiante', 'periodo']);
+  
+    if (!pensiones || pensiones.length === 0) {
+      throw new BadRequestException('No se encontraron pensiones para el periodo y estudiante especificados');
+    }
+  
+    return pensiones;
+  }
 }

@@ -61,11 +61,18 @@ export class PensionController {
   async generatePensionExcelReport(@Res() response: Response) {
     const filePath = await this.pensionService.generatePensionReportExcel();
 
-  // Puedes enviar el archivo como respuesta o simplemente devolver la ruta
     response.download(filePath, (err) => {
       if (err) {
         response.status(500).send('Error al descargar el archivo');
       }
     });
+  }
+
+  @Get(':periodo_id/:estudiante_id')
+  async findByPeriodoYEstudiante(
+    @Param('periodo_id') periodo_id: string,
+    @Param('estudiante_id') estudiante_id: string,
+  ) {
+    return this.pensionService.findByPeriodoYEstudiante(periodo_id, estudiante_id);
   }
 }

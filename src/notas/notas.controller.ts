@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NotasService } from './notas.service';
 import { CreateNotasDto } from './dto/create-notas.dto';
@@ -24,13 +24,60 @@ export class NotasController {
     return this.notasService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateNotasDto: UpdateNotasDto){
     return this.notasService.update(id, updateNotasDto)
   }
-  
-  @Get('/:gradoId/:periodoId/:seccionId')
-  listarEstudiantesPorGradoPeriodoYSeccion(@Param('gradoId') gradoId: string,@Param('periodoId') periodoId: string, @Param('seccionId') seccionId: string){
-    return this.notasService.listarEstudiantesPorGradoPeriodoYSeccion(gradoId, periodoId, seccionId)
+
+  @Get(':estudianteId/:cursoId/:bimestreId/:periodoId')
+  listarNotas(
+    @Param('estudianteId') estudianteId: string,
+    @Param('cursoId') cursoId: string,
+    @Param('bimestreId') bimestreId: string,
+    @Param('periodoId') periodoId: string,
+  ) {
+    return this.notasService.listarNotasPorEstudianteCursoBimestreYPeriodo(
+      estudianteId,
+      cursoId,
+      bimestreId,
+      periodoId,
+    );
+  }
+
+  @Get('/:estudianteId/:cursoId/:bimestreId/:seccionId/:tipoNota')
+  filtrarNotasPorParametros(
+    @Param('estudianteId') estudianteId: string,
+    @Param('cursoId') cursoId: string,
+    @Param('bimestreId') bimestreId: string,
+    @Param('seccionId') seccionId: string,
+    @Param('tipoNota') tipoNota: string,
+  ) {
+    return this.notasService.listarNotasPorParametros(
+      estudianteId,
+      cursoId,
+      bimestreId,
+      seccionId,
+      tipoNota,
+    );
+  }
+
+  @Patch('processed/:id')
+  procesarSolicitud(@Param('id') id: string) {
+    return this.notasService.cambiarProcesado(id)
+  }
+
+  @Patch('approve/:id')
+  aprobarEstado(@Param('id') id: string) {
+    return this.notasService.cambiarAprobado(id)
+  }
+
+  @Patch('cancel/:id')
+  cancelarEstado(@Param('id') id: string){
+    return this.notasService.cambiarRechazado(id)
+  }
+
+  @Patch('remove/:id')
+  removerEstado(@Param('id') id: string){
+    return this.notasService.removerEstado(id)
   }
 }

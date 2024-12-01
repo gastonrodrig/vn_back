@@ -15,7 +15,6 @@ import { CursoModule } from './curso/curso.module';
 import { GradoCursoHorasModule } from './grado-curso-horas/grado-curso-horas.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
 import { ApoderadoModule } from './apoderado/apoderado.module';
-import { EstudianteCursoModule } from './estudiante-curso/estudiante-curso.module';
 import { CursoDocenteModule } from './curso-docente/curso-docente.module';
 import { HorarioModule } from './horario/horario.module';
 import { GmailModule } from './gmail/gmail.module';
@@ -35,6 +34,10 @@ import { NotasModule } from './notas/notas.module';
 import { SeccionCursoModule } from './seccion-curso/seccion-curso.module';
 import { SeccionCursoDocenteModule } from './seccion-curso-docente/seccion-curso-docente.module';
 import { ResumenAsistenciaModule } from './resumen-asistencia/resumen-asistencia.module';
+import { BimestreModule } from './bimestre/bimestre.module';
+import { SolicitudNotasService } from './solicitud-notas/solicitud-notas.service';
+import { SolicitudNotasModule } from './solicitud-notas/solicitud-notas.module';
+import { EstudianteCursoPeriodoModule } from './estudiante-curso-periodo/estudiante-curso-periodo.module';
 
 @Module({
   imports: [
@@ -58,7 +61,6 @@ import { ResumenAsistenciaModule } from './resumen-asistencia/resumen-asistencia
     GradoCursoHorasModule,
     EstudianteModule,
     ApoderadoModule,
-    EstudianteCursoModule,
     CursoDocenteModule,
     HorarioModule,
     GmailModule,
@@ -77,7 +79,10 @@ import { ResumenAsistenciaModule } from './resumen-asistencia/resumen-asistencia
     TareasModule,
     NotasModule,
     SeccionCursoDocenteModule,
-    ResumenAsistenciaModule
+    ResumenAsistenciaModule,
+    BimestreModule,
+    SolicitudNotasModule,
+    EstudianteCursoPeriodoModule
   ],
   controllers: [AppController],
   providers: [AppService],
