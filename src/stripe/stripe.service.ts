@@ -71,8 +71,12 @@ export class StripeService {
         payment_method: createPagoDto.paymentMethodId,
         confirm: true,
         metadata: createPagoDto.metadata,
+        automatic_payment_methods: {
+          enabled: true,
+          allow_redirects: 'never', // Evita las redirecciones
+        },
       });
-  
+    
       const paymentDate = new Date(paymentIntent.created * 1000).toISOString();
   
       const createdPago = await this.pagoService.create({
@@ -93,6 +97,7 @@ export class StripeService {
         stripeOperationId: paymentIntent.id,
       };
     } catch (error) {
+      console.error('Error al procesar el pago:', error);  // Captura el error
       throw new Error(`Error al procesar el pago: ${error.message}`);
     }
   }
