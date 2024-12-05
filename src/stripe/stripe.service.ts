@@ -68,14 +68,32 @@ export class StripeService {
       const paymentIntent = await this.stripe.paymentIntents.create({
         amount: createPagoDto.monto * 100,
         currency: createPagoDto.divisa,
+        payment_method: createPagoDto.paymentMethodId,
+        confirm: true,
         metadata: createPagoDto.metadata,
       });
-
+  
+      const paymentDate = new Date(paymentIntent.created * 1000).toISOString();
+  
+      const createdPago = await this.pagoService.create({
+        monto: createPagoDto.monto,
+        divisa: createPagoDto.divisa,
+        paymentMethodId: createPagoDto.paymentMethodId,
+        nombre_completo: createPagoDto.nombre_completo,
+        transactionDetails: paymentIntent.status,
+        stripeOperationId: paymentIntent.id,
+        status: paymentIntent.status === 'succeeded' ? PagoStatus.APROBADO : PagoStatus.RECHAZADO,
+        metadata: createPagoDto.metadata,
+        paymentDate,
+      });
+  
       return {
-        client_secret: paymentIntent.client_secret,
+        paymentIntent,
+        createdPago,
+        stripeOperationId: paymentIntent.id,
       };
     } catch (error) {
-      throw new Error(`Error al crear el PaymentIntent: ${error.message}`);
+      throw new Error(`Error al procesar el pago: ${error.message}`);
     }
   }
 }
