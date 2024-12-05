@@ -17,7 +17,16 @@ export class PagoService {
   }
 
   async findAll() {
-    return this.pagoModel.find()
+    const pagos = await this.pagoModel.find();
+  
+    return pagos.map((pago) => ({
+      ...pago.toObject(),
+      tipoServicio: pago.metadata && pago.metadata.tipoServicio 
+        ? pago.metadata.tipoServicio
+        : (pago.transactionDetails && pago.transactionDetails.includes('pensión') 
+            ? 'Pensión' 
+            : 'Matrícula'),
+    }));
   }
 
   async getGananciasPorMes() {
