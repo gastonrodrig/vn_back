@@ -27,7 +27,6 @@ export class Pago extends Document {
 
   @Prop({ type: Object })
   metadata: {
-    
     nroDocumento: string;
   };
 

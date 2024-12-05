@@ -18,8 +18,7 @@ export class PagoService {
 
   async findAll() {
     return this.pagoModel.find()
-      
-  }
+  }
 
   async getGananciasPorMes() {
     const pagos = await this.pagoModel.find();

@@ -7,13 +7,13 @@ import { CreatePagoDto } from '../pago/dto/create-pago.dto';
 export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
-  @Post()
-  processPayment(@Body() createPagoDto: CreatePagoDto) {
+  @Post('angular')
+  processPaymentAngular(@Body() createPagoDto: CreatePagoDto) {
     return this.stripeService.processPaymentAngular(createPagoDto);
   }
 
   @Post('react-native')
-  async processPaymentReactNative(@Body() createPagoDto: CreatePagoDto) {
+  processPaymentReactNative(@Body() createPagoDto: CreatePagoDto) {
     return this.stripeService.processPaymentForReactNative(createPagoDto);
   }
   
@@ -21,6 +21,5 @@ export class StripeController {
   getPaymentDetails(@Param('stripeOperationId') stripeOperationId: string){
     return this.stripeService.getPaymentDetails(stripeOperationId)
   }
-
 
 }
