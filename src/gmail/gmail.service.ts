@@ -78,10 +78,13 @@ export class GmailService {
   }
 
   private async generatePdf(pago: Pago, paymentIntent: any, paymentDate: string): Promise<Buffer> {
-    // Cálculo del monto base e IGV
-    const montoTotal = paymentIntent.amount / 100; // Monto total en la moneda principal
-    const montoBase = (montoTotal / 1.18).toFixed(2); // Monto base excluyendo el IGV
-    const igv = (montoTotal - parseFloat(montoBase)).toFixed(2); // IGV (18%)
+    const montoTotal = paymentIntent.amount / 100;
+    const montoBase = (montoTotal / 1.18).toFixed(2);
+    const igv = (montoTotal - parseFloat(montoBase)).toFixed(2);
+    
+    const tipoDocumento = pago.metadata?.tipoDocumento;
+    const esFactura = tipoDocumento === 'Ruc';
+    const titulo = esFactura ? 'Factura Nº001-24' : 'Boleta Nº001-24';
   
     const htmlContent = `
       <!DOCTYPE html>
@@ -89,59 +92,60 @@ export class GmailService {
       <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Boleta de Pago</title>
+          <title>${titulo}</title>
       </head>
       <body>
           <header>
-              <h2>Boleta Nº001-24</h2>
+              <h2 style="text-align:center; font-size: 18px; font-weight: bold; margin: 20px 0;">${titulo}</h2>
           </header>
-          <section>
+          <section style="text-align:center; font-size: 14px;">
               <p><strong>Colegio Virgen de la Natividad</strong></p>
               <p>Av. Test 354, Urbanización Chorrillos</p>
               <p>Teléfono: (01)555-555</p>
               <p>Correo: virgen-natividad@gmail.com</p>
           </section>
-          <section>
-              <h3>Detalles del Cliente:</h3>
+          <section style="font-size: 14px; margin-top: 20px;">
+              <h3 style="font-size: 16px; font-weight: bold;">Detalles del Cliente:</h3>
               <p>Nombre del cliente: ${pago.nombre_completo}</p>
-              <p>DNI/RUC: ${pago.metadata?.nroDocumento || 'No registrado'}</p>
+              <p>${esFactura ? 'RUC' : 'DNI'}: ${pago.metadata?.nroDocumento || 'No registrado'}</p>
+              <p>Dirección: ${pago.metadata?.direccion || 'No registrada'}</p>
           </section>
-          <section>
-              <h3>Detalle del Servicio</h3>
-              <table>
-                  <thead>
+          <section style="font-size: 14px; margin-top: 20px;">
+              <h3 style="font-size: 16px; font-weight: bold;">Detalle del Servicio:</h3>
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                  <thead style="background-color: #657cae; color: white; text-align: left;">
                       <tr>
-                          <th>Descripción</th>
-                          <th>Cantidad</th>
-                          <th>Precio Unitario</th>
-                          <th>Subtotal</th>
+                          <th style="padding: 8px;">Descripción</th>
+                          <th style="padding: 8px;">Cantidad</th>
+                          <th style="padding: 8px;">Precio Unitario</th>
+                          <th style="padding: 8px;">Subtotal</th>
                       </tr>
                   </thead>
-                  <tbody>
+                  <tbody style="background-color: #f9f9f9;">
                       <tr>
-                          <td>MATRÍCULA ALUMNO</td>
-                          <td>1</td>
-                          <td>S/. ${montoBase}</td>
-                          <td>S/. ${montoBase}</td>
+                          <td style="padding: 8px;">MATRÍCULA ALUMNO</td>
+                          <td style="padding: 8px;">1</td>
+                          <td style="padding: 8px; text-align: right;">S/. ${montoBase}</td>
+                          <td style="padding: 8px; text-align: right;">S/. ${montoBase}</td>
                       </tr>
                       <tr>
-                          <td colspan="3">IGV (18%)</td>
-                          <td>S/. ${igv}</td>
+                          <td colspan="3" style="padding: 8px;">IGV (18%)</td>
+                          <td style="padding: 8px; text-align: right;">S/. ${igv}</td>
                       </tr>
                       <tr>
-                          <td colspan="3">Total</td>
-                          <td>S/. ${montoTotal}</td>
+                          <td colspan="3" style="padding: 8px; font-weight: bold;">Total</td>
+                          <td style="padding: 8px; font-weight: bold; text-align: right;">S/. ${montoTotal}</td>
                       </tr>
                   </tbody>
               </table>
           </section>
-          <section>
-              <h4>Información del Pago:</h4>
+          <section style="font-size: 14px; margin-top: 20px;">
+              <h4 style="font-size: 16px; font-weight: bold;">Información del Pago:</h4>
               <p>Monto Total Pagado: S/. ${montoTotal.toFixed(2)}</p>
               <p>Estado del Pago: ${paymentIntent.status}</p>
               <p>Fecha de Operación: ${paymentDate}</p>
           </section>
-          <footer class="footer">
+          <footer style="text-align: center; font-size: 12px; margin-top: 30px; color: #666;">
               <p>Gracias por su pago. Si tiene alguna consulta, no dude en contactarnos.</p>
               <p>Dirección: Av. Test 354, Urbanización Chorrillos</p>
               <p>Teléfono: (01)555-555</p>
@@ -150,7 +154,7 @@ export class GmailService {
       </body>
       </html>
     `;
-  
+    
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
   
@@ -256,5 +260,5 @@ export class GmailService {
   
     await browser.close();
     return Buffer.from(pdfBuffer);
-  }
+  }  
 }

@@ -42,6 +42,8 @@ export class CreatePagoDto {
   @IsObject()
   @IsOptional()
   metadata?: {
+    direccion: string;
+    tipoDocumento: string;
     nroDocumento: string;
   };
 
