@@ -29,6 +29,7 @@ export class Pago extends Document {
   metadata: {
     direccion: string;
     tipoDocumento: string;
+    tipoPago: string;
     nroDocumento: string;
   };
 

@@ -44,6 +44,7 @@ export class CreatePagoDto {
   metadata?: {
     direccion: string;
     tipoDocumento: string;
+    tipoPago: string;
     nroDocumento: string;
   };
 
