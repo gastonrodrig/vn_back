@@ -68,11 +68,8 @@ export class PensionController {
     });
   }
 
-  @Get(':periodo_id/:estudiante_id')
-  async findByPeriodoYEstudiante(
-    @Param('periodo_id') periodo_id: string,
-    @Param('estudiante_id') estudiante_id: string,
-  ) {
-    return this.pensionService.findByPeriodoYEstudiante(periodo_id, estudiante_id);
+  @Patch('pagar/:id')
+  pagarPension(@Param('id') pension_id: string) {
+    return this.pensionService.updatePensionPay(pension_id);
   }
 }

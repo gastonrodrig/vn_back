@@ -16,6 +16,7 @@ import { Documento } from 'src/documento/schema/documento.schema';
 import * as XLSX from 'xlsx';
 import * as fs from 'fs'; // Importa el módulo fs
 import * as path from 'path'; // Importa el módulo path
+import { MetodoPago } from './enums/metodo-pago.enum';
 
 @Injectable()
 export class PensionService {
@@ -307,5 +308,19 @@ export class PensionService {
     }
   
     return pensiones;
+  }
+
+  async updatePensionPay(pension_id: string) {
+    const pension = await this.pensionModel.findById(pension_id).populate(['estudiante', 'periodo']);
+    if (!pension) throw new BadRequestException('Pensión no encontrada');
+  
+    pension.estado = EstadoPension.PAGADO;
+    pension.metodo_pago = MetodoPago.TARJETA;
+    pension.n_operacion = (Math.random() * 1e8 | 0).toString().padStart(8, '0');
+    pension.tiempo_pago = new Date().toISOString();
+  
+    await pension.save();
+  
+    return pension.populate(['estudiante', 'periodo']);
   }
 }
