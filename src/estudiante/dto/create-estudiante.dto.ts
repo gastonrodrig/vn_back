@@ -1,12 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateEstudianteDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   nombre: string;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

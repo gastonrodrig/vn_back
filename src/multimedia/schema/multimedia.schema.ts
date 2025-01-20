@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
 
 @Schema({ collection: 'Multimedia' })
 export class Multimedia {
   _id: any;
-  
+
   @Prop()
   nombre: string;
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsEnum, IsMongoId, isNotEmpty, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { TipoRegistro } from "../enums/tipo-registro.enum";
 import { MetodoPago } from "../enums/metodo-pago.enum";
 import { tipoMatricula } from "../enums/tipo-matricula.enums";
@@ -32,7 +32,6 @@ export class CreateMatriculaDto {
   estudiante_id: string;
 
   @ApiProperty()
-  @IsEnum(TipoRegistro)
   @IsNotEmpty()
   tipo: TipoRegistro;
 

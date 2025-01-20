@@ -16,7 +16,7 @@ export class GmailService {
   constructor(
     @InjectModel(Pago.name)
     private readonly pagoModel: Model<Pago>,
-    private readonly stripeService: StripeService
+    private readonly stripeService: StripeService,
   ) {
     this.oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
@@ -51,13 +51,14 @@ export class GmailService {
   }
 
   async sendEmailWithPdf(stripeOperationId: string, dto: CreateGmailPdfDto) {
-    const { to, subject, dni } = dto;
-
     const pago = await this.pagoModel.findOne({ stripeOperationId }).exec();
     if (!pago) {
-      throw new BadRequestException('No se encontró el pago con el stripeOperationId proporcionado.');
+      throw new BadRequestException(
+        'No se encontró el pago con el stripeOperationId proporcionado.',
+      );
     }
-    const { paymentIntent, paymentDate } = await this.stripeService.getPaymentDetails(stripeOperationId);
+    const { paymentIntent, paymentDate } =
+      await this.stripeService.getPaymentDetails(stripeOperationId);
 
     const pdfBuffer = await this.generatePdf(pago, paymentIntent, paymentDate);
 
@@ -77,15 +78,19 @@ export class GmailService {
     await this.transporter.sendMail(mailOptions);
   }
 
-  private async generatePdf(pago: Pago, paymentIntent: any, paymentDate: string): Promise<Buffer> {
+  private async generatePdf(
+    pago: Pago,
+    paymentIntent: any,
+    paymentDate: string,
+  ): Promise<Buffer> {
     const montoTotal = paymentIntent.amount / 100;
     const montoBase = (montoTotal / 1.18).toFixed(2);
     const igv = (montoTotal - parseFloat(montoBase)).toFixed(2);
-    
+
     const tipoDocumento = pago.metadata?.tipoDocumento;
     const esFactura = tipoDocumento === 'Ruc';
     const titulo = esFactura ? 'Factura Nº001-24' : 'Boleta Nº001-24';
-  
+
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="es">
@@ -154,12 +159,12 @@ export class GmailService {
       </body>
       </html>
     `;
-    
+
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-  
+
     await page.setContent(htmlContent);
-  
+
     await page.addStyleTag({
       content: `
         body {
@@ -247,18 +252,18 @@ export class GmailService {
         .footer p {
           margin: 5px 0;
         }
-      `
+      `,
     });
-  
+
     await page.emulateMediaType('screen');
-  
+
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: '20mm', bottom: '20mm', left: '10mm', right: '10mm' },
     });
-  
+
     await browser.close();
     return Buffer.from(pdfBuffer);
-  }  
+  }
 }

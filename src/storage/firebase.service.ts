@@ -13,14 +13,17 @@ export class FirebaseService {
           privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
           clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         }),
-        storageBucket: "virgennatividad-a5c2b.appspot.com",
+        storageBucket: 'virgennatividad-a5c2b.appspot.com',
       });
       FirebaseService.initialized = true;
     }
   }
 
-  async uploadPfpToFirebase(location: string, file: Express.Multer.File): Promise<string> {
-    let uploadedUrl: string = "";
+  async uploadPfpToFirebase(
+    location: string,
+    file: Express.Multer.File,
+  ): Promise<string> {
+    let uploadedUrl: string = '';
 
     const { originalname, buffer } = file;
     const storage = admin.storage();
@@ -36,7 +39,10 @@ export class FirebaseService {
     return uploadedUrl;
   }
 
-  async uploadDocumentsToFirebase(location: string, files: Express.Multer.File[] = []): Promise<object[]> {
+  async uploadDocumentsToFirebase(
+    location: string,
+    files: Express.Multer.File[] = [],
+  ): Promise<object[]> {
     if (!Array.isArray(files)) {
       throw new Error('Files should be an array');
     }
@@ -49,15 +55,17 @@ export class FirebaseService {
       const bucket = storage.bucket();
 
       const uniqueFilename = `${Date.now()}-${originalname}`;
-      const fileBlob = bucket.file(`${location}/documentosEstudiante/${uniqueFilename}`);
+      const fileBlob = bucket.file(
+        `${location}/documentosEstudiante/${uniqueFilename}`,
+      );
 
       await fileBlob.save(buffer, { contentType: mimetype });
       await fileBlob.makePublic();
 
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileBlob.name}`;
 
-      const [metadata] = await fileBlob.getMetadata(); 
-      
+      const [metadata] = await fileBlob.getMetadata();
+
       uploadedUrls.push({
         nombre: uniqueFilename,
         url: publicUrl,
@@ -70,21 +78,29 @@ export class FirebaseService {
   async deleteFileFromFirebase(fileUrl: string): Promise<void> {
     const storage = admin.storage();
     const bucket = storage.bucket();
-  
-    const filePath = fileUrl.replace(`https://storage.googleapis.com/${bucket.name}/`, '');
+
+    const filePath = fileUrl.replace(
+      `https://storage.googleapis.com/${bucket.name}/`,
+      '',
+    );
     const file = bucket.file(filePath);
-  
+
     const [exists] = await file.exists();
-  
+
     if (exists) {
       await file.delete();
       console.log(`Successfully deleted file: ${filePath}`);
     } else {
-      console.warn(`File not found: ${fileUrl}. It may have been already deleted.`);
+      console.warn(
+        `File not found: ${fileUrl}. It may have been already deleted.`,
+      );
     }
   }
 
-  async uploadTareasToFirebase(location: string, files: Express.Multer.File[] = []): Promise<object[]> {
+  async uploadTareasToFirebase(
+    location: string,
+    files: Express.Multer.File[] = [],
+  ): Promise<object[]> {
     if (!Array.isArray(files)) {
       throw new Error('Files should be an array');
     }
@@ -97,15 +113,17 @@ export class FirebaseService {
       const bucket = storage.bucket();
 
       const uniqueFilename = `${Date.now()}-${originalname}`;
-      const fileBlob = bucket.file(`${location}/tareasEstudiante/${uniqueFilename}`);
+      const fileBlob = bucket.file(
+        `${location}/tareasEstudiante/${uniqueFilename}`,
+      );
 
       await fileBlob.save(buffer, { contentType: mimetype });
       await fileBlob.makePublic();
 
       const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileBlob.name}`;
 
-      const [metadata] = await fileBlob.getMetadata(); 
-      
+      const [metadata] = await fileBlob.getMetadata();
+
       uploadedUrls.push({
         nombre: uniqueFilename,
         url: publicUrl,

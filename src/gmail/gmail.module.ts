@@ -8,12 +8,10 @@ import { Pago, PagoSchema } from 'src/pago/schema/pago.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      {name: Pago.name, schema: PagoSchema}
-    ]),
-    PagoModule
+    MongooseModule.forFeature([{ name: Pago.name, schema: PagoSchema }]),
+    PagoModule,
   ],
   providers: [GmailService, StripeService],
-  controllers: [GmailController]
+  controllers: [GmailController],
 })
 export class GmailModule {}

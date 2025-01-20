@@ -2,12 +2,18 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateGmailPdfDto {
-  @ApiProperty({ example: 'user@example.com', description: 'Email del destinatario' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'Email del destinatario',
+  })
   @IsEmail()
   @IsNotEmpty()
   to: string;
 
-  @ApiProperty({ example: 'Constancia de pago - Virgen de la Natividad', description: 'Asunto del email' })
+  @ApiProperty({
+    example: 'Constancia de pago - Virgen de la Natividad',
+    description: 'Asunto del email',
+  })
   @IsString()
   @IsNotEmpty()
   subject: string;
